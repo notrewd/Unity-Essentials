@@ -2,5 +2,6 @@
   "name": "com.notrewd.essentials",
   "version": "0.0.1",
   "displayName": "Essentials",
-  "description": "An unity package to improve the workflow."
+  "description": "An unity package to improve the workflow.",
+  "type": "tool"
 }

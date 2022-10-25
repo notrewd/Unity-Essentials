@@ -1,0 +1,20 @@
+{
+    "name": "notrewd.essentials.editor",
+    "rootNamespace": "Essentials",
+    "references": [
+        "GUID:3052f54dfd2853946b64a65b937e967c"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        ""
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
