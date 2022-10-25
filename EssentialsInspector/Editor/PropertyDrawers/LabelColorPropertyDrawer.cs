@@ -1,17 +1,21 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(LabelColorAttribute))]
-public class LabelColorPropertyDrawer : PropertyDrawer
+namespace Essentials.Inspector
 {
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(LabelColorAttribute))]
+    public class LabelColorPropertyDrawer : PropertyDrawer
     {
-        LabelColorAttribute labelColorAttribute = (LabelColorAttribute)attribute;
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            LabelColorAttribute labelColorAttribute = (LabelColorAttribute) attribute;
 
-        GUI.contentColor = labelColorAttribute.color;
+            GUI.contentColor = labelColorAttribute.color;
 
-        EditorGUI.PropertyField(position, property, label);
+            EditorGUI.PropertyField(position, property, label);
 
-        GUI.contentColor = Color.white;
+            GUI.contentColor = Color.white;
+        }
     }
+
 }

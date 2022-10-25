@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
-
-[AttributeUsage(AttributeTargets.Field)]
-public class ReadOnlyAttribute : PropertyAttribute {}
+namespace Essentials.Inspector
+{
+    [AttributeUsage(AttributeTargets.Field)]
+    public class ReadOnlyAttribute : PropertyAttribute {}
+}

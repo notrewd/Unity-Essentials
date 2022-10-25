@@ -1,12 +1,15 @@
 using System;
 using UnityEngine;
 
-public class FieldColorAttribute : PropertyAttribute
+namespace Essentials.Inspector
 {
-    public readonly Color color;
-
-    public FieldColorAttribute(int r, int g, int b)
+    public class FieldColorAttribute : PropertyAttribute
     {
-        color = new Color32(Convert.ToByte(r), Convert.ToByte(g), Convert.ToByte(b), 255);
+        public readonly Color color;
+
+        public FieldColorAttribute(int r, int g, int b)
+        {
+            color = new Color32(Convert.ToByte(r), Convert.ToByte(g), Convert.ToByte(b), 255);
+        }
     }
 }

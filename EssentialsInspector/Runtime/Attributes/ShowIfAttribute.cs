@@ -1,20 +1,23 @@
 using UnityEngine;
 
-public class ShowIfAttribute : PropertyAttribute
+namespace Essentials.Inspector
 {
-    public readonly string conditionName;
-    public readonly object compareValue;
-    public readonly object[] compareValues;
-
-    public ShowIfAttribute(string conditionName, object compareValue)
+    public class ShowIfAttribute : PropertyAttribute
     {
-        this.conditionName = conditionName;
-        this.compareValue = compareValue;
-    }
+        public readonly string conditionName;
+        public readonly object compareValue;
+        public readonly object[] compareValues;
 
-    public ShowIfAttribute(string conditionName, object[] compareValues)
-    {
-        this.conditionName = conditionName;
-        this.compareValues = compareValues;
+        public ShowIfAttribute(string conditionName, object compareValue)
+        {
+            this.conditionName = conditionName;
+            this.compareValue = compareValue;
+        }
+
+        public ShowIfAttribute(string conditionName, object[] compareValues)
+        {
+            this.conditionName = conditionName;
+            this.compareValues = compareValues;
+        }
     }
 }

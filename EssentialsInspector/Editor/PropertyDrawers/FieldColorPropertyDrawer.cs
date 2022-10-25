@@ -1,17 +1,22 @@
+using System;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(FieldColorAttribute))]
-public class FieldColorPropertyDrawer : PropertyDrawer
+namespace Essentials.Inspector
 {
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(FieldColorAttribute))]
+    public class FieldColorPropertyDrawer : PropertyDrawer
     {
-        FieldColorAttribute fieldColorAttribute = (FieldColorAttribute)attribute;
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            FieldColorAttribute fieldColorAttribute = (FieldColorAttribute) attribute;
 
-        GUI.backgroundColor = fieldColorAttribute.color;
+            GUI.backgroundColor = fieldColorAttribute.color;
+                
+            EditorGUI.PropertyField(position, property, label);
 
-        EditorGUI.PropertyField(position, property, label);
-
-        GUI.backgroundColor = Color.white;
+            GUI.backgroundColor = Color.white;
+        }
     }
 }
