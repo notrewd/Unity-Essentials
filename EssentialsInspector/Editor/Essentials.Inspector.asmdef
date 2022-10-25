@@ -1,6 +1,6 @@
 {
     "name": "notrewd.essentials.editor",
-    "rootNamespace": "Essentials",
+    "rootNamespace": "",
     "references": [
         "GUID:3052f54dfd2853946b64a65b937e967c"
     ],
