@@ -12,9 +12,11 @@ namespace Essentials.Inspector
 
             GUI.backgroundColor = fieldColorAttribute.color;
                 
-            EditorGUI.PropertyField(position, property, label);
+            EditorGUI.PropertyField(position, property, label, true);
 
             GUI.backgroundColor = Color.white;
         }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => EditorGUI.GetPropertyHeight(property);
     }
 }

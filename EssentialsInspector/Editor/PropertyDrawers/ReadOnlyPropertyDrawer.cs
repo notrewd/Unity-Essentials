@@ -10,9 +10,11 @@ namespace Essentials.Inspector
         {
             GUI.enabled = false;
 
-            EditorGUI.PropertyField(position, property, label);
+            EditorGUI.PropertyField(position, property, label, true);
 
             GUI.enabled = true;
         }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => EditorGUI.GetPropertyHeight(property);
     }
 }
