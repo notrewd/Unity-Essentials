@@ -4,5 +4,8 @@
   "displayName": "Essentials",
   "description": "An unity package to improve the workflow.",
   "type": "tool",
-  "unity": "2021.3"
+  "unity": "2021.3",
+  "documentationUrl": "https://github.com/NotRewd/Unity-Essentials",
+  "changelogUrl": "https://github.com/NotRewd/Unity-Essentials",
+  "licensesUrl": "https://github.com/NotRewd/Unity-Essentials"
 }
