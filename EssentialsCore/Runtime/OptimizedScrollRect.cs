@@ -285,8 +285,6 @@ namespace Essentials.Core.UI
                     {
                         element.gameObject.SetActive(size < maxSize);
                         size += element.sizeDelta.y;
-                        
-                        Debug.Log($"Max: {maxSize}, current: {size}");
                     }
                 }
             }
