@@ -184,6 +184,20 @@ namespace Essentials.Inspector
                 case SerializedPropertyType.BoundsInt:
                     if (showIfAttribute.compareValue is BoundsInt) isShown = (BoundsInt) showIfAttribute.compareValue == condition.boundsIntValue;
                     break;
+                case SerializedPropertyType.ObjectReference:
+                    if (showIfAttribute.compareValue is string)
+                    {
+                        string value = showIfAttribute.compareValue.ToString();
+                        
+                        if (string.IsNullOrWhiteSpace(value) || value != "!=null")
+                        {
+                            DisplayError(position, ErrorType.InvalidCompareValue);
+                            return;
+                        }
+
+                        isShown = condition.objectReferenceValue != null;
+                    }
+                    break;
                 default:
                     DisplayError(position, ErrorType.InvalidCompareType);
                     break;
@@ -215,7 +229,7 @@ namespace Essentials.Inspector
 
         private string GetPureFloat(string s)
         {
-            return s[s.Length - 1] == 'f' ? s.Remove(s.Length - 1) : s;
+            return s[^1] == 'f' ? s.Remove(s.Length - 1) : s;
         }
 
         private void DisplayError(Rect position, ErrorType errorType)
@@ -225,7 +239,7 @@ namespace Essentials.Inspector
             
             GUI.Label(position, "Error", style);
 
-            const string prefix = "Essentials inspector:";
+            const string prefix = "Essentials Inspector:";
 
             switch (errorType)
             {

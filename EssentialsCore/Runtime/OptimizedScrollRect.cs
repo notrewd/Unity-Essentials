@@ -3,14 +3,59 @@ using System.Collections.Generic;
 using System.Linq;
 using Essentials.Inspector;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Essentials.Core.UI
 {
     [RequireComponent(typeof(ScrollRect))]
     [DisallowMultipleComponent]
-    public class OptimizedScrollView : MonoBehaviour
+    public class OptimizedScrollRect : MonoBehaviour
     {
+        public RectTransform content = null;
+
+        public ScrollRect.MovementType movementType = ScrollRect.MovementType.Elastic;
+
+        [ShowIf(nameof(movementType), ScrollRect.MovementType.Elastic)]
+        [SetIndentLevel(1)]
+        public float elasticity = 0.1f;
+
+        public bool inertia;
+
+        [ShowIf(nameof(inertia), true)]
+        [SetIndentLevel(1)]
+        public float decelerationRate = 0.135f;
+
+        public float scrollSensitivity = 1;
+
+        public RectTransform viewport = null;
+        
+        public Scrollbar horizontalScrollbar = null;
+
+        [ShowIf(nameof(horizontalScrollbar), "!=null")]
+        [LabelName("Visibility")]
+        [SetIndentLevel(1)]
+        public ScrollRect.ScrollbarVisibility horizontalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+
+        [ShowIf(nameof(horizontalScrollbar), "!=null")]
+        [LabelName("Spacing")]
+        [SetIndentLevel(1)]
+        public float horizontalScrollbarSpacing;
+        
+        public Scrollbar verticalScrollbar = null;
+
+        [ShowIf(nameof(verticalScrollbar), "!=null")]
+        [LabelName("Visibility")]
+        [SetIndentLevel(1)]
+        public ScrollRect.ScrollbarVisibility verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+
+        [ShowIf(nameof(verticalScrollbar), "!=null")]
+        [LabelName("Spacing")]
+        [SetIndentLevel(1)]
+        public float verticalScrollbarSpacing;
+        
+        [Space]
+        
         public LayoutType layoutType = LayoutType.None;
 
         [ShowIf(nameof(layoutType), LayoutType.VerticalLayout)]
@@ -33,26 +78,49 @@ namespace Essentials.Core.UI
         [ShowIf(nameof(layoutType), new object[] {LayoutType.HorizontalLayout, LayoutType.VerticalLayout})]
         public bool controlChildSize;
 
-        [ShowIf(nameof(layoutType), new object[] { LayoutType.HorizontalLayout, LayoutType.VerticalLayout })]
+        [ShowIf(nameof(layoutType), new object[] {LayoutType.HorizontalLayout, LayoutType.VerticalLayout})]
         public ChildSizePadding childSizePadding;
 
         [ShowIf(nameof(layoutType), new object[] {LayoutType.HorizontalLayout, LayoutType.VerticalLayout})]
         public Padding padding;
 
+        [Space]
+
+        public ScrollRect.ScrollRectEvent onValueChanged;
+
         [HideInInspector] public List<RectTransform> elements = new List<RectTransform>();
 
         private ScrollRect scrollRect;
-        private GameObject content;
 
         private float disableMarginX;
         private float disableMarginY;
-
+        
+        private void OnValidate()
+        {
+            ScrollRect scrollRect = GetComponent<ScrollRect>();
+            
+            scrollRect.content = content;
+            scrollRect.movementType = movementType;
+            scrollRect.elasticity = elasticity;
+            scrollRect.inertia = inertia;
+            scrollRect.decelerationRate = decelerationRate;
+            scrollRect.scrollSensitivity = scrollSensitivity;
+            scrollRect.viewport = viewport;
+            scrollRect.horizontalScrollbar = horizontalScrollbar;
+            scrollRect.verticalScrollbar = verticalScrollbar;
+            scrollRect.horizontalScrollbarVisibility = horizontalScrollbarVisibility;
+            scrollRect.verticalScrollbarVisibility = verticalScrollbarVisibility;
+            scrollRect.horizontalScrollbarSpacing = horizontalScrollbarSpacing;
+            scrollRect.verticalScrollbarSpacing = verticalScrollbarSpacing;
+            scrollRect.horizontal = IsHorizontal();
+            scrollRect.vertical = IsVertical();
+            scrollRect.onValueChanged = onValueChanged;
+        }
 
         private void Awake()
         {
             scrollRect = GetComponent<ScrollRect>();
-            content = scrollRect.content.gameObject;
-            
+            onValueChanged.AddListener(OnScroll);
             scrollRect.onValueChanged.AddListener(OnScroll);
 
             if (content.GetComponent<ContentSizeFitter>() != null || content.GetComponent<VerticalLayoutGroup>() != null || content.GetComponent<HorizontalLayoutGroup>() != null || content.GetComponent<GridLayoutGroup>() != null)
@@ -62,9 +130,12 @@ namespace Essentials.Core.UI
                 if (content.TryGetComponent(out HorizontalLayoutGroup horizontalLayoutGroup)) horizontalLayoutGroup.enabled = false;
                 if (content.TryGetComponent(out GridLayoutGroup gridLayoutGroup)) gridLayoutGroup.enabled = false;
             
-                Debug.LogError("Essentials Core UI: Optimized Scroll View does not need any layout groups or content size fitter.");
+                Debug.LogWarning("Essentials Core UI: Optimized Scroll View doesn't need any layout groups or content size fitter.");
             }
+        }
 
+        private void Start()
+        {
             if (content.transform.childCount >= 1)
             {
                 foreach (Transform t in content.transform)
@@ -72,13 +143,12 @@ namespace Essentials.Core.UI
                     if (t.TryGetComponent(out RectTransform rectTransform))
                     {
                         elements.Add(rectTransform);
-                    
                         UpdateMarginSize(t.gameObject);
                     }
                 }
-                
-                RecalculateContentSize();
+
                 RecalculateLayout();
+                RecalculateContentSize();
                 CalculateApproxVisibility();
             }
         }
@@ -191,7 +261,7 @@ namespace Essentials.Core.UI
 
             if (IsHorizontal())
             {
-                float maxSize = scrollRect.GetComponent<RectTransform>().sizeDelta.x;
+                float maxSize = scrollRect.GetComponent<RectTransform>().rect.width;
                 float size = 0f;
 
                 if (elements.Count >= 2)
@@ -199,7 +269,6 @@ namespace Essentials.Core.UI
                     foreach (RectTransform element in elements)
                     {
                         element.gameObject.SetActive(size < maxSize);
-
                         size += element.sizeDelta.x;
                     }
                 }
@@ -207,16 +276,17 @@ namespace Essentials.Core.UI
             
             else if (IsVertical())
             {
-                float maxSize = scrollRect.GetComponent<RectTransform>().sizeDelta.y;
+                float maxSize = scrollRect.GetComponent<RectTransform>().rect.height;
                 float size = 0f;
 
-                if (elements.Count >= 2)
+                if (elements.Count >= 1)
                 {
                     foreach (RectTransform element in elements)
                     {
                         element.gameObject.SetActive(size < maxSize);
-
                         size += element.sizeDelta.y;
+                        
+                        Debug.Log($"Max: {maxSize}, current: {size}");
                     }
                 }
             }
@@ -271,7 +341,7 @@ namespace Essentials.Core.UI
                             elements[i].anchorMax = anchorMax;
 
                             elements[i].anchoredPosition = new Vector2(positionX, elements[i - 1].anchoredPosition.y - elements[i - 1].sizeDelta.y * 0.5f - elements[i].sizeDelta.y * 0.5f - spacing);
-
+                            
                             if (controlChildSize && verticalAlignment == VerticalAlignment.Center) elements[i].sizeDelta = new Vector2(scrollRect.content.rect.width - childSizePadding.leftAndRight, elements[i].sizeDelta.y);
                         }
                     }
@@ -326,9 +396,9 @@ namespace Essentials.Core.UI
 
                     scrollRect.content.anchorMin = new Vector2(0, 1);
                     scrollRect.content.anchorMax = new Vector2(1, 1);
-
-                    scrollRect.content.sizeDelta = new Vector2(0, newSizeY);
                     
+                    scrollRect.content.sizeDelta = new Vector2(0, newSizeY);
+
                     break;
                 case LayoutType.HorizontalLayout:
 
@@ -341,7 +411,7 @@ namespace Essentials.Core.UI
                             newSizeX += elements[i].rect.width + spacing;
                         }
                     }
-
+                    
                     scrollRect.content.anchorMin = new Vector2(0, 0);
                     scrollRect.content.anchorMax = new Vector2(0, 1);
                     
