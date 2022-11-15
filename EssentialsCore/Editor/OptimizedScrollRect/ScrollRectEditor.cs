@@ -1,24 +1,26 @@
-using Essentials.Core.UI;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CustomEditor(typeof(ScrollRect))]
-public class ScrollRectEditor : UnityEditor.UI.ScrollRectEditor
+namespace Essentials.Core.UI
 {
-    public override void OnInspectorGUI()
+    [CustomEditor(typeof(ScrollRect))]
+    public class ScrollRectEditor : UnityEditor.UI.ScrollRectEditor
     {
-        ScrollRect scrollRect = (ScrollRect) target;
-        if (scrollRect.GetComponent<OptimizedScrollRect>() == null) base.OnInspectorGUI();
-        else
+        public override void OnInspectorGUI()
         {
-            GUILayout.Label("Overriden by Optimized Scroll Rect.", new GUIStyle
+            ScrollRect scrollRect = (ScrollRect)target;
+            if (scrollRect.GetComponent<OptimizedScrollRect>() == null) base.OnInspectorGUI();
+            else
             {
-                normal =
+                GUILayout.Label("Overriden by Optimized Scroll Rect.", new GUIStyle
                 {
-                    textColor = Color.gray
-                }
-            });
+                    normal =
+                    {
+                        textColor = Color.gray
+                    }
+                });
+            }
         }
     }
 }
