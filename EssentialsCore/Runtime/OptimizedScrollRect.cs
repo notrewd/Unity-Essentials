@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Essentials.Inspector;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Essentials.Core.UI
@@ -94,6 +93,8 @@ namespace Essentials.Core.UI
 
         private float disableMarginX;
         private float disableMarginY;
+
+        private bool recalculateOnScroll;
         
         private void OnValidate()
         {
@@ -153,43 +154,34 @@ namespace Essentials.Core.UI
             }
         }
 
-        public void Instatiate(GameObject element)
+        private void OnRectTransformDimensionsChange() => Recalculate(RecalculateMode.Layout);
+
+        public void Instatiate(GameObject element, RecalculateMode mode = RecalculateMode.All)
         {
             GameObject instance = Instantiate(element, content.transform, false);
             elements.Add(instance.GetComponent<RectTransform>());
             
             UpdateMarginSize(element);
-
-            RecalculateContentSize();
-            RecalculateLayout();
-            RecalculateVisibility();
+            Recalculate(mode);
         }
 
-        public void Add(GameObject element)
+        public void Add(GameObject element, RecalculateMode mode = RecalculateMode.All)
         {
             element.transform.SetParent(content.transform, false);
             elements.Add(element.GetComponent<RectTransform>());
 
             UpdateMarginSize(element);
-
-            RecalculateContentSize();
-            RecalculateLayout();
-            RecalculateVisibility();
+            Recalculate(mode);
         }
 
-        public void Remove(GameObject element)
+        public void Remove(GameObject element, RecalculateMode mode = RecalculateMode.All)
         {
             if (elements.Contains(element.GetComponent<RectTransform>()))
             {
                 elements.Remove(element.GetComponent<RectTransform>());
                 Destroy(element);
 
-                if (elements.Count >= 1)
-                {
-                    RecalculateContentSize();
-                    RecalculateLayout();
-                    RecalculateVisibility();
-                }
+                if (elements.Count >= 1) Recalculate(mode);
             }
         }
 
@@ -228,12 +220,34 @@ namespace Essentials.Core.UI
             scrollRect.content.sizeDelta = new Vector2(0, 0);
         }
 
-        public void Recalculate()
+        public void Recalculate(RecalculateMode mode = RecalculateMode.All)
         {
-            RecalculateContentSize();
-            RecalculateLayout();
-            RecalculateVisibility();
+            if (elements.Count == 0) return;
+            
+            switch (mode)
+            {
+                case RecalculateMode.None:
+                    break;
+                case RecalculateMode.ContentSize:
+                    RecalculateContentSize();
+                    break;
+                case RecalculateMode.Layout:
+                    RecalculateLayout();
+                    break;
+                case RecalculateMode.Visibility:
+                    RecalculateVisibility();
+                    break;
+                case RecalculateMode.All:
+                    RecalculateContentSize();
+                    RecalculateLayout();
+                    RecalculateVisibility();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+            }
         }
+
+        public void EnableRecalculationOnScroll(bool enable) => recalculateOnScroll = enable;
 
         public GameObject[] GetAll()
         {
@@ -243,8 +257,7 @@ namespace Essentials.Core.UI
         private void OnScroll(Vector2 pos)
         {
             if (elements.Count == 0) return;
-            
-            RecalculateVisibility();
+            if (recalculateOnScroll) RecalculateVisibility();
         }
 
         private void UpdateMarginSize(GameObject element)
@@ -508,6 +521,8 @@ namespace Essentials.Core.UI
         public enum HorizontalAlignment {Top, Center, Bottom}
         
         public enum ScrollDirection {Vertical, Horizontal}
+        
+        public enum RecalculateMode {None, Visibility, Layout, ContentSize, All}
 
         [Serializable]
         public struct Padding
