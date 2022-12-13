@@ -22,6 +22,10 @@ namespace Essentials.Core.CheatConsole
         public string title = "Cheat Console";
         [SerializeField] private Color color = new Color(0.1f, 0.1f, 0.1f, 0.5f);
         public Padding padding;
+        
+        [Header("Keybinds")]
+        [SerializeField] private InputActionReference openAction;
+        [SerializeField] private InputActionAsset[] inputsToDisable;
 
         [Header("Default Commands")]
         [SerializeField] private bool helpCommand = true;
@@ -40,6 +44,8 @@ namespace Essentials.Core.CheatConsole
 
         private Texture2D backgroundTexture;
         private Texture2D foregroundTexture;
+
+        private InputAction toggleAction;
 
         [Serializable]
         public struct Padding
@@ -118,6 +124,19 @@ namespace Essentials.Core.CheatConsole
         {
             backgroundTexture = EssentialsUtility.SingleTexture2DColor(color);
             foregroundTexture = EssentialsUtility.SingleTexture2DColor(new Color(0.8f, 0.8f, 0.8f, 0.5f));
+
+            if (openAction != null) toggleAction = openAction.action;
+            else
+            {
+                InputActionAsset asset = ScriptableObject.CreateInstance<InputActionAsset>();
+                InputActionMap map = asset.AddActionMap("Default");
+                
+                map.AddAction("Toggle", binding: "<Keyboard>/backquote");
+
+                toggleAction = asset.FindAction("Toggle");
+            }
+            
+            toggleAction.Enable();
 
             if (helpCommand) FindCommand("help").onExecute.AddListener(HelpCommand);
             if (printCommand) FindCommand("print").onExecuteRaw.AddListener(PrintCommand);
@@ -298,17 +317,21 @@ namespace Essentials.Core.CheatConsole
         
         private void Update()
         {
-            if (Keyboard.current.backquoteKey.wasPressedThisFrame)
+            if (!toggleAction.WasPressedThisFrame()) return;
+            
+            if (!consoleVisible)
             {
-                if (!consoleVisible)
-                {
-                    previousCursorLockMode = Cursor.lockState;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-                else Cursor.lockState = previousCursorLockMode;
-                
-                consoleVisible = !consoleVisible;
+                previousCursorLockMode = Cursor.lockState;
+                Cursor.lockState = CursorLockMode.None;
+                foreach (InputActionAsset asset in inputsToDisable) asset.Disable();
             }
+            else
+            {
+                Cursor.lockState = previousCursorLockMode;
+                foreach (InputActionAsset asset in inputsToDisable) asset.Enable();
+            }
+                
+            consoleVisible = !consoleVisible;
         }
 
         #region Default Commands
