@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:VisualElement style="flex-grow: 1;">
-        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="Content" style="flex-grow: 1; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px;">
+        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" name="Content" style="flex-grow: 1; margin-left: 3px; margin-right: 3px; margin-top: 3px; margin-bottom: 3px; padding-left: 0; padding-right: 0;">
             <ui:VisualElement name="ClassName" style="flex-grow: 0; flex-shrink: 0; flex-direction: row; justify-content: space-around;">
                 <ui:TextField picking-mode="Ignore" label="Class Name" value="GameDirectories" text="GameDirectories" name="ClassNameField" style="flex-shrink: 1; flex-grow: 1;" />
                 <ui:Label text=".cs" display-tooltip-when-elided="true" style="-unity-text-align: middle-left; flex-shrink: 0; flex-grow: 0;" />
@@ -12,7 +12,7 @@
             </ui:VisualElement>
             <ui:Foldout text="Directory References" value="false" name="DirectoryReferences" />
         </ui:ScrollView>
-        <ui:VisualElement name="BottomBar" style="flex-shrink: 0; height: 28px; padding-top: 3px; padding-bottom: 3px; background-color: rgba(0, 0, 0, 0.15); flex-direction: row; justify-content: flex-end;">
+        <ui:VisualElement name="BottomBar" style="flex-shrink: 0; height: 28px; padding-top: 3px; padding-bottom: 3px; background-color: rgba(0, 0, 0, 0.15); flex-direction: row; justify-content: flex-end; padding-left: 2px; padding-right: 2px;">
             <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyButton" />
         </ui:VisualElement>
     </ui:VisualElement>

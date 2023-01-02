@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Essentials.Core.GameDirectories;
+using System.Linq;
 
 namespace Essentials.Internal.GameDirectories
 {
@@ -66,9 +67,28 @@ namespace Essentials.Internal.GameDirectories
 
             applyButton.clicked += Apply;
             settingsButton.clicked += ShowSettingsWindow;
+
+            string directories = GameDirectoriesSettings.GetGameDirectories();
+
+            if (!string.IsNullOrEmpty(directories))
+            {
+                string[] directoriesData = directories.Split(';');
+
+                foreach (string directoryData in directoriesData)
+                {
+                    string[] directoryDataSplit = directoryData.Split(',');
+
+                    if (directoryDataSplit.Length != 2) continue;
+
+                    CreateGameDirectory(directoryDataSplit[0], directoryDataSplit[1]);
+                }
+
+                RefreshScrollView();
+                applyButton.SetEnabled(false);
+            }
         }
 
-        private void CreateGameDirectory(string path)
+        private void CreateGameDirectory(string path, string reference = null)
         {
             if (string.IsNullOrWhiteSpace(path)) return;
 
@@ -89,7 +109,11 @@ namespace Essentials.Internal.GameDirectories
 
             void CreateSubDirectores(GameDirectory directory, string[] subDirectories, string newPath = "")
             {
-                if (subDirectories.Length == 0) return;
+                if (subDirectories.Length == 0)
+                {
+                    directory.reference = reference;
+                    return;
+                }
 
                 if (string.IsNullOrEmpty(newPath)) newPath = directory.name;
 
@@ -117,49 +141,9 @@ namespace Essentials.Internal.GameDirectories
             applyButton.SetEnabled(true);
         }
 
-        private GameDirectory FindGameDirectory(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path)) return null;
-
-            string[] directories = Array.Empty<string>();
-
-            if (path.Contains("\\")) path = path.Replace("\\", "/");
-            if (path.Contains("/")) directories = path.Split('/');
-            else directories = new string[] { path };
-
-            if (directories.Length == 0) return null;
-
-            foreach (string directory in directories)
-            {
-                if (string.IsNullOrWhiteSpace(directory)) return null;
-                if (directory.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0) return null;
-            }
-
-            GameDirectory FindSubDirectory(GameDirectory directory, string[] subDirectories)
-            {
-                if (subDirectories.Length == 0) return directory;
-
-                GameDirectory subDirectory = directory.subDirectories.Find(x => x.name == subDirectories[0]);
-
-                if (subDirectory == null) return null;
-
-                return FindSubDirectory(subDirectory, subDirectories[1..]);
-            }
-
-            GameDirectory gameDirectory = Core.GameDirectories.GameDirectories.gameDirectories.Find(x => x.name == directories[0]);
-
-            if (gameDirectory == null) return null;
-
-            GameDirectory foundDirectory = FindSubDirectory(gameDirectory, directories[1..]);
-
-            if (foundDirectory == null) return null;
-
-            return foundDirectory;
-        }
-
         private void RemoveGameDirectory(GameDirectory directory)
         {
-            GameDirectory parentDirectory = FindGameDirectory(directory.path[..(directory.path.Contains("/") ? directory.path.LastIndexOf("/") : 0)]);
+            GameDirectory parentDirectory = Core.GameDirectories.GameDirectories.FindGameDirectory(directory.path[..(directory.path.Contains("/") ? directory.path.LastIndexOf("/") : 0)]);
 
             if (parentDirectory != null) parentDirectory.subDirectories.Remove(directory);
             else Core.GameDirectories.GameDirectories.gameDirectories.Remove(directory);
@@ -182,7 +166,7 @@ namespace Essentials.Internal.GameDirectories
 
             if (newParentPath == "~")
             {
-                GameDirectory oldParentDirectory = FindGameDirectory(directory.path[..(directory.path.Contains("/") ? directory.path.LastIndexOf("/") : 0)]);
+                GameDirectory oldParentDirectory = Core.GameDirectories.GameDirectories.FindGameDirectory(directory.path[..(directory.path.Contains("/") ? directory.path.LastIndexOf("/") : 0)]);
 
                 if (oldParentDirectory != null)
                 {
@@ -195,12 +179,12 @@ namespace Essentials.Internal.GameDirectories
                 return;
             }
 
-            GameDirectory parentDirectory = FindGameDirectory(newParentPath);
+            GameDirectory parentDirectory = Core.GameDirectories.GameDirectories.FindGameDirectory(newParentPath);
 
             if (parentDirectory != null)
             {
                 parentDirectory.subDirectories.Add(directory);
-                GameDirectory oldParentDirectory = FindGameDirectory(directory.path[..(directory.path.Contains("/") ? directory.path.LastIndexOf("/") : 0)]);
+                GameDirectory oldParentDirectory = Core.GameDirectories.GameDirectories.FindGameDirectory(directory.path[..(directory.path.Contains("/") ? directory.path.LastIndexOf("/") : 0)]);
                 if (oldParentDirectory != null) oldParentDirectory.subDirectories.Remove(directory);
                 else Core.GameDirectories.GameDirectories.gameDirectories.Remove(directory);
                 directory.path = newParentPath + "/" + directory.name;
@@ -419,6 +403,9 @@ namespace Essentials.Internal.GameDirectories
         private void Apply()
         {
             applyButton.SetEnabled(false);
+
+            GameDirectoriesSettings.SetGameDirectories(string.Join(";", Core.GameDirectories.GameDirectories.GetAllGameDirectories().Select(x => $"{x.path},{x.reference}")));
+
             if (settingsEditor != null) settingsEditor.Refresh();
         }
 
