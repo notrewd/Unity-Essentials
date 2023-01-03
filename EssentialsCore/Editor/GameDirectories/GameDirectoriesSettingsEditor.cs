@@ -58,7 +58,13 @@ namespace Essentials.Internal.GameDirectories
 
         private bool Validate()
         {
+            string[] reservedNames = new string[]
+            {
+                "GameDirectory", "GameDirectories", "GameDirectoriesSettings", "GameDirectoriesSettingsEditor", "GameDirectoriesEditor", "GameDirectoriesPopup"
+            };
+
             if (string.IsNullOrWhiteSpace(classNameField.value)) return false;
+            if (reservedNames.Contains(classNameField.value)) return false;
             if (!char.IsLetter(classNameField.value[0])) return false;
             foreach (char character in classNameField.value) if (!char.IsLetterOrDigit(character) && character != '_') return false;
 
@@ -82,6 +88,8 @@ namespace Essentials.Internal.GameDirectories
             classNameField.value = GameDirectoriesSettings.GetClassName();
             classLocationLabel.text = GameDirectoriesSettings.GetClassLocation();
 
+            directoryReferences.Clear();
+
             // load directories from settings in format "path1,reference1;path2,reference2;..."
             string directories = GameDirectoriesSettings.GetGameDirectories();
 
@@ -95,8 +103,6 @@ namespace Essentials.Internal.GameDirectories
             else
             {
                 string[] directoriesData = directories.Split(';');
-
-                directoryReferences.Clear();
 
                 foreach (string directoryData in directoriesData)
                 {
@@ -137,7 +143,11 @@ namespace Essentials.Internal.GameDirectories
                 Core.GameDirectories.GameDirectories.FindGameDirectory(referenceField.label).reference = referenceField.value;
             }
 
-            GameDirectoriesSettings.SetGameDirectories(string.Join(";", Core.GameDirectories.GameDirectories.GetAllGameDirectories().Select(x => $"{x.path},{x.reference}")));
+            GameDirectory[] gameDirectories = Core.GameDirectories.GameDirectories.GetAllGameDirectories();
+
+            GameDirectoriesSettings.SetGameDirectories(string.Join(";", gameDirectories.Select(x => $"{x.path},{x.reference}")));
+
+            GameDirectoriesSettings.GenerateClass(gameDirectories);
         }
     }
 }
