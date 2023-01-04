@@ -10,6 +10,8 @@ namespace Essentials.Internal.GameDirectories
 {
     public class GameDirectoriesEditor : EditorWindow
     {
+        private bool regenerateClass = false;
+
         private ScrollView scrollView;
         private VisualElement topBar;
         private VisualElement bottomBar;
@@ -145,6 +147,8 @@ namespace Essentials.Internal.GameDirectories
         {
             GameDirectory parentDirectory = Core.GameDirectories.GameDirectories.FindGameDirectory(directory.path[..(directory.path.Contains("/") ? directory.path.LastIndexOf("/") : 0)]);
 
+            if (directory.reference != null) regenerateClass = true;
+
             if (parentDirectory != null) parentDirectory.subDirectories.Remove(directory);
             else Core.GameDirectories.GameDirectories.gameDirectories.Remove(directory);
 
@@ -176,6 +180,10 @@ namespace Essentials.Internal.GameDirectories
                 }
 
                 RefreshScrollView();
+
+                if (directory.reference != null) regenerateClass = true;
+
+                applyButton.SetEnabled(true);
                 return;
             }
 
@@ -189,6 +197,8 @@ namespace Essentials.Internal.GameDirectories
                 else Core.GameDirectories.GameDirectories.gameDirectories.Remove(directory);
                 directory.path = newParentPath + "/" + directory.name;
             }
+
+            if (directory.reference != null) regenerateClass = true;
 
             applyButton.SetEnabled(true);
         }
@@ -226,6 +236,10 @@ namespace Essentials.Internal.GameDirectories
                     directory.name = name;
                     directory.path = directory.path[..(directory.path.LastIndexOf("/") + 1)] + name;
                     RefreshScrollView();
+
+                    if (directory.reference != null) regenerateClass = true;
+
+                    applyButton.SetEnabled(true);
                 }));
             });
 
@@ -407,6 +421,12 @@ namespace Essentials.Internal.GameDirectories
             GameDirectoriesSettings.SetGameDirectories(string.Join(";", Core.GameDirectories.GameDirectories.GetAllGameDirectories().Select(x => $"{x.path},{x.reference}")));
 
             if (settingsEditor != null) settingsEditor.Refresh();
+
+            if (regenerateClass)
+            {
+                GameDirectoriesSettings.GenerateClass(Core.GameDirectories.GameDirectories.GetAllGameDirectories());
+                regenerateClass = false;
+            }
         }
 
         private void ShowSettingsWindow()
