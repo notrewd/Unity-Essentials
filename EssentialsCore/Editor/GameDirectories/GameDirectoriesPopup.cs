@@ -42,8 +42,6 @@ public class GameDirectoriesPopup : PopupWindowContent
         inputField.value = inputFieldText;
         confirmButton.text = confirmButtonText;
 
-        inputField.RegisterValueChangedCallback(evt => confirmButton.SetEnabled(!string.IsNullOrEmpty(evt.newValue)));
-
         inputField.RegisterCallback<KeyDownEvent>(evt =>
         {
             if (evt.keyCode == KeyCode.Return)

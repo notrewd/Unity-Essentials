@@ -32,8 +32,6 @@ namespace Essentials.Internal.GameDirectories
             stringBuilder.AppendLine("{");
             stringBuilder.AppendLine($"\tpublic static class {className}");
             stringBuilder.AppendLine("\t{");
-            stringBuilder.AppendLine("\t\tprivate static char separator = Path.DirectorySeparatorChar;");
-            stringBuilder.AppendLine();
 
             foreach (GameDirectory directory in directories)
             {
@@ -43,7 +41,7 @@ namespace Essentials.Internal.GameDirectories
                 stringBuilder.AppendLine("\t\t{");
                 stringBuilder.AppendLine("\t\t\tget");
                 stringBuilder.AppendLine("\t\t\t{");
-                stringBuilder.AppendLine($"\t\t\t\tstring path = Application.persistentDataPath + separator + {string.Join(" + separator + ", directory.path.Split("/").Select(x => $"\"{x}\""))};");
+                stringBuilder.AppendLine($"\t\t\t\tstring path = Path.Combine(Application.persistentDataPath, {string.Join(", ", directory.path.Split("/").Select(x => $"\"{x}\""))});");
                 stringBuilder.AppendLine("\t\t\t\tif (!Directory.Exists(path)) Directory.CreateDirectory(path);");
                 stringBuilder.AppendLine("\t\t\t\treturn path;");
                 stringBuilder.AppendLine("\t\t\t}");
@@ -53,7 +51,7 @@ namespace Essentials.Internal.GameDirectories
             stringBuilder.AppendLine("\t}");
             stringBuilder.AppendLine("}");
 
-            string classPath = $"{classLocation}/{className}.cs";
+            string classPath = $"{Path.Combine(classLocation, className)}.cs";
 
             if (AssetDatabase.LoadAssetAtPath<MonoScript>(classPath) != null) AssetDatabase.DeleteAsset(classPath);
 
@@ -62,8 +60,6 @@ namespace Essentials.Internal.GameDirectories
             streamWriter.Close();
 
             AssetDatabase.Refresh();
-
-
         }
     }
 }

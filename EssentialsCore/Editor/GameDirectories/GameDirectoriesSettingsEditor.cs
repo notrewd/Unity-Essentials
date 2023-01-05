@@ -15,6 +15,7 @@ namespace Essentials.Internal.GameDirectories
         private Label classLocationLabel;
         private Button classLocationButton;
         private VisualElement directoryReferences;
+        private VisualElement unappliedChanges;
 
         public void CreateGUI()
         {
@@ -28,6 +29,7 @@ namespace Essentials.Internal.GameDirectories
             classLocationLabel = content.Q("ClassLocation").Q<Label>("ClassLocationLabel");
             classLocationButton = content.Q("ClassLocation").Q<Button>("ClassLocationButton");
             directoryReferences = content.Q<VisualElement>("DirectoryReferences");
+            unappliedChanges = rootVisualElement.Q<VisualElement>("UnappliedChanges");
 
             applyButton.SetEnabled(false);
 
@@ -53,6 +55,12 @@ namespace Essentials.Internal.GameDirectories
                 applyButton.SetEnabled(Validate());
             };
 
+            rootVisualElement.RegisterCallback<FocusInEvent>(_ =>
+            {
+                if (!GameDirectoriesEditor.appliedChanges) unappliedChanges.style.display = DisplayStyle.Flex;
+                else unappliedChanges.style.display = DisplayStyle.None;
+            });
+
             Refresh();
         }
 
@@ -76,6 +84,8 @@ namespace Essentials.Internal.GameDirectories
                 if (string.IsNullOrEmpty(referenceField.value)) continue;
                 if (!char.IsLetter(referenceField.value[0])) return false;
                 foreach (char character in referenceField.value) if (!char.IsLetterOrDigit(character) && character != '_') return false;
+
+                if (directoryReferences.Children().Count(x => x != directoryReference && x is TextField && ((TextField) x).value == referenceField.value) > 0) return false;
             }
 
             return true;
