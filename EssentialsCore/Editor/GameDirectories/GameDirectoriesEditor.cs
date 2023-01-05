@@ -472,9 +472,7 @@ namespace Essentials.Internal.GameDirectories
                 return;
             }
 
-            settingsEditor = EditorWindow.GetWindow<GameDirectoriesSettingsEditor>();
-            settingsEditor.titleContent = new GUIContent("Game Directories Settings", EditorGUIUtility.IconContent("d_SettingsIcon").image);
-            settingsEditor.minSize = new Vector2(300, 300);
+            settingsEditor = GameDirectoriesSettingsEditor.Open();
         }
     }
 }

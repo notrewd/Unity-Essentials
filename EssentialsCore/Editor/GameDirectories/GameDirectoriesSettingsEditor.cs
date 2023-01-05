@@ -17,6 +17,15 @@ namespace Essentials.Internal.GameDirectories
         private VisualElement directoryReferences;
         private VisualElement unappliedChanges;
 
+        public static GameDirectoriesSettingsEditor Open()
+        {
+            GameDirectoriesSettingsEditor window = GetWindow<GameDirectoriesSettingsEditor>();
+            window.titleContent = new GUIContent("Game Directories Settings", EditorGUIUtility.IconContent("d_SettingsIcon").image);
+            window.minSize = new Vector2(300, 300);
+
+            return window;
+        }
+
         public void CreateGUI()
         {
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/GameDirectories/GameDirectoriesSettingsEditorDocument.uxml");
@@ -85,7 +94,7 @@ namespace Essentials.Internal.GameDirectories
                 if (!char.IsLetter(referenceField.value[0])) return false;
                 foreach (char character in referenceField.value) if (!char.IsLetterOrDigit(character) && character != '_') return false;
 
-                if (directoryReferences.Children().Count(x => x != directoryReference && x is TextField && ((TextField) x).value == referenceField.value) > 0) return false;
+                if (directoryReferences.Children().Count(x => x != directoryReference && x is TextField && ((TextField)x).value == referenceField.value) > 0) return false;
             }
 
             return true;
@@ -135,6 +144,9 @@ namespace Essentials.Internal.GameDirectories
                     directoryReferences.Add(referenceField);
                 }
             }
+
+            if (!GameDirectoriesEditor.appliedChanges) unappliedChanges.style.display = DisplayStyle.Flex;
+            else unappliedChanges.style.display = DisplayStyle.None;
         }
 
         public void Apply()
