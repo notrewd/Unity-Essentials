@@ -2,6 +2,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Essentials.Core.GameDirectories;
+using Essentials.Core.Utility;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,13 +10,42 @@ namespace Essentials.Internal.GameDirectories
 {
     public static class GameDirectoriesSettings
     {
-        public static string GetClassName() => EditorPrefs.GetString("Essentials.GameDirectoriesSettings.ClassName", "DirectoriesList");
-        public static string GetClassLocation() => EditorPrefs.GetString("Essentials.GameDirectoriesSettings.ClassLocation", "Assets");
-        public static string GetGameDirectories() => EditorPrefs.GetString("Essentials.GameDirectoriesSettings.GameDirectories", string.Empty);
+        private static GameDirectoriesSettingsData settingsData;
 
-        public static void SetClassName(string className) => EditorPrefs.SetString("Essentials.GameDirectoriesSettings.ClassName", className);
-        public static void SetClassLocation(string classLocation) => EditorPrefs.SetString("Essentials.GameDirectoriesSettings.ClassLocation", classLocation);
-        public static void SetGameDirectories(string gameDirectories) => EditorPrefs.SetString("Essentials.GameDirectoriesSettings.GameDirectories", gameDirectories);
+        public static void LoadData()
+        {
+            if (settingsData != null) return;
+
+            settingsData = AssetDatabase.LoadAssetAtPath<GameDirectoriesSettingsData>("Packages/com.notrewd.essentials/EssentialsCore/Runtime/GameDirectories/GameDirectoriesData.asset");
+
+            if (settingsData == null)
+            {
+                settingsData = ScriptableObject.CreateInstance<GameDirectoriesSettingsData>();
+                AssetDatabase.CreateAsset(settingsData, "Packages/com.notrewd.essentials/EssentialsCore/Runtime/GameDirectories/GameDirectoriesData.asset");
+                AssetDatabase.SaveAssets();
+
+                if (string.IsNullOrWhiteSpace(settingsData.gameDirectoriesData)) settingsData.gameDirectoriesData = JsonUtility.ToJson(new GameDirectoryData[0]);
+            }
+        }
+
+        public static void SaveData()
+        {
+            EditorUtility.SetDirty(settingsData);
+            AssetDatabase.SaveAssets();
+        }
+
+        public static string GetClassName() => settingsData.className;
+        public static string GetClassLocation() => settingsData.classLocation;
+        public static GameDirectoryData[] GetGameDirectoriesData() => JsonUtility.FromJson<Wrapper<GameDirectoryData>>(settingsData.gameDirectoriesData).items;
+
+        public static void SetClassName(string className) => settingsData.className = className;
+        public static void SetClassLocation(string classLocation) => settingsData.classLocation = classLocation;
+        public static void SetGameDirectoriesData(GameDirectoryData[] directories)
+        {
+            Wrapper<GameDirectoryData> wrapper = new Wrapper<GameDirectoryData>();
+            wrapper.items = directories;
+            settingsData.gameDirectoriesData = JsonUtility.ToJson(wrapper);
+        }
 
         public static void GenerateClass(GameDirectory[] directories)
         {

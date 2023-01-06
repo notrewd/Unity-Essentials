@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Essentials.Core.Utility;
 
 namespace Essentials.Core.CheatConsole
 {
