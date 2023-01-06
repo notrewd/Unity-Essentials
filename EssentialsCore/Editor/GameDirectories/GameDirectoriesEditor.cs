@@ -77,14 +77,17 @@ namespace Essentials.Internal.GameDirectories
 
             GameDirectoryData[] gameDirectoriesData = GameDirectoriesSettings.GetGameDirectoriesData();
 
-            foreach (GameDirectoryData gameDirectoryData in gameDirectoriesData)
+            if (gameDirectoriesData != null)
             {
-                CreateGameDirectory(gameDirectoryData.path, gameDirectoryData.reference);
+                foreach (GameDirectoryData gameDirectoryData in gameDirectoriesData)
+                {
+                    CreateGameDirectory(gameDirectoryData.path, gameDirectoryData.reference);
+                }
+
+                RefreshScrollView();
             }
 
-            RefreshScrollView();
             applyButton.SetEnabled(false);
-
             appliedChanges = true;
         }
 
