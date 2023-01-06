@@ -34,8 +34,6 @@ namespace Essentials.Internal.GameDirectories
 
         public void CreateGUI()
         {
-            GameDirectoriesSettings.LoadData();
-
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/GameDirectories/GameDirectoriesEditorDocument.uxml");
             visualTree.CloneTree(rootVisualElement);
 
@@ -75,15 +73,24 @@ namespace Essentials.Internal.GameDirectories
             applyButton.clicked += Apply;
             settingsButton.clicked += ShowSettingsWindow;
 
-            GameDirectoryData[] gameDirectoriesData = GameDirectoriesSettings.GetGameDirectoriesData();
+            string directories = GameDirectoriesSettings.GetGameDirectories();
 
-            foreach (GameDirectoryData gameDirectoryData in gameDirectoriesData)
+            if (!string.IsNullOrEmpty(directories))
             {
-                CreateGameDirectory(gameDirectoryData.path, gameDirectoryData.reference);
-            }
+                string[] directoriesData = directories.Split(';');
 
-            RefreshScrollView();
-            applyButton.SetEnabled(false);
+                foreach (string directoryData in directoriesData)
+                {
+                    string[] directoryDataSplit = directoryData.Split(',');
+
+                    if (directoryDataSplit.Length != 2) continue;
+
+                    CreateGameDirectory(directoryDataSplit[0], directoryDataSplit[1]);
+                }
+
+                RefreshScrollView();
+                applyButton.SetEnabled(false);
+            }
 
             appliedChanges = true;
         }
@@ -287,6 +294,28 @@ namespace Essentials.Internal.GameDirectories
             menu.ShowAsContext();
         }
 
+        public GameDirectory[] GetAllGameDirectories()
+        {
+            List<GameDirectory> directories = new List<GameDirectory>();
+
+            void AddSubDirectories(GameDirectory directory)
+            {
+                foreach (GameDirectory subDirectory in directory.subDirectories)
+                {
+                    directories.Add(subDirectory);
+                    AddSubDirectories(subDirectory);
+                }
+            }
+
+            foreach (GameDirectory gameDirectory in Core.GameDirectories.GameDirectories.gameDirectories)
+            {
+                directories.Add(gameDirectory);
+                AddSubDirectories(gameDirectory);
+            }
+
+            return directories.ToArray();
+        }
+
         private void RefreshScrollView()
         {
             scrollView.Clear();
@@ -424,23 +453,13 @@ namespace Essentials.Internal.GameDirectories
             appliedChanges = true;
             applyButton.SetEnabled(false);
 
-            GameDirectory[] gameDirectories = Core.GameDirectories.GameDirectories.GetAllGameDirectories();
-            GameDirectoryData[] gameDirectoryData = new GameDirectoryData[gameDirectories.Length];
-
-            for (int i = 0; i < gameDirectories.Length; i++)
-            {
-                gameDirectoryData[i] = new GameDirectoryData(gameDirectories[i].path, gameDirectories[i].reference);
-            }
-
-            GameDirectoriesSettings.SetGameDirectoriesData(gameDirectoryData);
-
-            GameDirectoriesSettings.SaveData();
+            GameDirectoriesSettings.SetGameDirectories(string.Join(";", Core.GameDirectories.GameDirectories.GetAllGameDirectories().Select(x => $"{x.path},{x.reference}")));
 
             if (settingsEditor != null) settingsEditor.Refresh();
 
             if (regenerateClass)
             {
-                GameDirectoriesSettings.GenerateClass(gameDirectories);
+                GameDirectoriesSettings.GenerateClass(Core.GameDirectories.GameDirectories.GetAllGameDirectories());
                 regenerateClass = false;
             }
         }
