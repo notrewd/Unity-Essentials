@@ -28,6 +28,8 @@ namespace Essentials.Internal.GameDirectories
 
         public void CreateGUI()
         {
+            GameDirectoriesSettings.LoadData();
+
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/GameDirectories/GameDirectoriesSettingsEditorDocument.uxml");
             visualTree.CloneTree(rootVisualElement);
 
@@ -109,10 +111,9 @@ namespace Essentials.Internal.GameDirectories
 
             directoryReferences.Clear();
 
-            // load directories from settings in format "path1,reference1;path2,reference2;..."
-            string directories = GameDirectoriesSettings.GetGameDirectories();
+            GameDirectoryData[] gameDirectoriesData = GameDirectoriesSettings.GetGameDirectoriesData();
 
-            if (directories.Length == 0)
+            if (gameDirectoriesData == null || gameDirectoriesData.Length == 0)
             {
                 Label label = new Label("No directories have been added yet.");
                 label.style.color = Color.grey;
@@ -121,21 +122,12 @@ namespace Essentials.Internal.GameDirectories
             }
             else
             {
-                string[] directoriesData = directories.Split(';');
-
-                foreach (string directoryData in directoriesData)
+                foreach (GameDirectoryData gameDirectoryData in gameDirectoriesData)
                 {
-                    string[] directoryDataSplit = directoryData.Split(',');
-                    if (directoryDataSplit.Length != 2) continue;
-
-                    string path = directoryDataSplit[0];
-                    string reference = directoryDataSplit[1];
-
                     TextField referenceField = new TextField();
-
-                    referenceField.value = reference;
-                    referenceField.label = path;
-
+                    referenceField.label = gameDirectoryData.path;
+                    referenceField.value = gameDirectoryData.reference;
+                    
                     referenceField.RegisterValueChangedCallback(_ =>
                     {
                         applyButton.SetEnabled(Validate());
@@ -166,8 +158,16 @@ namespace Essentials.Internal.GameDirectories
             }
 
             GameDirectory[] gameDirectories = Core.GameDirectories.GameDirectories.GetAllGameDirectories();
+            GameDirectoryData[] gameDirectoriesData = new GameDirectoryData[gameDirectories.Length];
 
-            GameDirectoriesSettings.SetGameDirectories(string.Join(";", gameDirectories.Select(x => $"{x.path},{x.reference}")));
+            for (int i = 0; i < gameDirectories.Length; i++)
+            {
+                gameDirectoriesData[i] = new GameDirectoryData(gameDirectories[i].path, gameDirectories[i].reference);
+            }
+
+            GameDirectoriesSettings.SetGameDirectoriesData(gameDirectoriesData);
+
+            GameDirectoriesSettings.SaveData();
 
             GameDirectoriesSettings.GenerateClass(gameDirectories);
         }
