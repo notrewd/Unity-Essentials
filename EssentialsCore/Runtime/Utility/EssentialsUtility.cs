@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Essentials.Core
+namespace Essentials.Core.Utility
 {
     public static class EssentialsUtility
     {
@@ -12,5 +12,10 @@ namespace Essentials.Core
 
             return newTexture;
         }
+    }
+
+    public class Wrapper<T>
+    {
+        public T[] items;
     }
 }
