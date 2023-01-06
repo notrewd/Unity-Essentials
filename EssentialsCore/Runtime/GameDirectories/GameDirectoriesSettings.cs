@@ -10,28 +10,24 @@ namespace Essentials.Internal.GameDirectories
 {
     public static class GameDirectoriesSettings
     {
+        private const string SAVE_KEY = "Essentials.GameDirectoriesSettingsData";
+
         private static GameDirectoriesSettingsData settingsData;
 
         public static void LoadData()
         {
             if (settingsData != null) return;
 
-            settingsData = AssetDatabase.LoadAssetAtPath<GameDirectoriesSettingsData>("Packages/com.notrewd.essentials/EssentialsCore/Runtime/GameDirectories/GameDirectoriesData.asset");
-
-            if (settingsData == null)
-            {
-                settingsData = ScriptableObject.CreateInstance<GameDirectoriesSettingsData>();
-                AssetDatabase.CreateAsset(settingsData, "Packages/com.notrewd.essentials/EssentialsCore/Runtime/GameDirectories/GameDirectoriesData.asset");
-                AssetDatabase.SaveAssets();
-
-                if (string.IsNullOrWhiteSpace(settingsData.gameDirectoriesData)) settingsData.gameDirectoriesData = JsonUtility.ToJson(new GameDirectoryData[0]);
-            }
+            int hash = Application.dataPath.GetHashCode();
+            
+            settingsData = EditorPrefs.HasKey($"{SAVE_KEY}.{hash:X}") ? JsonUtility.FromJson<GameDirectoriesSettingsData>(EditorPrefs.GetString($"{SAVE_KEY}.{hash:X}")) : new GameDirectoriesSettingsData();
         }
 
         public static void SaveData()
         {
-            EditorUtility.SetDirty(settingsData);
-            AssetDatabase.SaveAssets();
+            int hash = Application.dataPath.GetHashCode();
+
+            EditorPrefs.SetString($"{SAVE_KEY}.{hash:X}", JsonUtility.ToJson(settingsData));
         }
 
         public static string GetClassName() => settingsData.className;

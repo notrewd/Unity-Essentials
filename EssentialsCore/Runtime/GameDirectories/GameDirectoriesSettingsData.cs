@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Essentials.Internal.GameDirectories
 {
-    public class GameDirectoriesSettingsData : ScriptableObject
+    [Serializable]
+    public class GameDirectoriesSettingsData
     {
         public string className = "DirectoriesList";
         public string classLocation = "Assets";
