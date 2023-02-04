@@ -10,8 +10,6 @@ namespace Essentials.Internal.GameDirectories
 {
     public static class GameDirectoriesSettings
     {
-        private const string SAVE_KEY = "Essentials.GameDirectoriesSettingsData";
-
         private static GameDirectoriesSettingsData settingsData;
 
         public static void LoadData()
@@ -20,14 +18,20 @@ namespace Essentials.Internal.GameDirectories
 
             int hash = Application.dataPath.GetHashCode();
             
-            settingsData = EditorPrefs.HasKey($"{SAVE_KEY}.{hash:X}") ? JsonUtility.FromJson<GameDirectoriesSettingsData>(EditorPrefs.GetString($"{SAVE_KEY}.{hash:X}")) : new GameDirectoriesSettingsData();
+            settingsData = File.Exists(Path.Combine(Application.dataPath, "EssentialsData", "GameDirectoriesSettingsData.json"))
+                ? JsonUtility.FromJson<GameDirectoriesSettingsData>(File.ReadAllText(Path.Combine(Application.dataPath, "EssentialsData", "GameDirectoriesSettingsData.json")))
+                : new GameDirectoriesSettingsData();
         }
 
         public static void SaveData()
         {
             int hash = Application.dataPath.GetHashCode();
 
-            EditorPrefs.SetString($"{SAVE_KEY}.{hash:X}", JsonUtility.ToJson(settingsData));
+            string path = Path.Combine(Application.dataPath, "EssentialsData", "GameDirectoriesSettingsData.json");
+            
+            if (!Directory.Exists(Path.Combine(Application.dataPath, "EssentialsData"))) Directory.CreateDirectory(Path.Combine(Application.dataPath, "EssentialsData"));
+            File.WriteAllText(path, JsonUtility.ToJson(settingsData, true));
+            AssetDatabase.Refresh();
         }
 
         public static string GetClassName() => settingsData.className;
