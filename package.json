@@ -7,8 +7,5 @@
   "unity": "2021.3",
   "documentationUrl": "https://github.com/NotRewd/Unity-Essentials",
   "changelogUrl": "https://github.com/NotRewd/Unity-Essentials",
-  "licensesUrl": "https://github.com/NotRewd/Unity-Essentials",
-  "dependencies": {
-    "com.unity.inputsystem": "1.4.4"
-  }
+  "licensesUrl": "https://github.com/NotRewd/Unity-Essentials"
 }
