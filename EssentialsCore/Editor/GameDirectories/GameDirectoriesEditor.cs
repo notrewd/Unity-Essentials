@@ -408,7 +408,7 @@ namespace Essentials.Internal.GameDirectories
 
             if (path.Replace("\\", "/").Contains("/"))
             {
-                string[] directories = path.Split('/');
+                string[] directories = path.Replace("\\", "/").Split('/');
                 if (directories.Length == 0) return false;
 
                 foreach (string directory in directories)
