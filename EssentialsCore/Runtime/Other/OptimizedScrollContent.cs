@@ -45,10 +45,12 @@ public class OptimizedScrollContent : MonoBehaviour
     public bool stretchChildren;
     public Padding padding;
 
+    private RectTransform rectTransform;
     private GameObject[] items;
 
     private void Awake()
     {
+        rectTransform = GetComponent<RectTransform>();
         scrollRect.onValueChanged.AddListener(OnScroll);
     }
 
@@ -63,6 +65,7 @@ public class OptimizedScrollContent : MonoBehaviour
         }
 
         RecalculateLayout();
+        if (resizeContent) RecalculateContentSize();
     }
 
     private void OnRectTransformDimensionsChange()
@@ -182,5 +185,45 @@ public class OptimizedScrollContent : MonoBehaviour
     private void RecalculateLayoutHorizontal()
     {
 
+    }
+
+    private void RecalculateContentSize()
+    {
+        if (layoutType == LayoutType.Vertical)
+        {
+            float height = 0;
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                RectTransform item = items[i].GetComponent<RectTransform>();
+                height += item.rect.height * item.localScale.y;
+            }
+
+            height += (items.Length - 1) * spacing;
+            height += padding.top + padding.bottom;
+
+            rectTransform.anchorMin = new Vector2(0, 1);
+            rectTransform.anchorMax = new Vector2(1, 1);
+
+            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, height);
+        }
+        else if (layoutType == LayoutType.Horizontal)
+        {
+            float width = 0;
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                RectTransform item = items[i].GetComponent<RectTransform>();
+                width += item.rect.width * item.localScale.x;
+            }
+
+            width += (items.Length - 1) * spacing;
+            width += padding.left + padding.right;
+
+            rectTransform.anchorMin = new Vector2(0, 0);
+            rectTransform.anchorMax = new Vector2(0, 1);
+
+            rectTransform.sizeDelta = new Vector2(width, rectTransform.sizeDelta.y);
+        }
     }
 }
