@@ -46,7 +46,7 @@ public class OptimizedScrollContent : MonoBehaviour
     public Padding padding;
 
     private RectTransform rectTransform;
-    private GameObject[] items;
+    private GameObject[] items = new GameObject[0];
 
     private void Awake()
     {
@@ -75,7 +75,7 @@ public class OptimizedScrollContent : MonoBehaviour
 
     private void OnScroll(Vector2 pos)
     {
-
+        RecalculateVisibility();
     }
 
     private void RecalculateLayout()
@@ -184,7 +184,89 @@ public class OptimizedScrollContent : MonoBehaviour
 
     private void RecalculateLayoutHorizontal()
     {
+        if (transform.childCount == 0) return;
 
+        if (stretchChildren)
+        {
+            RectTransform firstItem = items[0].GetComponent<RectTransform>();
+            firstItem.anchorMin = new Vector2(0, 1);
+            firstItem.anchorMax = new Vector2(0, 1);
+            firstItem.pivot = new Vector2(0, 1);
+            firstItem.anchoredPosition = new Vector2(padding.left, -padding.top);
+            firstItem.sizeDelta = new Vector2(firstItem.sizeDelta.x, scrollRect.viewport.rect.height / firstItem.localScale.y - padding.top / firstItem.localScale.y - padding.bottom / firstItem.localScale.y);
+
+            for (int i = 1; i < items.Length; i++)
+            {
+                RectTransform item = items[i].GetComponent<RectTransform>();
+                RectTransform prevItem = items[i - 1].GetComponent<RectTransform>();
+
+                item.anchorMin = new Vector2(0, 1);
+                item.anchorMax = new Vector2(0, 1);
+                item.pivot = new Vector2(0, 1);
+                item.anchoredPosition = new Vector2(prevItem.anchoredPosition.x + prevItem.rect.width * prevItem.localScale.x + spacing, -padding.top);
+                item.sizeDelta = new Vector2(item.sizeDelta.x, scrollRect.viewport.rect.height / item.localScale.y - padding.top / firstItem.localScale.y - padding.bottom / firstItem.localScale.y);
+            }
+
+            return;
+        }
+
+        if (horizontalLayoutAlignment == HorizontalLayoutAlignment.Top)
+        {
+            RectTransform firstItem = items[0].GetComponent<RectTransform>();
+            firstItem.anchorMin = new Vector2(0, 1);
+            firstItem.anchorMax = new Vector2(0, 1);
+            firstItem.pivot = new Vector2(0, 1);
+            firstItem.anchoredPosition = new Vector2(padding.left, -padding.top);
+
+            for (int i = 1; i < items.Length; i++)
+            {
+                RectTransform item = items[i].GetComponent<RectTransform>();
+                RectTransform prevItem = items[i - 1].GetComponent<RectTransform>();
+
+                item.anchorMin = new Vector2(0, 1);
+                item.anchorMax = new Vector2(0, 1);
+                item.pivot = new Vector2(0, 1);
+                item.anchoredPosition = new Vector2(prevItem.anchoredPosition.x + prevItem.rect.width * prevItem.localScale.x + spacing, -padding.top);
+            }
+        }
+        else if (horizontalLayoutAlignment == HorizontalLayoutAlignment.Center)
+        {
+            RectTransform firstItem = items[0].GetComponent<RectTransform>();
+            firstItem.anchorMin = new Vector2(0, 0.5f);
+            firstItem.anchorMax = new Vector2(0, 0.5f);
+            firstItem.pivot = new Vector2(0, 0.5f);
+            firstItem.anchoredPosition = new Vector2(padding.left, 0);
+
+            for (int i = 1; i < items.Length; i++)
+            {
+                RectTransform item = items[i].GetComponent<RectTransform>();
+                RectTransform prevItem = items[i - 1].GetComponent<RectTransform>();
+
+                item.anchorMin = new Vector2(0, 0.5f);
+                item.anchorMax = new Vector2(0, 0.5f);
+                item.pivot = new Vector2(0, 0.5f);
+                item.anchoredPosition = new Vector2(prevItem.anchoredPosition.x + prevItem.rect.width * prevItem.localScale.x + spacing, 0);
+            }
+        }
+        else if (horizontalLayoutAlignment == HorizontalLayoutAlignment.Bottom)
+        {
+            RectTransform firstItem = items[0].GetComponent<RectTransform>();
+            firstItem.anchorMin = new Vector2(0, 0);
+            firstItem.anchorMax = new Vector2(0, 0);
+            firstItem.pivot = new Vector2(0, 0);
+            firstItem.anchoredPosition = new Vector2(padding.left, padding.bottom);
+
+            for (int i = 1; i < items.Length; i++)
+            {
+                RectTransform item = items[i].GetComponent<RectTransform>();
+                RectTransform prevItem = items[i - 1].GetComponent<RectTransform>();
+
+                item.anchorMin = new Vector2(0, 0);
+                item.anchorMax = new Vector2(0, 0);
+                item.pivot = new Vector2(0, 0);
+                item.anchoredPosition = new Vector2(prevItem.anchoredPosition.x + prevItem.rect.width * prevItem.localScale.x + spacing, padding.bottom);
+            }
+        }
     }
 
     private void RecalculateContentSize()
@@ -205,7 +287,7 @@ public class OptimizedScrollContent : MonoBehaviour
             rectTransform.anchorMin = new Vector2(0, 1);
             rectTransform.anchorMax = new Vector2(1, 1);
 
-            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, height);
+            rectTransform.sizeDelta = new Vector2(0, height);
         }
         else if (layoutType == LayoutType.Horizontal)
         {
@@ -223,7 +305,34 @@ public class OptimizedScrollContent : MonoBehaviour
             rectTransform.anchorMin = new Vector2(0, 0);
             rectTransform.anchorMax = new Vector2(0, 1);
 
-            rectTransform.sizeDelta = new Vector2(width, rectTransform.sizeDelta.y);
+            rectTransform.sizeDelta = new Vector2(width, 0);
+        }
+    }
+
+    private void RecalculateVisibility()
+    {
+        // calculate the visible area of the scroll rect using inverse transform point
+        Vector3[] corners = new Vector3[4];
+        scrollRect.viewport.GetWorldCorners(corners);
+
+        for (int i = 0; i < 4; i++) corners[i] = transform.InverseTransformPoint(corners[i]);
+
+        Rect visibleArea = new Rect(corners[0], Vector2.zero);
+        visibleArea.xMin = corners[0].x;
+        visibleArea.yMin = corners[0].y;
+        visibleArea.xMax = corners[2].x;
+        visibleArea.yMax = corners[2].y;
+
+        // check if the item is visible and set the appropriate flag
+        for (int i = 0; i < items.Length; i++)
+        {
+            RectTransform item = items[i].GetComponent<RectTransform>();
+            Rect itemRect = new Rect(item.anchoredPosition, item.rect.size * item.localScale);
+
+            if (layoutType == LayoutType.Vertical) itemRect.y -= item.rect.height * item.localScale.y;
+            else if (layoutType == LayoutType.Horizontal) itemRect.x -= item.rect.width * item.localScale.x;
+
+            items[i].SetActive(visibleArea.Overlaps(itemRect));
         }
     }
 }
