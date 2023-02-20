@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement style="flex-grow: 1;">
+        <uie:ObjectField label="Scroll Rect" binding-path="scrollRect" allow-scene-objects="true" type="UnityEngine.UI.ScrollRect, UnityEngine.UI" />
+        <uie:EnumField label="Layout Type" value="Center" binding-path="layoutType" name="LayoutType" style="padding-top: 5px;" />
+        <ui:Foldout text="Layout Settings" name="LayoutSettings">
+            <uie:EnumField label="Layout Alignment" value="Center" binding-path="verticalLayoutAlignment" name="VerticalLayoutAlignment" style="display: flex;" />
+            <uie:EnumField label="Layout Alignment" value="Center" binding-path="horizontalLayoutAlignment" name="HorizontalLayoutAlignment" style="display: none;" />
+            <uie:FloatField label="Spacing" value="0" name="Spacing" readonly="false" binding-path="spacing" style="display: flex; visibility: visible;" />
+            <ui:Toggle label="Resize Content" binding-path="resizeContent" name="ResizeContent" style="display: flex; visibility: visible; padding-top: 1px;" />
+            <ui:Toggle label="Stretch Children" binding-path="stretchChildren" name="StretchChildren" style="display: flex; visibility: visible;" />
+        </ui:Foldout>
+        <uie:PropertyField label="Padding" name="Padding" binding-path="padding" style="display: flex; padding-top: 5px;" />
+    </ui:VisualElement>
+</ui:UXML>
