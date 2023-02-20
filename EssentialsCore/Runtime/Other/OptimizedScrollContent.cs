@@ -330,7 +330,6 @@ public class OptimizedScrollContent : MonoBehaviour
             Rect itemRect = new Rect(item.anchoredPosition, item.rect.size * item.localScale);
 
             if (layoutType == LayoutType.Vertical) itemRect.y -= item.rect.height * item.localScale.y;
-            else if (layoutType == LayoutType.Horizontal) itemRect.x -= item.rect.width * item.localScale.x;
 
             items[i].SetActive(visibleArea.Overlaps(itemRect));
         }
