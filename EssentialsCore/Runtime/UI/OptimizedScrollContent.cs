@@ -125,7 +125,7 @@ namespace Essentials.Core.UI
 
         private void OnTransformChildrenChanged()
         {
-            if (!changeChildrenOnTransformChildrenChanged) return;
+            if (!changeChildrenOnTransformChildrenChanged || !Application.isPlaying) return;
 
             items.Clear();
             for (int i = 0; i < transform.childCount; i++) items.Add(transform.GetChild(i).gameObject);
