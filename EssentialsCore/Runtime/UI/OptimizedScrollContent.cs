@@ -57,7 +57,7 @@ namespace Essentials.Core.UI
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
-            scrollRect.onValueChanged.AddListener(OnScroll);
+            if (scrollRect != null) scrollRect.onValueChanged.AddListener(OnScroll);
         }
 
         public void AddElement(GameObject element)
