@@ -58,6 +58,7 @@ namespace Essentials.Core.UI
         {
             rectTransform = GetComponent<RectTransform>();
             if (scrollRect != null) scrollRect.onValueChanged.AddListener(OnScroll);
+            else if (Application.isPlaying) Debug.LogError("Essentials UI: ScrollRect is not assigned to Optimized Scroll Content");
         }
 
         public void AddElement(GameObject element)
