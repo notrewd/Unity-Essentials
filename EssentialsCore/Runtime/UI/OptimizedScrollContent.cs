@@ -120,7 +120,7 @@ namespace Essentials.Core.UI
 
         private void Update()
         {
-            if (Application.isPlaying || layoutType == LayoutType.None) return;
+            if (Application.isPlaying || layoutType == LayoutType.None || scrollRect == null) return;
             OnTransformChildrenChanged();
         }
 

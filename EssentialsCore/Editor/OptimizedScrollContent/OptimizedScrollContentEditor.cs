@@ -19,7 +19,7 @@ public class OptimizedScrollContentEditor : Editor
     public override VisualElement CreateInspectorGUI()
     {
         VisualElement root = new VisualElement();
-        VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/OptimizedScrollRect/OptimizedScrollContentDocument.uxml");
+        VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/OptimizedScrollContent/OptimizedScrollContentDocument.uxml");
         visualTree.CloneTree(root);
 
         layoutType = root.Q<EnumField>("LayoutType");
