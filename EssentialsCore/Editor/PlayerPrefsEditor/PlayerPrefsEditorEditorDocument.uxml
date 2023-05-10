@@ -2,10 +2,14 @@
     <ui:VisualElement style="flex-grow: 1;">
         <ui:ScrollView name="PlayerPrefsList" style="flex-grow: 1; display: none;" />
         <ui:VisualElement name="NoPlayerPrefsInfo" style="flex-grow: 1; justify-content: center; align-items: center;">
-            <ui:Label text="There are currently no PlayerPrefs." display-tooltip-when-elided="true" name="Title" />
+            <ui:Label text="There are currently no PlayerPrefs." display-tooltip-when-elided="true" name="Title" style="margin-bottom: 5px;" />
+            <ui:Button text="Refresh" display-tooltip-when-elided="true" name="RefreshButton" />
         </ui:VisualElement>
         <ui:VisualElement name="BottomBar" style="justify-content: space-between; align-items: stretch; flex-grow: 0; flex-direction: row; flex-shrink: 0; padding-left: 2px; padding-right: 2px; padding-top: 3px; padding-bottom: 3px; background-color: rgba(0, 0, 0, 0.15);">
-            <ui:Button text="Add Key" display-tooltip-when-elided="true" name="AddKeyButton" />
+            <ui:Label text="Show Internal PlayerPrefs" display-tooltip-when-elided="true" name="InternalPlayerPrefsLabel" style="-unity-text-align: middle-left; margin-right: 5px;" />
+            <ui:Toggle name="InternalPlayerPrefsToggle" style="flex-grow: 0; flex-shrink: 0; -unity-text-align: middle-left; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0;" />
+            <ui:VisualElement style="flex-grow: 1;" />
+            <ui:Button text="New PlayerPref" display-tooltip-when-elided="true" name="NewPlayerPrefButton" />
             <ui:Button text="Apply" display-tooltip-when-elided="true" name="ApplyButton" />
         </ui:VisualElement>
     </ui:VisualElement>
