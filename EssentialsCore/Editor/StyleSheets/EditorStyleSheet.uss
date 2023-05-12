@@ -1,0 +1,36 @@
+.tab-button {
+    height: 23px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    -unity-text-align: middle-center;
+    background-color: rgba(0, 0, 0, 0.15);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.tab-button.selected {
+    background-color: rgb(56, 56, 56);
+}
+
+.bar {
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    flex-shrink: 0;
+    flex-direction: row;
+    background-color: rgb(47, 47, 47);
+    height: auto;
+}

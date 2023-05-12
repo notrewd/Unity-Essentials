@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:VisualElement style="flex-grow: 1; justify-content: center; align-items: stretch; flex-direction: column; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;">
-        <ui:Label text="Add New PlayerPref" display-tooltip-when-elided="true" style="margin-bottom: 10px; margin-top: 0; -unity-text-align: middle-center; -unity-font-style: bold;" />
+        <ui:Label text="Add New PlayerPref" display-tooltip-when-elided="true" name="TitleLabel" style="margin-bottom: 10px; margin-top: 0; -unity-text-align: middle-center; -unity-font-style: bold;" />
         <ui:TextField picking-mode="Ignore" label="Key Name" readonly="false" multiline="false" name="KeyField" style="flex-shrink: 1; flex-grow: 0; height: auto; margin-bottom: 5px;" />
         <ui:TextField picking-mode="Ignore" label="Value" readonly="false" multiline="false" name="ValueField" style="flex-shrink: 0; flex-grow: 0; margin-bottom: 5px;" />
         <ui:DropdownField label="Value Type" index="-1" name="TypeField" style="flex-shrink: 0; flex-grow: 0; margin-bottom: 10px;" />

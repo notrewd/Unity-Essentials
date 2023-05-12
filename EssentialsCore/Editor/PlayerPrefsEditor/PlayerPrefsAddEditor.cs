@@ -8,6 +8,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
 {
     public class PlayerPrefsAddEditor : EditorWindow
     {
+        private Label titleLabel;
         private TextField keyField;
         private TextField valueField;
         private DropdownField typeField;
@@ -18,7 +19,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
         public static void ShowWindow(PlayerPrefsEditorEditor editor)
         {
             PlayerPrefsAddEditor window = GetWindow<PlayerPrefsAddEditor>();
-            window.titleContent = new GUIContent("Add PlayerPrefs");
+            window.titleContent = new GUIContent(PlayerPrefsEditorEditor.isEditorPrefs ? "Add EditorPref" : "Add PlayerPref");
             window.minSize = new Vector2(350, 150);
             window.maxSize = new Vector2(350, 150);
 
@@ -30,10 +31,13 @@ namespace Essentials.Internal.PlayerPrefsEditor
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/PlayerPrefsEditor/PlayerPrefsAddEditorDocument.uxml");
             visualTree.CloneTree(rootVisualElement);
 
+            titleLabel = rootVisualElement.Q<Label>("TitleLabel");
             keyField = rootVisualElement.Q<TextField>("KeyField");
             valueField = rootVisualElement.Q<TextField>("ValueField");
             typeField = rootVisualElement.Q<DropdownField>("TypeField");
             addButton = rootVisualElement.Q<Button>("AddButton");
+
+            titleLabel.text = PlayerPrefsEditorEditor.isEditorPrefs ? "Add New EditorPref" : "Add New PlayerPref";
 
             keyField.RegisterValueChangedCallback((_) => CheckFields());
 
@@ -43,6 +47,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
             typeField.value = "String";
             typeField.RegisterValueChangedCallback((_) => CheckFields());
 
+            addButton.text = PlayerPrefsEditorEditor.isEditorPrefs ? "Add EditorPref" : "Add PlayerPref";
             addButton.clicked += Add;
         }
 
