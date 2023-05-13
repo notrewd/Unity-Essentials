@@ -18,8 +18,8 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
         public static void ShowWindow(PlayerPrefsEditorEditor editor)
         {
-            PlayerPrefsAddEditor window = GetWindow<PlayerPrefsAddEditor>();
-            window.titleContent = new GUIContent(PlayerPrefsEditorEditor.isEditorPrefs ? "Add EditorPref" : "Add PlayerPref");
+            // Create a modal window
+            PlayerPrefsAddEditor window = GetWindow<PlayerPrefsAddEditor>(true, PlayerPrefsEditorEditor.isEditorPrefs ? "Add EditorPref" : "Add PlayerPref", true);
             window.minSize = new Vector2(350, 150);
             window.maxSize = new Vector2(350, 150);
 
