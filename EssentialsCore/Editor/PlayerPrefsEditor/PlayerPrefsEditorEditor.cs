@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 using System.Runtime.Serialization.Plists;
 using UnityEditor.UIElements;
 using System.Linq;
+using Microsoft.Win32;
+using System.IO;
+using System.ComponentModel;
 
 namespace Essentials.Internal.PlayerPrefsEditor
 {
@@ -30,10 +33,14 @@ namespace Essentials.Internal.PlayerPrefsEditor
         private Button newPlayerPrefButton;
         private Button applyButton;
 
+        private RegistryMonitor playerPrefsRegistryMonitor;
+        private RegistryMonitor editorPrefsRegistryMonitor;
         private Dictionary<string, object> playerPrefs = new Dictionary<string, object>();
         private bool orderAscending = true;
+        private bool playerPrefsEntryUpdated = false;
+        private bool editorPrefsEntryUpdated = false;
 
-#if PLATFORM_STANDALONE_OSX || PLATFORM_STANDALONE_WIN
+#if UNITY_EDITOR_OSX || UNITY_EDITOR_WIN
         [MenuItem("Essentials/PlayerPrefs Editor")]
         private static void ShowWindow()
         {
@@ -128,9 +135,43 @@ namespace Essentials.Internal.PlayerPrefsEditor
             internalPlayerPrefsToggle.RegisterValueChangedCallback((_) => RefreshList());
 
             newPlayerPrefButton.clicked += () => PlayerPrefsAddEditor.ShowWindow(this);
+
             applyButton.clicked += Apply;
 
             RefreshAll();
+
+#if UNITY_EDITOR_WIN
+            playerPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity\\UnityEditor\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
+            playerPrefsRegistryMonitor.RegChanged += (_, __) => playerPrefsEntryUpdated = true;
+            playerPrefsRegistryMonitor.Start();
+
+            editorPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity Technologies\\Unity Editor 5.x");
+            editorPrefsRegistryMonitor.RegChanged += (_, __) => playerPrefsEntryUpdated = true;
+            editorPrefsRegistryMonitor.Start();
+#endif
+        }
+
+        private void OnEnable() => EditorApplication.update += Update;
+
+        private void OnDisable() => EditorApplication.update -= Update;
+
+        private void Update()
+        {
+            if (playerPrefsEntryUpdated)
+            {
+                playerPrefsEntryUpdated = false;
+                if (isEditorPrefs) return;
+                LoadPlayerPrefs();
+                RefreshList();
+            }
+
+            if (editorPrefsEntryUpdated)
+            {
+                editorPrefsEntryUpdated = false;
+                if (!isEditorPrefs) return;
+                LoadPlayerPrefs();
+                RefreshList();
+            }
         }
 
         public void AddPlayerPref(string key, object value)
@@ -157,7 +198,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
         private void LoadPlayerPrefs()
         {
-#if PLATFORM_STANDALONE_OSX
+#if UNITY_EDITOR_OSX
             BinaryPlistReader reader = new BinaryPlistReader();
 
             if (!isEditorPrefs)
@@ -198,13 +239,13 @@ namespace Essentials.Internal.PlayerPrefsEditor
             }
 #endif
 
-#if PLATFORM_STANDALONE_WIN
+#if UNITY_EDITOR_WIN
             playerPrefs.Clear();
 
             if (!isEditorPrefs)
             {
                 RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("Software\\Unity\\UnityEditor\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
-                
+
                 if (registryKey != null)
                 {
                     foreach (string valueName in registryKey.GetValueNames())
@@ -349,6 +390,11 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
         private void Apply()
         {
+#if UNITY_EDITOR_WIN
+            playerPrefsRegistryMonitor.Stop();
+            editorPrefsRegistryMonitor.Stop();
+#endif
+
             if (!isEditorPrefs)
             {
                 PlayerPrefs.DeleteAll();
@@ -357,7 +403,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
                 {
                     if (pair.Value is string) PlayerPrefs.SetString(pair.Key.ToString(), pair.Value.ToString());
                     else if (pair.Value is int) PlayerPrefs.SetInt(pair.Key.ToString(), int.Parse(pair.Value.ToString()));
-                    else if (pair.Value is float or double) PlayerPrefs.SetFloat(pair.Key.ToString(), float.Parse(pair.Value.ToString()));
+                    else if (pair.Value is float) PlayerPrefs.SetFloat(pair.Key.ToString(), float.Parse(pair.Value.ToString()));
                 }
 
                 PlayerPrefs.Save();
@@ -378,6 +424,11 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
                 applyButton.SetEnabled(false);
             }
+
+#if UNITY_EDITOR_WIN
+            playerPrefsRegistryMonitor.Start();
+            editorPrefsRegistryMonitor.Start();
+#endif
         }
     }
 }

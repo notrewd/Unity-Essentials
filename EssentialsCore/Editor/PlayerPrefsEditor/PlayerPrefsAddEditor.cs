@@ -76,7 +76,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
                         EditorUtility.DisplayDialog("Invalid Value", "Value is not a valid integer", "OK");
                         return;
                     }
-                    editor.AddPlayerPref(keyField.value, Int16.Parse(valueField.value));
+                    editor.AddPlayerPref(keyField.value, int.Parse(valueField.value));
                     break;
                 case "Float":
                     if (!float.TryParse(valueField.value, out float floatValue))
@@ -84,7 +84,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
                         EditorUtility.DisplayDialog("Invalid Value", "Value is not a valid float", "OK");
                         return;
                     }
-                    editor.AddPlayerPref(keyField.value, double.Parse(valueField.value));
+                    editor.AddPlayerPref(keyField.value, float.Parse(valueField.value));
                     break;
             }
 
