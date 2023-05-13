@@ -21,7 +21,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
         private VisualElement topBar;
         private Button playerPrefsButton;
         private Button editorPrefsButton;
-        private ToolbarSearchField searchField;
+        private ToolbarPopupSearchField searchField;
         private Button orderButton;
         private Button refreshButton;
         private ScrollView playerPrefsList;
@@ -36,9 +36,12 @@ namespace Essentials.Internal.PlayerPrefsEditor
         private RegistryMonitor playerPrefsRegistryMonitor;
         private RegistryMonitor editorPrefsRegistryMonitor;
         private Dictionary<string, object> playerPrefs = new Dictionary<string, object>();
+        private SearchType searchType = SearchType.KeyName;
         private bool orderAscending = true;
         private bool playerPrefsEntryUpdated = false;
         private bool editorPrefsEntryUpdated = false;
+
+        private enum SearchType { KeyName, Value, ValueType }
 
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_WIN
         [MenuItem("Essentials/PlayerPrefs Editor")]
@@ -60,7 +63,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
             topBar = rootVisualElement.Q<VisualElement>("TopBar");
             playerPrefsButton = topBar.Q<Button>("PlayerPrefsButton");
             editorPrefsButton = topBar.Q<Button>("EditorPrefsButton");
-            searchField = topBar.Q<ToolbarSearchField>("SearchField");
+            searchField = topBar.Q<ToolbarPopupSearchField>("SearchField");
             orderButton = topBar.Q<Button>("OrderButton");
             refreshButton = topBar.Q<Button>("RefreshButton");
             playerPrefsList = rootVisualElement.Q<ScrollView>("PlayerPrefsList");
@@ -116,6 +119,24 @@ namespace Essentials.Internal.PlayerPrefsEditor
                 RefreshAll();
             };
 
+            searchField.menu.AppendAction("Key Name", (_) =>
+            {
+                searchType = SearchType.KeyName;
+                RefreshList();
+            }, (_) => searchType == SearchType.KeyName ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+
+            searchField.menu.AppendAction("Value", (_) =>
+            {
+                searchType = SearchType.Value;
+                RefreshList();
+            }, (_) => searchType == SearchType.Value ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+
+            searchField.menu.AppendAction("Value Type", (_) =>
+            {
+                searchType = SearchType.ValueType;
+                RefreshList();
+            }, (_) => searchType == SearchType.ValueType ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+
             searchField.RegisterValueChangedCallback((_) => RefreshList());
 
             orderButton.clicked += () =>
@@ -146,7 +167,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
             playerPrefsRegistryMonitor.Start();
 
             editorPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity Technologies\\Unity Editor 5.x");
-            editorPrefsRegistryMonitor.RegChanged += (_, __) => playerPrefsEntryUpdated = true;
+            editorPrefsRegistryMonitor.RegChanged += (_, __) => editorPrefsEntryUpdated = true;
             editorPrefsRegistryMonitor.Start();
 #endif
         }
@@ -293,7 +314,26 @@ namespace Essentials.Internal.PlayerPrefsEditor
             foreach (KeyValuePair<string, object> pair in playerPrefs)
             {
                 if (!internalPlayerPrefsToggle.value && (pair.Key.ToString().StartsWith("unity.") || pair.Key.ToString() == "UnityGraphicsQuality")) continue;
-                if (!pair.Key.ToString().ToLower().Contains(searchField.value.ToLower())) continue;
+
+                if (searchType == SearchType.KeyName && !pair.Key.ToString().ToLower().Contains(searchField.value.ToLower())) continue;
+                else if (searchType == SearchType.Value && pair.Value.ToString().ToLower() != searchField.value.ToLower()) continue;
+                else if (searchType == SearchType.ValueType)
+                {
+                    switch (pair.Value)
+                    {
+                        case string _:
+                            if (searchField.value.ToLower() != "string") continue;
+                            break;
+                        case int _:
+                            if (searchField.value.ToLower() != "int") continue;
+                            break;
+                        case float _:
+                            if (searchField.value.ToLower() != "float") continue;
+                            break;
+                        default:
+                            continue;
+                    }
+                }
 
                 VisualElement element = new VisualElement();
                 element.style.flexDirection = FlexDirection.Row;
@@ -307,6 +347,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
                 DropdownField typeField = new DropdownField();
                 typeField.style.width = 70;
+                typeField.style.height = 20;
                 typeField.choices = new List<string>() { "String", "Int", "Float" };
 
                 if (pair.Value is string) typeField.value = "String";
