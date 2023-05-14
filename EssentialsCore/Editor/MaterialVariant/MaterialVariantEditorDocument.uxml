@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement style="height: auto;">
+        <ui:VisualElement name="MaterialSelection" style="flex-direction: row; justify-content: center; margin-bottom: 5px;">
+            <ui:Button text="←" display-tooltip-when-elided="true" name="PreviousButton" />
+            <ui:Label text="None" display-tooltip-when-elided="true" name="MaterialLabel" style="-unity-text-align: middle-center; -unity-font-style: bold;" />
+            <ui:Button text="→" display-tooltip-when-elided="true" name="NextButton" />
+        </ui:VisualElement>
+        <uie:ColorField label="Color" value="RGBA(0.000, 1.000, 1.000, 1.000)" binding-path="color" name="ColorField" />
+    </ui:VisualElement>
+</ui:UXML>
