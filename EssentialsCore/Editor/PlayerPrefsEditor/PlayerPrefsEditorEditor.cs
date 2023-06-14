@@ -50,7 +50,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
         private static void ShowWindow()
         {
             PlayerPrefsEditorEditor window = GetWindow<PlayerPrefsEditorEditor>();
-            window.titleContent = new GUIContent("PlayerPrefs Editor");
+            Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/playerprefs_icon.png");
+
+            window.titleContent = new GUIContent("PlayerPrefs Editor", icon);
             window.minSize = new Vector2(350, 300);
         }
 #endif
