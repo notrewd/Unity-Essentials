@@ -17,11 +17,13 @@ namespace Essentials.Internal.PlayerPrefsEditor
     {
         public static bool isEditorPrefs { get; private set; } = false;
         private static bool shownEditorPrefsWarning = false;
+        private static bool watchingChanges = true;
 
         private VisualElement topBar;
         private Button playerPrefsButton;
         private Button editorPrefsButton;
         private ToolbarPopupSearchField searchField;
+        private Button watchButton;
         private Button orderButton;
         private Button refreshButton;
         private ScrollView playerPrefsList;
@@ -64,6 +66,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
             playerPrefsButton = topBar.Q<Button>("PlayerPrefsButton");
             editorPrefsButton = topBar.Q<Button>("EditorPrefsButton");
             searchField = topBar.Q<ToolbarPopupSearchField>("SearchField");
+            watchButton = topBar.Q<Button>("WatchButton");
             orderButton = topBar.Q<Button>("OrderButton");
             refreshButton = topBar.Q<Button>("RefreshButton");
             playerPrefsList = rootVisualElement.Q<ScrollView>("PlayerPrefsList");
@@ -139,6 +142,33 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
             searchField.RegisterValueChangedCallback((_) => RefreshList());
 
+#if UNITY_EDITOR_WIN
+            watchButton.style.display = DisplayStyle.Flex;
+
+            watchButton.clicked += () =>
+            {
+                watchingChanges = !watchingChanges;
+
+                Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/" + (watchingChanges ? "watch_icon" : "unwatch_icon") + ".png");
+                watchButton.style.backgroundImage = new StyleBackground(icon);
+
+                if (watchingChanges)
+                {
+                    playerPrefsRegistryMonitor.Start();
+                    editorPrefsRegistryMonitor.Start();
+
+                    watchButton.tooltip = "Unwatch PlayerPrefs";
+                }
+                else
+                {
+                    playerPrefsRegistryMonitor.Stop();
+                    editorPrefsRegistryMonitor.Stop();
+
+                    watchButton.tooltip = "Watch PlayerPrefs";
+                }
+            };
+#endif
+
             orderButton.clicked += () =>
             {
                 orderAscending = !orderAscending;
@@ -162,13 +192,16 @@ namespace Essentials.Internal.PlayerPrefsEditor
             RefreshAll();
 
 #if UNITY_EDITOR_WIN
-            playerPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity\\UnityEditor\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
-            playerPrefsRegistryMonitor.RegChanged += (_, __) => playerPrefsEntryUpdated = true;
-            playerPrefsRegistryMonitor.Start();
+            if (watchingChanges)
+            {
+                playerPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity\\UnityEditor\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
+                playerPrefsRegistryMonitor.RegChanged += (_, __) => playerPrefsEntryUpdated = true;
+                playerPrefsRegistryMonitor.Start();
 
-            editorPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity Technologies\\Unity Editor 5.x");
-            editorPrefsRegistryMonitor.RegChanged += (_, __) => editorPrefsEntryUpdated = true;
-            editorPrefsRegistryMonitor.Start();
+                editorPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity Technologies\\Unity Editor 5.x");
+                editorPrefsRegistryMonitor.RegChanged += (_, __) => editorPrefsEntryUpdated = true;
+                editorPrefsRegistryMonitor.Start();
+            }
 #endif
         }
 
@@ -311,6 +344,8 @@ namespace Essentials.Internal.PlayerPrefsEditor
             if (orderAscending) playerPrefs = playerPrefs.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
             else playerPrefs = playerPrefs.OrderByDescending(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
 
+            int index = 0;
+
             foreach (KeyValuePair<string, object> pair in playerPrefs)
             {
                 if (!internalPlayerPrefsToggle.value && (pair.Key.ToString().StartsWith("unity.") || pair.Key.ToString() == "UnityGraphicsQuality")) continue;
@@ -338,6 +373,8 @@ namespace Essentials.Internal.PlayerPrefsEditor
                 VisualElement element = new VisualElement();
                 element.style.flexDirection = FlexDirection.Row;
                 element.style.marginBottom = 2;
+
+                if (index % 2 == 1) element.style.backgroundColor = (Color)new Color32(47, 47, 47, 255);
 
                 TextField valueField = new TextField();
                 valueField.label = pair.Key.ToString();
@@ -415,6 +452,8 @@ namespace Essentials.Internal.PlayerPrefsEditor
                 element.Add(valueField);
                 element.Add(typeField);
                 playerPrefsList.Add(element);
+
+                index++;
             }
 
             if (playerPrefsList.childCount > 0)
@@ -432,8 +471,11 @@ namespace Essentials.Internal.PlayerPrefsEditor
         private void Apply()
         {
 #if UNITY_EDITOR_WIN
-            playerPrefsRegistryMonitor.Stop();
-            editorPrefsRegistryMonitor.Stop();
+            if (watchingChanges)
+            {
+                playerPrefsRegistryMonitor.Stop();
+                editorPrefsRegistryMonitor.Stop();
+            }
 #endif
 
             if (!isEditorPrefs)
@@ -467,8 +509,11 @@ namespace Essentials.Internal.PlayerPrefsEditor
             }
 
 #if UNITY_EDITOR_WIN
-            playerPrefsRegistryMonitor.Start();
-            editorPrefsRegistryMonitor.Start();
+            if (watchingChanges)
+            {
+                playerPrefsRegistryMonitor.Start();
+                editorPrefsRegistryMonitor.Start();
+            }
 #endif
         }
     }
