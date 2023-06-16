@@ -145,6 +145,14 @@ namespace Essentials.Internal.PlayerPrefsEditor
             searchField.RegisterValueChangedCallback((_) => RefreshList());
 
 #if UNITY_EDITOR_WIN
+            playerPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity\\UnityEditor\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
+            playerPrefsRegistryMonitor.RegChanged += (_, __) => playerPrefsEntryUpdated = true;
+            if (watchingChanges) playerPrefsRegistryMonitor.Start();
+
+            editorPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity Technologies\\Unity Editor 5.x");
+            editorPrefsRegistryMonitor.RegChanged += (_, __) => editorPrefsEntryUpdated = true;
+            if (watchingChanges) editorPrefsRegistryMonitor.Start();
+
             watchButton.style.display = DisplayStyle.Flex;
 
             if (!watchingChanges)
@@ -200,19 +208,6 @@ namespace Essentials.Internal.PlayerPrefsEditor
             applyButton.clicked += Apply;
 
             RefreshAll();
-
-#if UNITY_EDITOR_WIN
-            if (watchingChanges)
-            {
-                playerPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity\\UnityEditor\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
-                playerPrefsRegistryMonitor.RegChanged += (_, __) => playerPrefsEntryUpdated = true;
-                playerPrefsRegistryMonitor.Start();
-
-                editorPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity Technologies\\Unity Editor 5.x");
-                editorPrefsRegistryMonitor.RegChanged += (_, __) => editorPrefsEntryUpdated = true;
-                editorPrefsRegistryMonitor.Start();
-            }
-#endif
         }
 
         private void OnEnable() => EditorApplication.update += Update;
