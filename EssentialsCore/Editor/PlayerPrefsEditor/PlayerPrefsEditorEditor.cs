@@ -147,6 +147,14 @@ namespace Essentials.Internal.PlayerPrefsEditor
 #if UNITY_EDITOR_WIN
             watchButton.style.display = DisplayStyle.Flex;
 
+            if (!watchingChanges)
+            {
+                Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/unwatch_icon.png");
+                watchButton.style.backgroundImage = new StyleBackground(icon);
+
+                watchButton.tooltip = "Watch Changes";
+            }
+
             watchButton.clicked += () =>
             {
                 watchingChanges = !watchingChanges;
@@ -159,14 +167,14 @@ namespace Essentials.Internal.PlayerPrefsEditor
                     playerPrefsRegistryMonitor.Start();
                     editorPrefsRegistryMonitor.Start();
 
-                    watchButton.tooltip = "Unwatch PlayerPrefs";
+                    watchButton.tooltip = "Unwatch Changes";
                 }
                 else
                 {
                     playerPrefsRegistryMonitor.Stop();
                     editorPrefsRegistryMonitor.Stop();
 
-                    watchButton.tooltip = "Watch PlayerPrefs";
+                    watchButton.tooltip = "Watch Changes";
                 }
             };
 #endif
