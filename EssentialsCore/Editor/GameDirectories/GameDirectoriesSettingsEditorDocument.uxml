@@ -7,7 +7,7 @@
                 <ui:Label text=".cs" display-tooltip-when-elided="true" style="-unity-text-align: middle-left; flex-shrink: 0; flex-grow: 0;" />
             </ui:VisualElement>
             <ui:VisualElement name="ClassLocation" style="flex-direction: row; align-items: center;">
-                <ui:Label text="Class Location" display-tooltip-when-elided="true" style="flex-shrink: 0; flex-grow: 0; margin-left: 3px; width: auto; min-width: 152px;" />
+                <ui:Label text="Class Location" display-tooltip-when-elided="true" style="flex-shrink: 0; flex-grow: 0; margin-left: 3px; width: 123px; min-width: auto;" />
                 <ui:Label text="Assets" display-tooltip-when-elided="true" name="ClassLocationLabel" style="flex-shrink: 1; flex-grow: 1; white-space: nowrap;" />
                 <ui:Button text="Change" display-tooltip-when-elided="true" name="ClassLocationButton" />
             </ui:VisualElement>

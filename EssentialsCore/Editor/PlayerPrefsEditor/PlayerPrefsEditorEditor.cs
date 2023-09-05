@@ -17,8 +17,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
     {
         public static bool isEditorPrefs { get; private set; } = false;
         private static bool shownEditorPrefsWarning = false;
+#if UNITY_EDITOR_WIN
         private static bool watchingChanges = true;
-
+#endif
         private VisualElement topBar;
         private Button playerPrefsButton;
         private Button editorPrefsButton;
