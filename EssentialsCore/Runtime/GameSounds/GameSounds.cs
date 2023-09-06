@@ -53,12 +53,13 @@ namespace Essentials.Core.GameSounds
         public static AudioSource PlaySound(AudioClip audioClip, Transform parent, bool looping, float volume = 1, float spatialBlend = 0) => PlaySound("Essentials.NoId", audioClip, default, parent, looping, volume, spatialBlend);
         public static AudioSource PlaySound(AudioClip audioClip, Vector3 position, float volume = 1, float spatialBlend = 0) => PlaySound("Essentials.NoId", audioClip, position, null, false, volume, spatialBlend);
         public static AudioSource PlaySound(AudioClip audioClip, Vector3 position, Transform parent, float volume = 1, float spatialBlend = 0) => PlaySound("Essentials.NoId", audioClip, position, parent, false, volume, spatialBlend);
-        public static AudioSource PlaySound(AudioClip audioClip, Vector3 position, bool looping, float volume = 1, float spatialBlend = 0) => PlaySound("Essentials.NoId", audioClip, position, null, looping, volume, spatialBlend);
+        public static AudioSource PlaySound(AudioClip audioClip, Vector3 position, bool looping = false, float volume = 1, float spatialBlend = 0) => PlaySound("Essentials.NoId", audioClip, position, null, looping, volume, spatialBlend);
         public static AudioSource PlaySound(AudioClip audioClip, float volume, float spatialBlend = 0) => PlaySound("Essentials.NoId", audioClip, default, null, false, volume, spatialBlend);
         public static AudioSource PlaySound(AudioClip audioClip, bool looping, float volume = 1, float spatialBlend = 0) => PlaySound("Essentials.NoId", audioClip, default, null, looping, volume, spatialBlend);
         public static AudioSource PlaySound(string id, AudioClip audioClip, Transform parent, float volume = 1, float spatialBlend = 0) => PlaySound(id, audioClip, default, parent, false, volume, spatialBlend);
         public static AudioSource PlaySound(string id, AudioClip audioClip, Transform parent, bool looping, float volume = 1, float spatialBlend = 0) => PlaySound(id, audioClip, default, parent, looping, volume, spatialBlend);
-        public static AudioSource PlaySound(string id, AudioClip audioClip, Vector3 position, float volume = 1, float spatialBlend = 0) => PlaySound(id, audioClip, position, null, false, volume, spatialBlend);
+        public static AudioSource PlaySound(string id, AudioClip audioClip, Vector3 position) => PlaySound(id, audioClip, position, null, false);
+        public static AudioSource PlaySound(string id, AudioClip audioClip, Vector3 position, float volume, float spatialBlend = 0) => PlaySound(id, audioClip, position, null, false, volume, spatialBlend);
         public static AudioSource PlaySound(string id, AudioClip audioClip, Vector3 position, Transform parent, float volume = 1, float spatialBlend = 0) => PlaySound(id, audioClip, position, parent, false, volume, spatialBlend);
         public static AudioSource PlaySound(string id, AudioClip audioClip, Vector3 position, bool looping, float volume = 1, float spatialBlend = 0) => PlaySound(id, audioClip, position, null, looping, volume, spatialBlend);
         public static AudioSource PlaySound(string id, AudioClip audioClip, float volume, float spatialBlend = 0) => PlaySound(id, audioClip, default, null, false, volume, spatialBlend);
@@ -76,11 +77,10 @@ namespace Essentials.Core.GameSounds
         
         public static void StopSound(string id)
         {
-            foreach (GameSound gameSound in _gameSounds.Where(gameSound => gameSound.id == id))
-            {
-                gameSound.Destroy();
-                _gameSounds.Remove(gameSound);
-            }
+            GameSound[] gameSounds = _gameSounds.Where(gameSound => gameSound.id == id).ToArray();
+            
+            foreach (GameSound gameSound in gameSounds) gameSound.Destroy();
+            _gameSounds.RemoveWhere(gameSound => gameSound.id == id);
         }
         
         public static void StopAllSounds()
