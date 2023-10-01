@@ -88,6 +88,16 @@ namespace Essentials.Core.GameSounds
             foreach (GameSound gameSound in _gameSounds) gameSound.Destroy();
             _gameSounds.Clear();
         }
+
+        public static bool IsPlaying(string id)
+        {
+            foreach (GameSound gameSound in _gameSounds)
+            {
+                if (gameSound.id == id) return true;
+            }
+
+            return false;
+        }
         
         private static async void StopSoundAfter(GameSound gameSound, float seconds, CancellationToken cancellationToken)
         {
