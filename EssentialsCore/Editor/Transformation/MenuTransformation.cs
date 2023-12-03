@@ -1,3 +1,4 @@
+using System.Linq;
 using Essentials.Core.Transformation;
 using UnityEditor;
 using UnityEngine;
@@ -67,21 +68,27 @@ namespace Essentials.Internal.Transformation
         }
 
         [MenuItem("Essentials/Transformation/Snap to/Ground", true)]
-        private static bool SnapObjectToGroundValidation() => Selection.transforms.Length > 0;
-        
+        private static bool SnapObjectToGroundValidation()
+        {
+            if (Selection.transforms.Length == 0) return false;
+            if (Selection.transforms.Any(transform => transform.GetComponent<Collider>() == null)) return false;
+            
+            return true;
+        }
+
         [MenuItem("Essentials/Transformation/Snap to/Up", true)]
-        private static bool SnapObjectToUpValidation() => Selection.transforms.Length > 0;
-        
+        private static bool SnapObjectToUpValidation() => Selection.transforms.Length != 0 && Selection.transforms.All(transform => transform.GetComponent<Collider>() != null);
+
         [MenuItem("Essentials/Transformation/Snap to/Left", true)]
-        private static bool SnapObjectToLeftValidation() => Selection.transforms.Length > 0;
-        
+        private static bool SnapObjectToLeftValidation() => Selection.transforms.Length != 0 && Selection.transforms.All(transform => transform.GetComponent<Collider>() != null);
+
         [MenuItem("Essentials/Transformation/Snap to/Right", true)]
-        private static bool SnapObjectToRightValidation() => Selection.transforms.Length > 0;
-        
+        private static bool SnapObjectToRightValidation() => Selection.transforms.Length != 0 && Selection.transforms.All(transform => transform.GetComponent<Collider>() != null);
+
         [MenuItem("Essentials/Transformation/Snap to/Forward", true)]
-        private static bool SnapObjectToForwardValidation() => Selection.transforms.Length > 0;
-        
+        private static bool SnapObjectToForwardValidation() => Selection.transforms.Length != 0 && Selection.transforms.All(transform => transform.GetComponent<Collider>() != null);
+
         [MenuItem("Essentials/Transformation/Snap to/Backward", true)]
-        private static bool SnapObjectToBackwardValidation() => Selection.transforms.Length > 0;
+        private static bool SnapObjectToBackwardValidation() => Selection.transforms.Length != 0 && Selection.transforms.All(transform => transform.GetComponent<Collider>() != null);
     }
 }
