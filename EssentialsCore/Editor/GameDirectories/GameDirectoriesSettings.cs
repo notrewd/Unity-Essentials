@@ -16,8 +16,6 @@ namespace Essentials.Internal.GameDirectories
         {
             if (settingsData != null) return;
 
-            int hash = Application.dataPath.GetHashCode();
-            
             settingsData = File.Exists(Path.Combine(Application.dataPath, "EssentialsData", "GameDirectoriesSettingsData.json"))
                 ? JsonUtility.FromJson<GameDirectoriesSettingsData>(File.ReadAllText(Path.Combine(Application.dataPath, "EssentialsData", "GameDirectoriesSettingsData.json")))
                 : new GameDirectoriesSettingsData();
@@ -25,10 +23,8 @@ namespace Essentials.Internal.GameDirectories
 
         public static void SaveData()
         {
-            int hash = Application.dataPath.GetHashCode();
-
             string path = Path.Combine(Application.dataPath, "EssentialsData", "GameDirectoriesSettingsData.json");
-            
+
             if (!Directory.Exists(Path.Combine(Application.dataPath, "EssentialsData"))) Directory.CreateDirectory(Path.Combine(Application.dataPath, "EssentialsData"));
             File.WriteAllText(path, JsonUtility.ToJson(settingsData, true));
             AssetDatabase.Refresh();

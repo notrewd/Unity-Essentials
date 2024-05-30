@@ -124,10 +124,12 @@ namespace Essentials.Internal.GameDirectories
             {
                 foreach (GameDirectoryData gameDirectoryData in gameDirectoriesData)
                 {
-                    TextField referenceField = new TextField();
-                    referenceField.label = gameDirectoryData.path;
-                    referenceField.value = gameDirectoryData.reference;
-                    
+                    TextField referenceField = new TextField
+                    {
+                        label = gameDirectoryData.path,
+                        value = gameDirectoryData.reference
+                    };
+
                     referenceField.RegisterValueChangedCallback(_ =>
                     {
                         applyButton.SetEnabled(Validate());
@@ -166,9 +168,7 @@ namespace Essentials.Internal.GameDirectories
             }
 
             GameDirectoriesSettings.SetGameDirectoriesData(gameDirectoriesData);
-
             GameDirectoriesSettings.SaveData();
-
             GameDirectoriesSettings.GenerateClass(gameDirectories);
         }
     }

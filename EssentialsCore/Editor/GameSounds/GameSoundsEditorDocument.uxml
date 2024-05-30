@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.notrewd.essentials/EssentialsCore/Editor/StyleSheets/EditorStyleSheet.uss?fileID=7433441132597879392&amp;guid=456df42b6676c4189b86d4cc87698692&amp;type=3#EditorStyleSheet" />
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:VisualElement style="flex-grow: 1; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; padding-left: 5px;">
+            <ui:Foldout text="Audio Defaults" name="Defaults" value="true" style="flex-grow: 0;">
+                <uie:PropertyField name="AudioMixerGroupField" binding-path="audioMixerGroup" />
+                <uie:PropertyField name="VolumeField" binding-path="volume" />
+                <uie:PropertyField name="LoopField" binding-path="loop" />
+                <uie:PropertyField name="PriorityField" binding-path="priority" />
+                <uie:PropertyField name="SpatialBlendField" binding-path="spatialBlend" />
+                <uie:PropertyField name="SpatializeField" binding-path="spatialize" />
+                <uie:PropertyField name="DopplerLevelField" binding-path="dopplerLevel" />
+                <uie:PropertyField name="MinDistanceField" binding-path="minDistance" />
+                <uie:PropertyField name="MaxDistanceField" binding-path="maxDistance" />
+                <uie:PropertyField name="PanStereoField" binding-path="panStereo" />
+                <uie:PropertyField name="ReverbZoneMixField" binding-path="reverbZoneMix" />
+            </ui:Foldout>
+        </ui:VisualElement>
+        <ui:VisualElement name="BottomBar" class="bar" style="justify-content: flex-end;">
+            <ui:Button text="Reset" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ResetButton" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
