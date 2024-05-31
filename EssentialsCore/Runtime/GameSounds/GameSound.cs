@@ -18,6 +18,9 @@ namespace Essentials.Core.GameSounds
         private GameObject _gameObject;
 
         private AudioClip _audioClip;
+        private Transform _parent;
+        private Vector3 _position;
+        private bool _worldPositionStays;
         private float _volume;
         private bool _loop;
         private int _priority;
@@ -41,6 +44,9 @@ namespace Essentials.Core.GameSounds
         public GameSound(AudioClip audioClip)
         {
             _audioClip = audioClip;
+            _parent = null;
+            _position = Vector3.zero;
+            _worldPositionStays = false;
 
             if (_gameSoundsData == null)
             {
@@ -88,13 +94,18 @@ namespace Essentials.Core.GameSounds
 
         public GameSound SetParent(Transform parent, bool worldPositionStays = false)
         {
-            _gameObject.transform.SetParent(parent, worldPositionStays);
+            _parent = parent;
+            _worldPositionStays = worldPositionStays;
+            if (_gameObject != null) _gameObject.transform.SetParent(parent, worldPositionStays);
+
             return this;
         }
 
         public GameSound SetPosition(Vector3 position)
         {
-            _gameObject.transform.position = position;
+            _position = position;
+            if (_gameObject != null) _gameObject.transform.position = position;
+
             return this;
         }
 
@@ -207,6 +218,9 @@ namespace Essentials.Core.GameSounds
             if (_gameObject == null)
             {
                 _gameObject = new GameObject($"GameSound [{_id}]");
+                _gameObject.transform.SetParent(_parent, _worldPositionStays);
+                _gameObject.transform.position = _position;
+
                 _gameSounds.Add(this);
             }
 
