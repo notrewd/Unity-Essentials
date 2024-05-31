@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Essentials.Core.GameSounds;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Essentials.Internal.GameSounds
 {
@@ -29,16 +30,44 @@ namespace Essentials.Internal.GameSounds
             {
                 await Task.Delay(TimeSpan.FromSeconds(seconds), _cancellationToken);
             }
-            catch (Exception)
+            catch (TaskCanceledException)
             {
-                gameSound.DestroyImmediate();
+                if (!_gameSounds.Contains(gameSound)) return;
+
+                Object.DestroyImmediate(gameSound.GetGameObject());
                 return;
             }
 
             if (!_gameSounds.Contains(gameSound)) return;
-            gameSound.Destroy();
+
+            _gameSounds.Remove(gameSound);
+            Object.Destroy(gameSound.GetGameObject());
         }
 
-        private static void OnApplicationQuit() => _cancellationTokenSource.Cancel();
+        public static void StopSounds(GameSound[] gameSounds)
+        {
+            if (gameSounds.Length == 0) return;
+
+            List<GameSound> soundsToRemove = new List<GameSound>();
+
+            foreach (GameSound gameSound in gameSounds)
+            {
+                if (!_gameSounds.Contains(gameSound)) continue;
+                soundsToRemove.Add(gameSound);
+            }
+
+            foreach (GameSound gameSound in soundsToRemove)
+            {
+                _gameSounds.Remove(gameSound);
+                Object.Destroy(gameSound.GetGameObject());
+            }
+        }
+
+        public static void StopAllSounds()
+        {
+
+        }
+
+        private static void OnApplicationQuit() => StopAllSounds();
     }
 }

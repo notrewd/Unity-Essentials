@@ -255,18 +255,8 @@ namespace Essentials.Core.GameSounds
         public void Stop() => _audioSource.Stop();
 
         public string GetId() => _id;
+
+        public GameObject GetGameObject() => _gameObject;
         public AudioSource GetAudioSource() => _audioSource;
-
-        public void Destroy()
-        {
-            _gameSounds.Remove(this);
-            Object.Destroy(_gameObject);
-        }
-
-        public void DestroyImmediate()
-        {
-            _gameSounds.Remove(this);
-            Object.DestroyImmediate(_gameObject);
-        }
     }
 }
