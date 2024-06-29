@@ -67,6 +67,7 @@ namespace Essentials.Core.GameSounds
             }
             else
             {
+                _audioMixerGroup = _gameSoundsData.audioMixerGroup;
                 _volume = _gameSoundsData.volume;
                 _loop = _gameSoundsData.loop;
                 _priority = _gameSoundsData.priority;

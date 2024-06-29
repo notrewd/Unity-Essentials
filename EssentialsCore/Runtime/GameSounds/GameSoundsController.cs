@@ -65,7 +65,8 @@ namespace Essentials.Internal.GameSounds
 
         public static void StopAllSounds()
         {
-
+            foreach (GameSound gameSound in _gameSounds) Object.Destroy(gameSound.GetGameObject());
+            _gameSounds.Clear();
         }
 
         private static void OnApplicationQuit() => StopAllSounds();
