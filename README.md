@@ -27,4 +27,4 @@ public class PlayASound : MonoBehaviour
 Ever wanted to see your PlayerPrefs or change them through an editor? Well now you can.
 <img width="608" alt="image" src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/e24d1de9-c434-42aa-a511-414eebc8ace6">
 
-Check out the documentation to see more.
+Check out the [documentation](https://github.com/NotRewd/Unity-Essentials/wiki) to see more.
