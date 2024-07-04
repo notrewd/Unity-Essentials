@@ -1,4 +1,4 @@
-using Essentials.Core.Serialization;
+using Essentials.Serialization;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;

@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace Essentials.Core.Serialization
+namespace Essentials.Serialization
 {
     public static class EssentialsSerialization
     {
