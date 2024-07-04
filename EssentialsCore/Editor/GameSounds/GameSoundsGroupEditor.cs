@@ -1,3 +1,4 @@
+using Essentials.Core.Serialization;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -46,10 +47,12 @@ namespace Essentials.Internal.GameSounds
 
             _gameSoundsData = GameSoundsSettings.GetData();
 
-            _serializedObject = new SerializedObject(_gameSoundsData);
-
             int _gameSoundsGroupIndex = _gameSoundsData.gameSoundGroups.IndexOf(_gameSoundGroup);
-            _gameSoundsGroupProperty = GetSerializedPropertyFromList(_gameSoundsGroupIndex);
+
+            _serializedObject = new SerializedObject(_gameSoundsData);
+            SerializedProperty property = _serializedObject.FindProperty("gameSoundGroups");
+
+            _gameSoundsGroupProperty = EssentialsSerialization.GetSerializedPropertyFromList(property, _gameSoundsGroupIndex);
 
             _groupNameField = rootVisualElement.Q<PropertyField>("GroupName");
 
@@ -85,26 +88,6 @@ namespace Essentials.Internal.GameSounds
             _maxDistanceField.BindProperty(settingsProperty.FindPropertyRelative("maxDistance"));
             _panStereoField.BindProperty(settingsProperty.FindPropertyRelative("panStereo"));
             _reverbZoneMixField.BindProperty(settingsProperty.FindPropertyRelative("reverbZoneMix"));
-        }
-
-        private SerializedProperty GetSerializedPropertyFromList(int index)
-        {
-            SerializedProperty property = _serializedObject.FindProperty("gameSoundGroups");
-
-            if (!property.isArray) return null;
-
-            property.Next(true);
-            property.Next(true);
-
-            int listLength = property.intValue;
-
-            for (int i = 0; i < listLength; i++)
-            {
-                property.Next(false);
-                if (i == index) return property;
-            }
-
-            return null;
         }
 
         public void SetGameSoundGroup(GameSoundGroup gameSoundGroup) => _gameSoundGroup = gameSoundGroup;
