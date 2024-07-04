@@ -9,8 +9,8 @@ namespace Essentials.Internal.GameSounds
     {
         private VisualTreeAsset _gameSoundGroupTemplate;
 
-        private SerializedObject _serializedObject;
         private GameSoundsData _gameSoundsData;
+        private SerializedObject _serializedObject;
 
         private VisualElement _bottomBar;
 
@@ -28,7 +28,7 @@ namespace Essentials.Internal.GameSounds
             window.minSize = new Vector2(300, 300);
         }
 
-        public void CreateGUI()
+        private void CreateGUI()
         {
             _gameSoundsData = GameSoundsSettings.GetData();
             _serializedObject = new SerializedObject(_gameSoundsData);
@@ -59,8 +59,10 @@ namespace Essentials.Internal.GameSounds
         {
             _groupsList.Clear();
 
-            foreach (GameSoundGroup gameSoundGroup in _gameSoundsData.gameSoundGroups)
+            for (int i = 0; i < _gameSoundsData.gameSoundGroups.Count; i++)
             {
+                GameSoundGroup gameSoundGroup = _gameSoundsData.gameSoundGroups[i];
+
                 VisualElement gameSoundGroupElement = _gameSoundGroupTemplate.Instantiate();
 
                 Label groupName = gameSoundGroupElement.Q<Label>("GroupName");
@@ -69,6 +71,7 @@ namespace Essentials.Internal.GameSounds
                 Button editButton = buttons.Q<Button>("EditButton");
                 Button deleteButton = buttons.Q<Button>("DeleteButton");
 
+                editButton.clicked += () => OpenGroup(gameSoundGroup);
                 deleteButton.clicked += () => RemoveGroup(gameSoundGroup);
 
                 groupName.text = gameSoundGroup.name;
@@ -86,6 +89,8 @@ namespace Essentials.Internal.GameSounds
 
             RefreshGroups();
         }
+
+        private void OpenGroup(GameSoundGroup gameSoundGroup) => GameSoundsGroupEditor.CreateWindow(gameSoundGroup);
 
         private void RemoveGroup(GameSoundGroup gameSoundGroup)
         {
