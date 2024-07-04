@@ -10,6 +10,7 @@ namespace Essentials.Core.GameSounds
     public class GameSound
     {
         private static GameSoundsData _gameSoundsData;
+        private static GameSoundSettings _defaultSettings;
         private static HashSet<GameSound> _gameSounds = new HashSet<GameSound>();
 
         private string _id;
@@ -39,6 +40,8 @@ namespace Essentials.Core.GameSounds
         private static void Initialize()
         {
             _gameSoundsData = Resources.Load<GameSoundsData>("GameSoundsData");
+            _defaultSettings = _gameSoundsData.defaultSettings;
+
             _gameSounds = GameSoundsController.GetGameSounds();
         }
 
@@ -67,17 +70,17 @@ namespace Essentials.Core.GameSounds
             }
             else
             {
-                _audioMixerGroup = _gameSoundsData.audioMixerGroup;
-                _volume = _gameSoundsData.volume;
-                _loop = _gameSoundsData.loop;
-                _priority = _gameSoundsData.priority;
-                _spatialBlend = _gameSoundsData.spatialBlend;
-                _spatialize = _gameSoundsData.spatialize;
-                _dopplerLevel = _gameSoundsData.dopplerLevel;
-                _minDistance = _gameSoundsData.minDistance;
-                _maxDistance = _gameSoundsData.maxDistance;
-                _panStereo = _gameSoundsData.panStereo;
-                _reverbZoneMix = _gameSoundsData.reverbZoneMix;
+                _audioMixerGroup = _defaultSettings.audioMixerGroup;
+                _volume = _defaultSettings.volume;
+                _loop = _defaultSettings.loop;
+                _priority = _defaultSettings.priority;
+                _spatialBlend = _defaultSettings.spatialBlend;
+                _spatialize = _defaultSettings.spatialize;
+                _dopplerLevel = _defaultSettings.dopplerLevel;
+                _minDistance = _defaultSettings.minDistance;
+                _maxDistance = _defaultSettings.maxDistance;
+                _panStereo = _defaultSettings.panStereo;
+                _reverbZoneMix = _defaultSettings.reverbZoneMix;
             }
         }
 
