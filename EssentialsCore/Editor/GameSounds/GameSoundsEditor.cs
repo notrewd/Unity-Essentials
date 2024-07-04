@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -53,6 +54,14 @@ namespace Essentials.Internal.GameSounds
             rootVisualElement.Bind(_serializedObject);
 
             RefreshGroups();
+
+            RebindWindowEvents();
+        }
+
+        private void RebindWindowEvents()
+        {
+            GameSoundsGroupEditor[] windows = GameSoundsGroupEditor.GetActiveWindows();
+            foreach (GameSoundsGroupEditor window in windows) window.onGroupNameChanged += RefreshGroups;
         }
 
         private void RefreshGroups()
@@ -71,10 +80,13 @@ namespace Essentials.Internal.GameSounds
                 Button editButton = buttons.Q<Button>("EditButton");
                 Button deleteButton = buttons.Q<Button>("DeleteButton");
 
+                if (i % 2 == 1) gameSoundGroupElement.style.backgroundColor = (Color)new Color32(47, 47, 47, 255);
+
                 editButton.clicked += () => OpenGroup(gameSoundGroup);
                 deleteButton.clicked += () => RemoveGroup(gameSoundGroup);
 
                 groupName.text = gameSoundGroup.name;
+
                 _groupsList.Add(gameSoundGroupElement);
             }
 
@@ -90,7 +102,11 @@ namespace Essentials.Internal.GameSounds
             RefreshGroups();
         }
 
-        private void OpenGroup(GameSoundGroup gameSoundGroup) => GameSoundsGroupEditor.CreateWindow(gameSoundGroup);
+        private void OpenGroup(GameSoundGroup gameSoundGroup)
+        {
+            GameSoundsGroupEditor window = GameSoundsGroupEditor.CreateWindow(gameSoundGroup);
+            window.onGroupNameChanged += RefreshGroups;
+        }
 
         private void RemoveGroup(GameSoundGroup gameSoundGroup)
         {

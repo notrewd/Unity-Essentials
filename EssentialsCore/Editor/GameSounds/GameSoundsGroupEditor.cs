@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Essentials.Serialization;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -8,6 +10,9 @@ namespace Essentials.Internal.GameSounds
 {
     public class GameSoundsGroupEditor : EditorWindow
     {
+        private static List<GameSoundsGroupEditor> _windows = new List<GameSoundsGroupEditor>();
+
+        public Action onGroupNameChanged;
 
         private GameSoundGroup _gameSoundGroup;
 
@@ -30,14 +35,16 @@ namespace Essentials.Internal.GameSounds
         private PropertyField _panStereoField;
         private PropertyField _reverbZoneMixField;
 
-        public static void CreateWindow(GameSoundGroup gameSoundGroup)
+        public static GameSoundsGroupEditor CreateWindow(GameSoundGroup gameSoundGroup)
         {
             GameSoundsGroupEditor window = CreateInstance<GameSoundsGroupEditor>();
-            window.titleContent = new GUIContent("Game Sounds Group Settings", EditorGUIUtility.IconContent("d_SceneViewAudio On").image);
+            window.titleContent = new GUIContent("Game Sounds Group Settings", EditorGUIUtility.IconContent("d_SettingsIcon").image);
             window.minSize = new Vector2(300, 300);
 
             window.SetGameSoundGroup(gameSoundGroup);
             window.Show();
+
+            return window;
         }
 
         private void CreateGUI()
@@ -56,6 +63,8 @@ namespace Essentials.Internal.GameSounds
 
             _groupNameField = rootVisualElement.Q<PropertyField>("GroupName");
 
+            _groupNameField.RegisterValueChangeCallback((evt) => onGroupNameChanged?.Invoke());
+
             _audioMixerGroupField = rootVisualElement.Q<PropertyField>("AudioMixerGroupField");
             _volumeField = rootVisualElement.Q<PropertyField>("VolumeField");
             _loopField = rootVisualElement.Q<PropertyField>("LoopField");
@@ -69,7 +78,11 @@ namespace Essentials.Internal.GameSounds
             _reverbZoneMixField = rootVisualElement.Q<PropertyField>("ReverbZoneMixField");
 
             BindProperties();
+
+            _windows.Add(this);
         }
+
+        private void OnDestroy() => _windows.Remove(this);
 
         private void BindProperties()
         {
@@ -91,5 +104,7 @@ namespace Essentials.Internal.GameSounds
         }
 
         public void SetGameSoundGroup(GameSoundGroup gameSoundGroup) => _gameSoundGroup = gameSoundGroup;
+
+        public static GameSoundsGroupEditor[] GetActiveWindows() => _windows.ToArray();
     }
 }

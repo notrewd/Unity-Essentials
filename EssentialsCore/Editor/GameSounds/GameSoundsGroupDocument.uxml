@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center;">
+    <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center; flex-shrink: 0;">
         <ui:Label tabindex="-1" text="GROUP_NAME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="GroupName" />
         <ui:VisualElement name="Buttons" style="flex-grow: 0; flex-direction: row-reverse;">
-            <ui:Button text="Delete" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeleteButton" />
+            <ui:Button text="Delete" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeleteButton" style="padding-right: 15px; padding-left: 15px;" />
             <ui:Button text="Edit" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditButton" style="padding-right: 15px; padding-left: 15px;" />
         </ui:VisualElement>
     </ui:VisualElement>

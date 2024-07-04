@@ -1,26 +1,28 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Packages/com.notrewd.essentials/EssentialsCore/Editor/StyleSheets/EditorStyleSheet.uss?fileID=7433441132597879392&amp;guid=456df42b6676c4189b86d4cc87698692&amp;type=3#EditorStyleSheet" />
     <ui:VisualElement style="flex-grow: 1;">
-        <ui:VisualElement style="flex-grow: 1; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; padding-left: 5px;">
-            <ui:Foldout text="Audio Defaults" name="Defaults" value="true" style="flex-grow: 0;">
-                <uie:PropertyField name="AudioMixerGroupField" binding-path="defaultSettings.audioMixerGroup" />
-                <uie:PropertyField name="VolumeField" binding-path="defaultSettings.volume" />
-                <uie:PropertyField name="LoopField" binding-path="defaultSettings.loop" />
-                <uie:PropertyField name="PriorityField" binding-path="defaultSettings.priority" />
-                <uie:PropertyField name="SpatialBlendField" binding-path="defaultSettings.spatialBlend" />
-                <uie:PropertyField name="SpatializeField" binding-path="defaultSettings.spatialize" />
-                <uie:PropertyField name="DopplerLevelField" binding-path="defaultSettings.dopplerLevel" />
-                <uie:PropertyField name="MinDistanceField" binding-path="defaultSettings.minDistance" />
-                <uie:PropertyField name="MaxDistanceField" binding-path="defaultSettings.maxDistance" />
-                <uie:PropertyField name="PanStereoField" binding-path="defaultSettings.panStereo" />
-                <uie:PropertyField name="ReverbZoneMixField" binding-path="defaultSettings.reverbZoneMix" />
-            </ui:Foldout>
-            <ui:Foldout text="Groups" name="GroupsList" style="flex-grow: 1; align-self: stretch; margin-top: 10px;">
-                <ui:VisualElement name="NewGroupElement" style="flex-grow: 1; align-items: flex-end; align-self: stretch; border-top-width: 1px; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); margin-top: 5px;">
-                    <ui:Button text="New Group" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewGroupButton" style="align-self: flex-end; align-items: auto; margin-top: 5px;" />
-                </ui:VisualElement>
-            </ui:Foldout>
-        </ui:VisualElement>
+        <ui:ScrollView style="flex-grow: 1; justify-content: flex-start; flex-direction: column; width: auto; height: auto;">
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; flex-shrink: 1; flex-basis: auto;">
+                <ui:Foldout text="Audio Defaults" name="Defaults" value="true" style="flex-grow: 0;">
+                    <uie:PropertyField name="AudioMixerGroupField" binding-path="defaultSettings.audioMixerGroup" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="VolumeField" binding-path="defaultSettings.volume" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="LoopField" binding-path="defaultSettings.loop" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="PriorityField" binding-path="defaultSettings.priority" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="SpatialBlendField" binding-path="defaultSettings.spatialBlend" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="SpatializeField" binding-path="defaultSettings.spatialize" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="DopplerLevelField" binding-path="defaultSettings.dopplerLevel" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="MinDistanceField" binding-path="defaultSettings.minDistance" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="MaxDistanceField" binding-path="defaultSettings.maxDistance" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="PanStereoField" binding-path="defaultSettings.panStereo" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="ReverbZoneMixField" binding-path="defaultSettings.reverbZoneMix" style="flex-shrink: 0;" />
+                </ui:Foldout>
+                <ui:Foldout text="Groups" name="GroupsList" style="flex-grow: 1; align-self: stretch; margin-top: 10px;">
+                    <ui:VisualElement name="NewGroupElement" style="flex-grow: 1; align-items: flex-end; align-self: stretch; border-top-width: 1px; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); margin-top: 5px;">
+                        <ui:Button text="New Group" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewGroupButton" style="align-self: flex-end; align-items: auto; margin-top: 5px;" />
+                    </ui:VisualElement>
+                </ui:Foldout>
+            </ui:VisualElement>
+        </ui:ScrollView>
         <ui:VisualElement name="BottomBar" class="bar" style="justify-content: flex-end;">
             <ui:Button text="Reset" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ResetButton" />
         </ui:VisualElement>

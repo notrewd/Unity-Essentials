@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <ui:VisualElement style="flex-grow: 1; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
+    <ui:ScrollView style="flex-grow: 1; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
         <uie:PropertyField name="GroupName" label="Group Name" style="margin-bottom: 10px; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); border-bottom-width: 1px; padding-bottom: 5px;" />
         <uie:PropertyField name="AudioMixerGroupField" />
         <uie:PropertyField name="VolumeField" />
@@ -12,5 +12,5 @@
         <uie:PropertyField name="MaxDistanceField" />
         <uie:PropertyField name="PanStereoField" />
         <uie:PropertyField name="ReverbZoneMixField" />
-    </ui:VisualElement>
+    </ui:ScrollView>
 </ui:UXML>
