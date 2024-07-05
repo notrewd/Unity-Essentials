@@ -130,6 +130,8 @@ namespace Essentials.Internal.GameSounds
             _serializedObject = new SerializedObject(_gameSoundsData);
 
             rootVisualElement.Bind(_serializedObject);
+
+            RefreshGroups();
         }
     }
 }
