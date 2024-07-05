@@ -5,6 +5,9 @@
             <ui:VisualElement name="VisualElement" style="flex-grow: 1; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; flex-shrink: 1; flex-basis: auto;">
                 <ui:Foldout text="Audio Defaults" name="Defaults" value="true" style="flex-grow: 0;">
                     <uie:PropertyField name="AudioMixerGroupField" binding-path="defaultSettings.audioMixerGroup" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="MuteField" binding-path="defaultSettings.mute" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="BypassEffectsField" binding-path="defaultSettings.bypassEffects" style="flex-shrink: 0;" />
+                    <uie:PropertyField name="BypassReverbZonesField" binding-path="defaultSettings.bypassReverbZones" style="flex-shrink: 0;" />
                     <uie:PropertyField name="VolumeField" binding-path="defaultSettings.volume" style="flex-shrink: 0;" />
                     <uie:PropertyField name="LoopField" binding-path="defaultSettings.loop" style="flex-shrink: 0;" />
                     <uie:PropertyField name="PriorityField" binding-path="defaultSettings.priority" style="flex-shrink: 0;" />

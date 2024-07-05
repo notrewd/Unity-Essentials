@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Essentials.Internal.GameSounds;
 using UnityEngine;
 using UnityEngine.Audio;
-using Object = UnityEngine.Object;
 
 namespace Essentials.Core.GameSounds
 {
@@ -34,6 +33,9 @@ namespace Essentials.Core.GameSounds
         private float _panStereo;
         private float _reverbZoneMix;
         private AudioMixerGroup _audioMixerGroup;
+        private bool _mute;
+        private bool _bypassEffects;
+        private bool _bypassReverbZones;
         private bool _doNotDestroy;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -66,11 +68,17 @@ namespace Essentials.Core.GameSounds
                 _panStereo = 0f;
                 _reverbZoneMix = 0f;
                 _audioMixerGroup = null;
+                _mute = false;
+                _bypassEffects = false;
+                _bypassReverbZones = false;
                 _doNotDestroy = false;
             }
             else
             {
                 _audioMixerGroup = _defaultSettings.audioMixerGroup;
+                _mute = _defaultSettings.mute;
+                _bypassEffects = _defaultSettings.bypassEffects;
+                _bypassReverbZones = _defaultSettings.bypassReverbZones;
                 _volume = _defaultSettings.volume;
                 _loop = _defaultSettings.loop;
                 _priority = _defaultSettings.priority;
@@ -218,9 +226,61 @@ namespace Essentials.Core.GameSounds
             return this;
         }
 
+        public GameSound SetMute(bool mute)
+        {
+            _mute = mute;
+            if (_audioSource != null) _audioSource.mute = mute;
+
+            return this;
+        }
+
+        public GameSound SetBypassEffects(bool bypassEffects)
+        {
+            _bypassEffects = bypassEffects;
+            if (_audioSource != null) _audioSource.bypassEffects = bypassEffects;
+
+            return this;
+        }
+
+        public GameSound SetBypassReverbZones(bool bypassReverbZones)
+        {
+            _bypassReverbZones = bypassReverbZones;
+            if (_audioSource != null) _audioSource.bypassReverbZones = bypassReverbZones;
+
+            return this;
+        }
+
         public GameSound SetDoNotDestroy(bool doNotDestroy)
         {
             _doNotDestroy = doNotDestroy;
+            return this;
+        }
+
+        public GameSound SetGroup(string groupName)
+        {
+            GameSoundGroup group = _gameSoundsData.GetGroup(groupName);
+
+            if (group == null)
+            {
+                Debug.LogWarning($"Essentials GameSounds: Group '{groupName}' not found");
+                return this;
+            }
+
+            _audioMixerGroup = group.settings.audioMixerGroup;
+            _mute = group.settings.mute;
+            _bypassEffects = group.settings.bypassEffects;
+            _bypassReverbZones = group.settings.bypassReverbZones;
+            _volume = group.settings.volume;
+            _loop = group.settings.loop;
+            _priority = group.settings.priority;
+            _spatialBlend = group.settings.spatialBlend;
+            _spatialize = group.settings.spatialize;
+            _dopplerLevel = group.settings.dopplerLevel;
+            _minDistance = group.settings.minDistance;
+            _maxDistance = group.settings.maxDistance;
+            _panStereo = group.settings.panStereo;
+            _reverbZoneMix = group.settings.reverbZoneMix;
+
             return this;
         }
 
@@ -256,6 +316,9 @@ namespace Essentials.Core.GameSounds
                 _audioSource.panStereo = _panStereo;
                 _audioSource.reverbZoneMix = _reverbZoneMix;
                 _audioSource.outputAudioMixerGroup = _audioMixerGroup;
+                _audioSource.mute = _mute;
+                _audioSource.bypassEffects = _bypassEffects;
+                _audioSource.bypassReverbZones = _bypassReverbZones;
             }
 
             _audioSource.Play();

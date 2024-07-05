@@ -10,6 +10,8 @@ namespace Essentials.Internal.GameSounds
     {
         public GameSoundSettings defaultSettings;
         public List<GameSoundGroup> gameSoundGroups = new List<GameSoundGroup>();
+
+        public GameSoundGroup GetGroup(string name) => gameSoundGroups.Find(x => x.name == name);
     }
 
     [Serializable]
@@ -33,5 +35,8 @@ namespace Essentials.Internal.GameSounds
         public float panStereo = 0f;
         public float reverbZoneMix = 0f;
         public AudioMixerGroup audioMixerGroup = null;
+        public bool mute = false;
+        public bool bypassEffects = false;
+        public bool bypassReverbZones = false;
     }
 }

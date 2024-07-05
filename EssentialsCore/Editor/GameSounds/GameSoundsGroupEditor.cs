@@ -24,6 +24,9 @@ namespace Essentials.Internal.GameSounds
         private PropertyField _groupNameField;
 
         private PropertyField _audioMixerGroupField;
+        private PropertyField _muteField;
+        private PropertyField _bypassEffectsField;
+        private PropertyField _bypassReverbZonesField;
         private PropertyField _volumeField;
         private PropertyField _loopField;
         private PropertyField _priorityField;
@@ -66,6 +69,9 @@ namespace Essentials.Internal.GameSounds
             _groupNameField.RegisterValueChangeCallback((evt) => onGroupNameChanged?.Invoke());
 
             _audioMixerGroupField = rootVisualElement.Q<PropertyField>("AudioMixerGroupField");
+            _muteField = rootVisualElement.Q<PropertyField>("MuteField");
+            _bypassEffectsField = rootVisualElement.Q<PropertyField>("BypassEffectsField");
+            _bypassReverbZonesField = rootVisualElement.Q<PropertyField>("BypassReverbZonesField");
             _volumeField = rootVisualElement.Q<PropertyField>("VolumeField");
             _loopField = rootVisualElement.Q<PropertyField>("LoopField");
             _priorityField = rootVisualElement.Q<PropertyField>("PriorityField");
@@ -91,6 +97,9 @@ namespace Essentials.Internal.GameSounds
             _groupNameField.BindProperty(_gameSoundsGroupProperty.FindPropertyRelative("name"));
 
             _audioMixerGroupField.BindProperty(settingsProperty.FindPropertyRelative("audioMixerGroup"));
+            _muteField.BindProperty(settingsProperty.FindPropertyRelative("mute"));
+            _bypassEffectsField.BindProperty(settingsProperty.FindPropertyRelative("bypassEffects"));
+            _bypassReverbZonesField.BindProperty(settingsProperty.FindPropertyRelative("bypassReverbZones"));
             _volumeField.BindProperty(settingsProperty.FindPropertyRelative("volume"));
             _loopField.BindProperty(settingsProperty.FindPropertyRelative("loop"));
             _priorityField.BindProperty(settingsProperty.FindPropertyRelative("priority"));
