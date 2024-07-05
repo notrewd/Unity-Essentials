@@ -217,6 +217,16 @@ namespace Essentials.Serialization
 
             return false;
         }
+
+        public static CompareType ConvertInspectorCompareTypeToSerialized(Inspector.CompareType compareType)
+        {
+            return compareType switch
+            {
+                Inspector.CompareType.All => CompareType.All,
+                Inspector.CompareType.Any => CompareType.Any,
+                _ => CompareType.All,
+            };
+        }
     }
 
     public enum CompareType

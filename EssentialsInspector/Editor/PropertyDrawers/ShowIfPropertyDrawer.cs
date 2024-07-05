@@ -2,7 +2,7 @@ using Essentials.Serialization;
 using UnityEditor;
 using UnityEngine;
 
-namespace Essentials.Inspector
+namespace Essentials.Inspector.Editor
 {
     [CustomPropertyDrawer(typeof(ShowIfAttribute))]
     public class ShowIfPropertyDrawer : PropertyDrawer
@@ -26,7 +26,11 @@ namespace Essentials.Inspector
                 return;
             }
 
-            if (showIfAttribute.compareValues != null) _isShown = EssentialsSerialization.CompareValues(condition, showIfAttribute.compareValues, ConvertInspectorCompareTypeToSerialized(showIfAttribute.compareType));
+            if (showIfAttribute.compareValues != null)
+            {
+                Serialization.CompareType compareType = EssentialsSerialization.ConvertInspectorCompareTypeToSerialized(showIfAttribute.compareType);
+                _isShown = EssentialsSerialization.CompareValues(condition, showIfAttribute.compareValues, compareType);
+            }
             else _isShown = EssentialsSerialization.CompareValues(condition, showIfAttribute.compareValue);
 
             if (_isShown) EditorGUI.PropertyField(position, property, label, true);
@@ -36,16 +40,6 @@ namespace Essentials.Inspector
         {
             if (_isShown) return EditorGUI.GetPropertyHeight(property);
             return -EditorGUIUtility.standardVerticalSpacing;
-        }
-
-        private Serialization.CompareType ConvertInspectorCompareTypeToSerialized(CompareType compareType)
-        {
-            return compareType switch
-            {
-                CompareType.All => Serialization.CompareType.All,
-                CompareType.Any => Serialization.CompareType.Any,
-                _ => Serialization.CompareType.All,
-            };
         }
     }
 }
