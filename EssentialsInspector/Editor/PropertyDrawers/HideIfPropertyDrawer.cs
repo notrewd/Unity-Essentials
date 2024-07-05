@@ -2,7 +2,7 @@ using Essentials.Serialization;
 using UnityEditor;
 using UnityEngine;
 
-namespace Essentials.Inspector.Editor
+namespace Essentials.Inspector
 {
     [CustomPropertyDrawer(typeof(HideIfAttribute))]
     public class HideIfPropertyDrawer : PropertyDrawer

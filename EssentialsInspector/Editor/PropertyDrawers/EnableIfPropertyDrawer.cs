@@ -2,7 +2,7 @@ using Essentials.Serialization;
 using UnityEngine;
 using UnityEditor;
 
-namespace Essentials.Inspector.Editor
+namespace Essentials.Inspector
 {
     [CustomPropertyDrawer(typeof(EnableIfAttribute))]
     public class EnableIfPropertyDrawer : PropertyDrawer
