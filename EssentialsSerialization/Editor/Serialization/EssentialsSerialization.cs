@@ -202,8 +202,8 @@ namespace Essentials.Serialization
 
         public static bool CompareValues(SerializedProperty property, object[] compareValues, CompareType compareType = CompareType.All)
         {
-            if (compareValues == null || compareValues.Length == 0) return false;
             if (property == null) return false;
+            if (compareValues == null || compareValues.Length == 0) return false;
 
             foreach (object compareValue in compareValues)
             {
@@ -213,7 +213,9 @@ namespace Essentials.Serialization
                 if (compareType == CompareType.All && !result) return false;
             }
 
-            return compareType == CompareType.Any;
+            if (compareType == CompareType.All) return true;
+
+            return false;
         }
     }
 

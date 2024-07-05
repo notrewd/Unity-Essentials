@@ -20,13 +20,14 @@ namespace Essentials.Inspector
                 return;
             }
 
-            if (showIfAttribute.compareValue == null)
+            if (showIfAttribute.compareValue == null && showIfAttribute.compareValues == null)
             {
                 Debug.LogError("Essentials Inspector: ShowIf attribute has no compare value.");
                 return;
             }
 
-            _isShown = EssentialsSerialization.CompareValues(condition, showIfAttribute.compareValue);
+            if (showIfAttribute.compareValues != null) _isShown = EssentialsSerialization.CompareValues(condition, showIfAttribute.compareValues, ConvertInspectorCompareTypeToSerialized(showIfAttribute.compareType));
+            else _isShown = EssentialsSerialization.CompareValues(condition, showIfAttribute.compareValue);
 
             if (_isShown) EditorGUI.PropertyField(position, property, label, true);
         }

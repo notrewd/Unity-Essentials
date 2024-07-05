@@ -6,8 +6,8 @@ namespace Essentials.Inspector
     {
         public readonly string conditionName;
         public readonly object compareValue;
-        // public readonly object[] compareValues;
-        // public readonly CompareType compareType;
+        public readonly object[] compareValues;
+        public readonly CompareType compareType = CompareType.All;
 
         public ShowIfAttribute(string conditionName, object compareValue)
         {
@@ -15,16 +15,23 @@ namespace Essentials.Inspector
             this.compareValue = compareValue;
         }
 
-        // public ShowIfAttribute(string conditionName, object[] compareValues, CompareType compareType = CompareType.All)
-        // {
-        //     this.conditionName = conditionName;
-        //     this.compareValues = compareValues;
-        // }
+        public ShowIfAttribute(string conditionName, params object[] compareValues)
+        {
+            this.conditionName = conditionName;
+            this.compareValues = compareValues;
+        }
+
+        public ShowIfAttribute(string conditionName, CompareType compareType, params object[] compareValues)
+        {
+            this.conditionName = conditionName;
+            this.compareType = compareType;
+            this.compareValues = compareValues;
+        }
     }
 
-    // public enum CompareType
-    // {
-    //     All,
-    //     Any
-    // }
+    public enum CompareType
+    {
+        All,
+        Any
+    }
 }
