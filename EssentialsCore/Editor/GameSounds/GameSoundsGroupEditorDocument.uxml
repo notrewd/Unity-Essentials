@@ -1,19 +1,21 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.notrewd.essentials/EssentialsInspector/Editor/StyleSheets/EditorStyleSheet.uss?fileID=7433441132597879392&amp;guid=456df42b6676c4189b86d4cc87698692&amp;type=3#EditorStyleSheet" />
     <ui:ScrollView style="flex-grow: 1; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
-        <uie:PropertyField name="GroupName" label="Group Name" style="margin-bottom: 10px; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); border-bottom-width: 1px; padding-bottom: 5px;" />
-        <uie:PropertyField name="AudioMixerGroupField" />
-        <uie:PropertyField name="MuteField" />
-        <uie:PropertyField name="BypassEffectsField" />
-        <uie:PropertyField name="BypassReverbZonesField" />
-        <uie:PropertyField name="VolumeField" />
-        <uie:PropertyField name="LoopField" />
-        <uie:PropertyField name="PriorityField" />
-        <uie:PropertyField name="SpatialBlendField" />
-        <uie:PropertyField name="SpatializeField" />
-        <uie:PropertyField name="DopplerLevelField" />
-        <uie:PropertyField name="MinDistanceField" />
-        <uie:PropertyField name="MaxDistanceField" />
-        <uie:PropertyField name="PanStereoField" />
-        <uie:PropertyField name="ReverbZoneMixField" />
+        <uie:PropertyField name="GroupName" label="Group Name" class="property-field" style="margin-bottom: 10px; border-left-color: rgb(118, 118, 118); border-right-color: rgb(118, 118, 118); border-top-color: rgb(118, 118, 118); border-bottom-color: rgb(118, 118, 118); border-bottom-width: 1px; padding-bottom: 5px;" />
+        <uie:PropertyField name="AudioMixerGroupField" class="property-field" />
+        <uie:PropertyField name="MuteField" class="property-field" />
+        <uie:PropertyField name="BypassEffectsField" class="property-field" />
+        <uie:PropertyField name="BypassListenerEffectsField" class="property-field" />
+        <uie:PropertyField name="BypassReverbZonesField" class="property-field" />
+        <uie:PropertyField name="VolumeField" class="property-field" />
+        <uie:PropertyField name="LoopField" class="property-field" />
+        <uie:PropertyField name="PriorityField" class="property-field" />
+        <uie:PropertyField name="SpatialBlendField" class="property-field" />
+        <uie:PropertyField name="SpatializeField" class="property-field" />
+        <uie:PropertyField name="DopplerLevelField" class="property-field" />
+        <uie:PropertyField name="MinDistanceField" class="property-field" />
+        <uie:PropertyField name="MaxDistanceField" class="property-field" />
+        <uie:PropertyField name="PanStereoField" class="property-field" />
+        <uie:PropertyField name="ReverbZoneMixField" class="property-field" />
     </ui:ScrollView>
 </ui:UXML>

@@ -37,6 +37,7 @@ namespace Essentials.Internal.GameSounds
         public AudioMixerGroup audioMixerGroup = null;
         public bool mute = false;
         public bool bypassEffects = false;
+        public bool bypassListenerEffects = false;
         public bool bypassReverbZones = false;
     }
 }

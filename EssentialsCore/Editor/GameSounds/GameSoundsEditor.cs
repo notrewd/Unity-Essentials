@@ -13,6 +13,10 @@ namespace Essentials.Internal.GameSounds
         private GameSoundsData _gameSoundsData;
         private SerializedObject _serializedObject;
 
+        private VisualElement _defaults;
+        private PropertyField _audioMixerGroupField;
+        private PropertyField _bypassListenerEffectsField;
+
         private VisualElement _bottomBar;
 
         private Foldout _groupsList;
@@ -39,6 +43,11 @@ namespace Essentials.Internal.GameSounds
 
             visualTree.CloneTree(rootVisualElement);
 
+            _defaults = rootVisualElement.Q<VisualElement>("Defaults");
+
+            _audioMixerGroupField = _defaults.Q<PropertyField>("AudioMixerGroupField");
+            _bypassListenerEffectsField = _defaults.Q<PropertyField>("BypassListenerEffectsField");
+
             _groupsList = rootVisualElement.Q<Foldout>("GroupsList");
 
             _newGroupElement = _groupsList.Q<VisualElement>("NewGroupElement");
@@ -50,6 +59,11 @@ namespace Essentials.Internal.GameSounds
 
             _resetButton = _bottomBar.Q<Button>("ResetButton");
             _resetButton.clicked += OnResetButtonClicked;
+
+            _audioMixerGroupField.RegisterValueChangeCallback((evt) =>
+            {
+                _bypassListenerEffectsField.SetEnabled(evt.changedProperty.objectReferenceValue == null);
+            });
 
             rootVisualElement.Bind(_serializedObject);
 
@@ -120,7 +134,7 @@ namespace Essentials.Internal.GameSounds
 
         private void OnResetButtonClicked()
         {
-            if (!EditorUtility.DisplayDialog("Reset", "Are you sure you want to reset the sound settings?", "Yes", "No")) return;
+            if (!EditorUtility.DisplayDialog("Reset", "Are you sure you want to reset the sound settings? All the current settings and groups will be lost.", "Yes", "No")) return;
 
             rootVisualElement.Unbind();
 

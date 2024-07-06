@@ -26,6 +26,7 @@ namespace Essentials.Internal.GameSounds
         private PropertyField _audioMixerGroupField;
         private PropertyField _muteField;
         private PropertyField _bypassEffectsField;
+        private PropertyField _bypassListenerEffectsField;
         private PropertyField _bypassReverbZonesField;
         private PropertyField _volumeField;
         private PropertyField _loopField;
@@ -71,6 +72,7 @@ namespace Essentials.Internal.GameSounds
             _audioMixerGroupField = rootVisualElement.Q<PropertyField>("AudioMixerGroupField");
             _muteField = rootVisualElement.Q<PropertyField>("MuteField");
             _bypassEffectsField = rootVisualElement.Q<PropertyField>("BypassEffectsField");
+            _bypassListenerEffectsField = rootVisualElement.Q<PropertyField>("BypassListenerEffectsField");
             _bypassReverbZonesField = rootVisualElement.Q<PropertyField>("BypassReverbZonesField");
             _volumeField = rootVisualElement.Q<PropertyField>("VolumeField");
             _loopField = rootVisualElement.Q<PropertyField>("LoopField");
@@ -82,6 +84,11 @@ namespace Essentials.Internal.GameSounds
             _maxDistanceField = rootVisualElement.Q<PropertyField>("MaxDistanceField");
             _panStereoField = rootVisualElement.Q<PropertyField>("PanStereoField");
             _reverbZoneMixField = rootVisualElement.Q<PropertyField>("ReverbZoneMixField");
+
+            _audioMixerGroupField.RegisterValueChangeCallback((evt) =>
+            {
+                _bypassListenerEffectsField.SetEnabled(evt.changedProperty.objectReferenceValue == null);
+            });
 
             BindProperties();
 
@@ -99,6 +106,7 @@ namespace Essentials.Internal.GameSounds
             _audioMixerGroupField.BindProperty(settingsProperty.FindPropertyRelative("audioMixerGroup"));
             _muteField.BindProperty(settingsProperty.FindPropertyRelative("mute"));
             _bypassEffectsField.BindProperty(settingsProperty.FindPropertyRelative("bypassEffects"));
+            _bypassListenerEffectsField.BindProperty(settingsProperty.FindPropertyRelative("bypassListenerEffects"));
             _bypassReverbZonesField.BindProperty(settingsProperty.FindPropertyRelative("bypassReverbZones"));
             _volumeField.BindProperty(settingsProperty.FindPropertyRelative("volume"));
             _loopField.BindProperty(settingsProperty.FindPropertyRelative("loop"));
