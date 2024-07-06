@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -6,6 +7,22 @@ namespace Essentials.Internal.GameSounds
 {
     [Serializable]
     public class GameSoundsData : ScriptableObject
+    {
+        public GameSoundSettings defaultSettings;
+        public List<GameSoundGroup> gameSoundGroups = new List<GameSoundGroup>();
+
+        public GameSoundGroup GetGroup(string name) => gameSoundGroups.Find(x => x.name == name);
+    }
+
+    [Serializable]
+    public class GameSoundGroup
+    {
+        public string name = "New Group";
+        public GameSoundSettings settings = new GameSoundSettings();
+    }
+
+    [Serializable]
+    public class GameSoundSettings
     {
         public float volume = 1f;
         public bool loop = false;
@@ -18,5 +35,9 @@ namespace Essentials.Internal.GameSounds
         public float panStereo = 0f;
         public float reverbZoneMix = 0f;
         public AudioMixerGroup audioMixerGroup = null;
+        public bool mute = false;
+        public bool bypassEffects = false;
+        public bool bypassListenerEffects = false;
+        public bool bypassReverbZones = false;
     }
 }

@@ -2,26 +2,26 @@ using UnityEngine;
 
 namespace Essentials.Inspector
 {
-    public class ShowIfAttribute : PropertyAttribute
+    public class HideIfAttribute : PropertyAttribute
     {
         public readonly string conditionName;
         public readonly object compareValue;
         public readonly object[] compareValues;
         public readonly CompareType compareType = CompareType.All;
 
-        public ShowIfAttribute(string conditionName, object compareValue)
+        public HideIfAttribute(string conditionName, object compareValue)
         {
             this.conditionName = conditionName;
             this.compareValue = compareValue;
         }
 
-        public ShowIfAttribute(string conditionName, params object[] compareValues)
+        public HideIfAttribute(string conditionName, params object[] compareValues)
         {
             this.conditionName = conditionName;
             this.compareValues = compareValues;
         }
 
-        public ShowIfAttribute(string conditionName, CompareType compareType, params object[] compareValues)
+        public HideIfAttribute(string conditionName, CompareType compareType, params object[] compareValues)
         {
             this.conditionName = conditionName;
             this.compareType = compareType;

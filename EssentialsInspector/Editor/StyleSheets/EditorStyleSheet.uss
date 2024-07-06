@@ -34,3 +34,6 @@
     background-color: rgb(47, 47, 47);
     height: auto;
 }
+
+.property-field {
+}
