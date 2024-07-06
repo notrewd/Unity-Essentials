@@ -10,6 +10,7 @@ There are various features that focus on different aspects of the game engine. M
 ### Game Directories
 Game Directories helps you manage and visualize persistent game folders.
 A simple editor window that handles all the necessary boilerplate code for creating persistent game folders, so you don't have to touch any code and shows everything in a single place.
+<br />
 <img width="606" alt="image" src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/fa82757c-09b3-4a09-955f-e0aceccf1936">
 
 ### Game Sounds
