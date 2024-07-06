@@ -5,11 +5,11 @@ A package for the Unity game engine that brings a few features I found handy dur
 Simply open the package manager and add a package from git URL: ``https://github.com/NotRewd/Unity-Essentials.git``
 
 ## Key Features
-There are various features that focus on different aspects on the game engine. Managing game folders, easy way to create sounds in-game with code, handy editor tools and more.
+There are various features that focus on different aspects of the game engine. Managing game folders, easy way to create in-game sounds with code, handy editor tools and more.
 
 ### Game Directories
 Game Directories helps you manage and visualize persistent game folders.
-A simple editor window that handles all the necessary boilerplate code for creating persistent game folders, so you don't have to touch any code.
+A simple editor window that handles all the necessary boilerplate code for creating persistent game folders, so you don't have to touch any code and shows everything in a single place.
 <img width="606" alt="image" src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/fa82757c-09b3-4a09-955f-e0aceccf1936">
 
 ### Game Sounds
