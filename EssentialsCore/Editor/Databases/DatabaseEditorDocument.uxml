@@ -4,8 +4,8 @@
         <uie:Toolbar style="flex-direction: row;">
             <uie:ToolbarSearchField name="SearchField" />
             <ui:VisualElement style="flex-grow: 1; flex-direction: row-reverse;">
-                <uie:ToolbarButton text="New Item" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewItemButton" />
-                <uie:ToolbarButton text="Delete Item" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeleteItemButton" />
+                <uie:ToolbarButton text="New Item" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewItemButton" style="-unity-text-align: middle-left;" />
+                <uie:ToolbarButton text="Delete Item" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeleteItemButton" style="-unity-text-align: middle-left;" />
             </ui:VisualElement>
         </uie:Toolbar>
         <ui:VisualElement style="flex-grow: 1; flex-direction: row;">

@@ -2,8 +2,7 @@ using UnityEngine;
 
 namespace Essentials.Core.Databases
 {
-    public class DatabaseObject<T> : ScriptableObject
+    public class DatabaseObject : ScriptableObject
     {
-
     }
 }
