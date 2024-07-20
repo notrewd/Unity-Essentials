@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.notrewd.essentials/EssentialsInspector/Editor/StyleSheets/EditorStyleSheet.uss?fileID=7433441132597879392&amp;guid=456df42b6676c4189b86d4cc87698692&amp;type=3#EditorStyleSheet" />
+    <ui:VisualElement style="flex-grow: 1;">
+        <uie:Toolbar style="flex-direction: row;">
+            <uie:ToolbarSearchField name="SearchField" />
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row-reverse;">
+                <uie:ToolbarButton text="New Item" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewItemButton" />
+                <uie:ToolbarButton text="Delete Item" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeleteItemButton" />
+            </ui:VisualElement>
+        </uie:Toolbar>
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:ListView name="ListView" class="secondary" style="width: 200px;" />
+            <ui:VisualElement name="ItemContent" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
