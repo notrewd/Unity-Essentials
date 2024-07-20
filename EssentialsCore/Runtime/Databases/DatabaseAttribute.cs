@@ -5,17 +5,17 @@ namespace Essentials.Core.Databases
 {
     public class DatabaseAttribute : Attribute
     {
-        public Type DatabaseType { get; }
+        public Type databaseType { get; }
 
-        public string NewItemButtonLabel { get; } = "New Item";
-        public string DeleteItemButtonLabel { get; } = "Delete Item";
+        public string newItemButtonLabel { get; } = "New Item";
+        public string deleteItemButtonLabel { get; } = "Delete Item";
 
         public DatabaseAttribute(Type databaseType, string newButtonLabel = "New Item", string deleteButtonLabel = "Delete Item")
         {
-            DatabaseType = databaseType;
+            this.databaseType = databaseType;
 
-            NewItemButtonLabel = newButtonLabel;
-            DeleteItemButtonLabel = deleteButtonLabel;
+            this.newItemButtonLabel = newButtonLabel;
+            this.deleteItemButtonLabel = deleteButtonLabel;
         }
     }
 }

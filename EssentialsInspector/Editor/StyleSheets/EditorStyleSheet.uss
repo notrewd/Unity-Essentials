@@ -41,3 +41,23 @@
 .secondary {
     background-color: rgba(0, 0, 0, 0.2);
 }
+
+.prompt {
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.prompt > Button {
+    align-self: center;
+    margin-top: 10px;
+}
+
+.prompt > Label {
+    -unity-text-align: upper-center;
+    -unity-font-style: bold;
+    margin-bottom: 10px;
+}

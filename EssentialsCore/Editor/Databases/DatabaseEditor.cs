@@ -11,6 +11,11 @@ namespace Essentials.Internal.Databases
     public class DatabaseEditor : EditorWindow
     {
         private DatabaseObject _databaseObject;
+        private Type _databaseType;
+        private string _databasePath;
+
+        private string _newItemButtonLabel;
+        private string _deleteItemButtonLabel;
 
         private ToolbarButton _newItemButton;
         private ToolbarButton _deleteItemButton;
@@ -21,7 +26,7 @@ namespace Essentials.Internal.Databases
             window.titleContent = new GUIContent(databaseObject.name);
             window.minSize = new Vector2(300, 300);
 
-            window.SetDatabaseObject(databaseObject);
+            window.ConfigureWindow(databaseObject);
             window.Show();
         }
 
@@ -47,23 +52,31 @@ namespace Essentials.Internal.Databases
             _newItemButton = rootVisualElement.Q<ToolbarButton>("NewItemButton");
             _deleteItemButton = rootVisualElement.Q<ToolbarButton>("DeleteItemButton");
 
-            ConfigureDatabase();
+            _newItemButton.text = _newItemButtonLabel;
+            _deleteItemButton.text = _deleteItemButtonLabel;
+
+            _newItemButton.clicked += CreateNewItem;
         }
 
-        private void ConfigureDatabase()
+        private void CreateNewItem() => NewItemPromptEditor.ShowWindow(_databaseType, _databasePath, _newItemButtonLabel);
+
+        private void ConfigureWindow(DatabaseObject databaseObject)
         {
+            _databaseObject = databaseObject;
+            _databasePath = AssetDatabase.GetAssetPath(_databaseObject);
+
             Attribute[] attributes = Attribute.GetCustomAttributes(_databaseObject.GetType(), true);
 
             for (int i = 0; i < attributes.Length; i++)
             {
                 if (attributes[i] is DatabaseAttribute databaseAttribute)
                 {
-                    _newItemButton.text = databaseAttribute.NewItemButtonLabel;
-                    _deleteItemButton.text = databaseAttribute.DeleteItemButtonLabel;
+                    _databaseType = databaseAttribute.databaseType;
+
+                    _newItemButtonLabel = databaseAttribute.newItemButtonLabel;
+                    _deleteItemButtonLabel = databaseAttribute.deleteItemButtonLabel;
                 }
             }
         }
-
-        public void SetDatabaseObject(DatabaseObject databaseObject) => _databaseObject = databaseObject;
     }
 }
