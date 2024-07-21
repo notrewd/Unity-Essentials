@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Packages/com.notrewd.essentials/EssentialsInspector/Editor/StyleSheets/EditorStyleSheet.uss?fileID=7433441132597879392&amp;guid=456df42b6676c4189b86d4cc87698692&amp;type=3#EditorStyleSheet" />
     <ui:VisualElement class="prompt">
-        <ui:Label text="Enter Name of the New Item" name="TitleLabel" />
-        <ui:TextField picking-mode="Ignore" value="New Item" name="NameField" />
-        <ui:Button text="Create" name="CreateButton" />
+        <ui:Label text="Enter Name of the New Item" name="MessageLabel" />
+        <ui:TextField picking-mode="Ignore" value="New Item" name="InputField" />
+        <ui:Button text="Create" name="SubmitButton" />
     </ui:VisualElement>
 </ui:UXML>

@@ -6,11 +6,15 @@ using UnityEditor.Callbacks;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Essentials.Inspector.Utilities;
+using System.Collections.Generic;
 
 namespace Essentials.Internal.Databases
 {
     public class DatabaseEditor : EditorWindow
     {
+        private static Dictionary<DatabaseObject, DatabaseEditor> _openDatabases = new Dictionary<DatabaseObject, DatabaseEditor>();
+
         private DatabaseObject _databaseObject;
         private Type _databaseType;
         private string _databasePath;
@@ -26,12 +30,20 @@ namespace Essentials.Internal.Databases
 
         public static void CreateWindow(DatabaseObject databaseObject)
         {
+            if (_openDatabases.ContainsKey(databaseObject))
+            {
+                _openDatabases[databaseObject].Focus();
+                return;
+            }
+
             DatabaseEditor window = CreateInstance<DatabaseEditor>();
             window.titleContent = new GUIContent(databaseObject.name);
             window.minSize = new Vector2(300, 300);
 
             window.ConfigureWindow(databaseObject);
             window.Show();
+
+            _openDatabases.Add(databaseObject, window);
         }
 
         [OnOpenAsset]
@@ -50,6 +62,12 @@ namespace Essentials.Internal.Databases
 
         private void CreateGUI()
         {
+            if (_databaseObject == null)
+            {
+                Close();
+                return;
+            }
+
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/Databases/DatabaseEditorDocument.uxml");
             visualTree.CloneTree(rootVisualElement);
 
@@ -57,7 +75,7 @@ namespace Essentials.Internal.Databases
             _deleteItemButton = rootVisualElement.Q<ToolbarButton>("DeleteItemButton");
 
             _newItemButton.text = $"New {_itemLabel}";
-            _newItemButton.clicked += CreateNewItem;
+            _newItemButton.clicked += ShowNewItemPrompt;
 
             _deleteItemButton.text = $"Delete {_itemLabel}";
             _deleteItemButton.clicked += DeleteCurrentItem;
@@ -69,9 +87,36 @@ namespace Essentials.Internal.Databases
             RefreshItemList();
         }
 
-        private void CreateNewItem() => NewItemPromptEditor.ShowWindow(this, _databaseType, _databasePath, _itemLabel);
+        private void ShowNewItemPrompt()
+        {
+            InputPrompt.ShowWindow($"New {_itemLabel}", $"Enter the Name of the New {_itemLabel}", $"New {_itemLabel}", "Create", name => CreateNewItem(name));
+        }
 
-        public void RefreshItemList()
+        private void ShowRenameItemPrompt(DatabaseItem databaseItem)
+        {
+            InputPrompt.ShowWindow($"Rename {_itemLabel}", $"Enter the New Name for '{databaseItem.name}'", databaseItem.name, "Rename", name => RenameItem(databaseItem, name));
+        }
+
+        private void CreateNewItem(string itemName)
+        {
+            ScriptableObject scriptableObject = CreateInstance(_databaseType);
+            scriptableObject.name = itemName;
+
+            AssetDatabase.AddObjectToAsset(scriptableObject, _databasePath);
+            AssetDatabase.SaveAssets();
+
+            RefreshItemList();
+        }
+
+        private void RenameItem(DatabaseItem databaseItem, string newName)
+        {
+            databaseItem.name = newName;
+
+            AssetDatabase.SaveAssets();
+            RefreshItemList();
+        }
+
+        private void RefreshItemList()
         {
             _itemsView.Clear();
 
@@ -106,6 +151,7 @@ namespace Essentials.Internal.Databases
             _itemsView.Add(option);
         }
 
+
         private void DeleteItem(DatabaseItem databaseItem)
         {
             if (databaseItem == null) return;
@@ -122,6 +168,7 @@ namespace Essentials.Internal.Databases
         private void ShowItemContextMenu(DatabaseItem databaseItem)
         {
             GenericMenu menu = new GenericMenu();
+            menu.AddItem(new GUIContent($"Rename {databaseItem.name}"), false, () => ShowRenameItemPrompt(databaseItem));
             menu.AddItem(new GUIContent($"Delete {databaseItem.name}"), false, () => DeleteItem(databaseItem));
             menu.ShowAsContext();
         }
@@ -181,6 +228,11 @@ namespace Essentials.Internal.Databases
                     _itemLabel = databaseAttribute.itemLabel;
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (_openDatabases.ContainsKey(_databaseObject)) _openDatabases.Remove(_databaseObject);
         }
     }
 }
