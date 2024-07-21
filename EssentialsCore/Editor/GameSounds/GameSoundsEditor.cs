@@ -94,7 +94,7 @@ namespace Essentials.Internal.GameSounds
                 Button editButton = buttons.Q<Button>("EditButton");
                 Button deleteButton = buttons.Q<Button>("DeleteButton");
 
-                if (i % 2 == 1) gameSoundGroupElement.style.backgroundColor = (Color)new Color32(47, 47, 47, 255);
+                if (i % 2 == 1) gameSoundGroupElement.AddToClassList("secondary");
 
                 editButton.clicked += () => OpenGroup(gameSoundGroup);
                 deleteButton.clicked += () => RemoveGroup(gameSoundGroup);

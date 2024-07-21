@@ -7,22 +7,26 @@ namespace Essentials.Internal.Databases
 {
     public class NewItemPromptEditor : EditorWindow
     {
+        private DatabaseEditor _editorInstance;
+
         private Type _databaseType;
         private string _databasePath;
-        private string _itemName;
+        private string _itemLabel;
 
         private Label _titleLabel;
         private TextField _nameField;
         private Button _createButton;
 
-        public static void ShowWindow(Type databaseType, string databasePath, string itemName)
+        public static void ShowWindow(DatabaseEditor editorInstance, Type databaseType, string databasePath, string itemLabel)
         {
-            NewItemPromptEditor window = GetWindow<NewItemPromptEditor>();
-            window.titleContent = new GUIContent(itemName, EditorGUIUtility.IconContent("d_SettingsIcon").image);
+            NewItemPromptEditor window = GetWindow<NewItemPromptEditor>(true);
+            window.titleContent = new GUIContent(itemLabel, EditorGUIUtility.IconContent("d_SettingsIcon").image);
             window.minSize = new Vector2(300, 100);
             window.maxSize = new Vector2(300, 100);
 
-            window.ConfigureWindow(databaseType, databasePath, itemName);
+            window._editorInstance = editorInstance;
+
+            window.ConfigureWindow(databaseType, databasePath, itemLabel);
             window.Show();
         }
 
@@ -32,7 +36,7 @@ namespace Essentials.Internal.Databases
             visualTree.CloneTree(rootVisualElement);
 
             _titleLabel = rootVisualElement.Q<Label>("TitleLabel");
-            _titleLabel.text = $"Enter Name of the {_itemName}";
+            _titleLabel.text = $"Enter Name of the New {_itemLabel}";
 
             _nameField = rootVisualElement.Q<TextField>("NameField");
             _createButton = rootVisualElement.Q<Button>("CreateButton");
@@ -44,9 +48,9 @@ namespace Essentials.Internal.Databases
         {
             _databaseType = databaseType;
             _databasePath = databasePath;
-            _itemName = itemName;
+            _itemLabel = itemName;
 
-            if (_titleLabel != null) _titleLabel.text = $"Enter Name of the {_itemName}";
+            if (_titleLabel != null) _titleLabel.text = $"Enter Name of the New {_itemLabel}";
         }
 
         private bool CheckItemName(string name)
@@ -64,6 +68,8 @@ namespace Essentials.Internal.Databases
 
             AssetDatabase.AddObjectToAsset(scriptableObject, _databasePath);
             AssetDatabase.SaveAssets();
+
+            _editorInstance.RefreshItemList();
 
             Close();
         }

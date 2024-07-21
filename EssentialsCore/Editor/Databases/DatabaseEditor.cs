@@ -14,11 +14,9 @@ namespace Essentials.Internal.Databases
         private DatabaseObject _databaseObject;
         private Type _databaseType;
         private string _databasePath;
+        private string _itemLabel;
 
         private DatabaseItem _currentItem;
-
-        private string _newItemButtonLabel;
-        private string _deleteItemButtonLabel;
 
         private ToolbarButton _newItemButton;
         private ToolbarButton _deleteItemButton;
@@ -57,19 +55,21 @@ namespace Essentials.Internal.Databases
             _newItemButton = rootVisualElement.Q<ToolbarButton>("NewItemButton");
             _deleteItemButton = rootVisualElement.Q<ToolbarButton>("DeleteItemButton");
 
-            _newItemButton.text = _newItemButtonLabel;
+            _newItemButton.text = $"New {_itemLabel}";
             _newItemButton.clicked += CreateNewItem;
 
-            _deleteItemButton.text = _deleteItemButtonLabel;
+            _deleteItemButton.text = $"Delete {_itemLabel}";
+            _deleteItemButton.clicked += DeleteCurrentItem;
 
             _itemsView = rootVisualElement.Q<ScrollView>("ItemsView");
 
+            RefreshDeleteButton();
             RefreshItemList();
         }
 
-        private void CreateNewItem() => NewItemPromptEditor.ShowWindow(_databaseType, _databasePath, _newItemButtonLabel);
+        private void CreateNewItem() => NewItemPromptEditor.ShowWindow(this, _databaseType, _databasePath, _itemLabel);
 
-        private void RefreshItemList()
+        public void RefreshItemList()
         {
             _itemsView.Clear();
 
@@ -88,17 +88,46 @@ namespace Essentials.Internal.Databases
             };
 
             option.AddToClassList("item-entry");
-
-            option.clicked += () =>
-            {
-                _currentItem = databaseItem;
-
-                foreach (Button button in _itemsView.Children().Cast<Button>()) button.RemoveFromClassList("selected");
-
-                option.AddToClassList("selected");
-            };
+            option.clicked += () => SelectItem(option, databaseItem);
 
             _itemsView.Add(option);
+        }
+
+        private void SelectItem(Button button, DatabaseItem databaseItem)
+        {
+            _currentItem = databaseItem;
+
+            foreach (Button child in _itemsView.Children().Cast<Button>()) child.RemoveFromClassList("selected");
+            button.AddToClassList("selected");
+
+            RefreshDeleteButton();
+        }
+
+        private void DeselectItem()
+        {
+            _currentItem = null;
+
+            foreach (Button child in _itemsView.Children().Cast<Button>()) child.RemoveFromClassList("selected");
+
+            RefreshDeleteButton();
+        }
+
+        private void DeleteCurrentItem()
+        {
+            if (_currentItem == null) return;
+            if (!EditorUtility.DisplayDialog($"Delete {_itemLabel}", $"Are you sure you want to delete '{_currentItem.name}'?", "Yes", "No")) return;
+
+            AssetDatabase.RemoveObjectFromAsset(_currentItem);
+            AssetDatabase.SaveAssets();
+
+            DeselectItem();
+            RefreshItemList();
+        }
+
+        private void RefreshDeleteButton()
+        {
+            if (_currentItem == null) _deleteItemButton.SetEnabled(false);
+            else _deleteItemButton.SetEnabled(true);
         }
 
         private void ConfigureWindow(DatabaseObject databaseObject)
@@ -113,9 +142,7 @@ namespace Essentials.Internal.Databases
                 if (attributes[i] is DatabaseAttribute databaseAttribute)
                 {
                     _databaseType = databaseAttribute.databaseType;
-
-                    _newItemButtonLabel = databaseAttribute.newItemButtonLabel;
-                    _deleteItemButtonLabel = databaseAttribute.deleteItemButtonLabel;
+                    _itemLabel = databaseAttribute.itemLabel;
                 }
             }
         }
