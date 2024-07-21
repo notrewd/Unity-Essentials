@@ -22,6 +22,7 @@ namespace Essentials.Internal.Databases
         private ToolbarButton _deleteItemButton;
 
         private ScrollView _itemsView;
+        private IMGUIContainer _itemContent;
 
         public static void CreateWindow(DatabaseObject databaseObject)
         {
@@ -62,6 +63,7 @@ namespace Essentials.Internal.Databases
             _deleteItemButton.clicked += DeleteCurrentItem;
 
             _itemsView = rootVisualElement.Q<ScrollView>("ItemsView");
+            _itemContent = rootVisualElement.Q<IMGUIContainer>("ItemContent");
 
             RefreshDeleteButton();
             RefreshItemList();
@@ -76,11 +78,11 @@ namespace Essentials.Internal.Databases
             foreach (object item in AssetDatabase.LoadAllAssetRepresentationsAtPath(_databasePath))
             {
                 DatabaseItem databaseItem = item as DatabaseItem;
-                if (databaseItem != null) CreateItemOption(databaseItem);
+                if (databaseItem != null) CreateItemOption(databaseItem, databaseItem == _currentItem);
             }
         }
 
-        private void CreateItemOption(DatabaseItem databaseItem)
+        private void CreateItemOption(DatabaseItem databaseItem, bool selected)
         {
             Button option = new Button
             {
@@ -88,9 +90,40 @@ namespace Essentials.Internal.Databases
             };
 
             option.AddToClassList("item-entry");
+            if (selected) option.AddToClassList("selected");
+
             option.clicked += () => SelectItem(option, databaseItem);
 
+            option.RegisterCallback<MouseUpEvent>(e =>
+            {
+                if (e.button == 1)
+                {
+                    ShowItemContextMenu(databaseItem);
+                    e.StopPropagation();
+                }
+            });
+
             _itemsView.Add(option);
+        }
+
+        private void DeleteItem(DatabaseItem databaseItem)
+        {
+            if (databaseItem == null) return;
+            if (!EditorUtility.DisplayDialog($"Delete {databaseItem.name}", $"Are you sure you want to delete '{databaseItem.name}'?", "Yes", "No")) return;
+
+            if (_currentItem == databaseItem) DeselectCurrentItem();
+
+            AssetDatabase.RemoveObjectFromAsset(databaseItem);
+            AssetDatabase.SaveAssets();
+
+            RefreshItemList();
+        }
+
+        private void ShowItemContextMenu(DatabaseItem databaseItem)
+        {
+            GenericMenu menu = new GenericMenu();
+            menu.AddItem(new GUIContent($"Delete {databaseItem.name}"), false, () => DeleteItem(databaseItem));
+            menu.ShowAsContext();
         }
 
         private void SelectItem(Button button, DatabaseItem databaseItem)
@@ -101,28 +134,31 @@ namespace Essentials.Internal.Databases
             button.AddToClassList("selected");
 
             RefreshDeleteButton();
+            ShowCurrentItem();
         }
 
-        private void DeselectItem()
+        private void ShowCurrentItem()
+        {
+            if (_currentItem == null)
+            {
+                _itemContent.onGUIHandler = null;
+                return;
+            }
+
+            _itemContent.onGUIHandler = () => Editor.CreateEditor(_currentItem).OnInspectorGUI();
+        }
+
+        private void DeselectCurrentItem()
         {
             _currentItem = null;
 
             foreach (Button child in _itemsView.Children().Cast<Button>()) child.RemoveFromClassList("selected");
 
             RefreshDeleteButton();
+            ShowCurrentItem();
         }
 
-        private void DeleteCurrentItem()
-        {
-            if (_currentItem == null) return;
-            if (!EditorUtility.DisplayDialog($"Delete {_itemLabel}", $"Are you sure you want to delete '{_currentItem.name}'?", "Yes", "No")) return;
-
-            AssetDatabase.RemoveObjectFromAsset(_currentItem);
-            AssetDatabase.SaveAssets();
-
-            DeselectItem();
-            RefreshItemList();
-        }
+        private void DeleteCurrentItem() => DeleteItem(_currentItem);
 
         private void RefreshDeleteButton()
         {

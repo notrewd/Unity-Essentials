@@ -20,7 +20,7 @@ namespace Essentials.Internal.Databases
         public static void ShowWindow(DatabaseEditor editorInstance, Type databaseType, string databasePath, string itemLabel)
         {
             NewItemPromptEditor window = GetWindow<NewItemPromptEditor>(true);
-            window.titleContent = new GUIContent(itemLabel, EditorGUIUtility.IconContent("d_SettingsIcon").image);
+            window.titleContent = new GUIContent($"New {itemLabel}", EditorGUIUtility.IconContent("d_SettingsIcon").image);
             window.minSize = new Vector2(300, 100);
             window.maxSize = new Vector2(300, 100);
 
