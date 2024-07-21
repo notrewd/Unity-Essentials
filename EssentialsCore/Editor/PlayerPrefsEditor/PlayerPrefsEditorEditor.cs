@@ -380,7 +380,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
                 element.style.flexDirection = FlexDirection.Row;
                 element.style.marginBottom = 2;
 
-                if (index % 2 == 1) element.style.backgroundColor = (Color)new Color32(47, 47, 47, 255);
+                if (index % 2 == 1) element.AddToClassList("secondary");
 
                 TextField valueField = new TextField();
                 valueField.label = pair.Key.ToString();

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Essentials.Core.Databases;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -14,11 +15,15 @@ namespace Essentials.Internal.Databases
         private Type _databaseType;
         private string _databasePath;
 
+        private DatabaseItem _currentItem;
+
         private string _newItemButtonLabel;
         private string _deleteItemButtonLabel;
 
         private ToolbarButton _newItemButton;
         private ToolbarButton _deleteItemButton;
+
+        private ScrollView _itemsView;
 
         public static void CreateWindow(DatabaseObject databaseObject)
         {
@@ -53,12 +58,48 @@ namespace Essentials.Internal.Databases
             _deleteItemButton = rootVisualElement.Q<ToolbarButton>("DeleteItemButton");
 
             _newItemButton.text = _newItemButtonLabel;
+            _newItemButton.clicked += CreateNewItem;
+
             _deleteItemButton.text = _deleteItemButtonLabel;
 
-            _newItemButton.clicked += CreateNewItem;
+            _itemsView = rootVisualElement.Q<ScrollView>("ItemsView");
+
+            RefreshItemList();
         }
 
         private void CreateNewItem() => NewItemPromptEditor.ShowWindow(_databaseType, _databasePath, _newItemButtonLabel);
+
+        private void RefreshItemList()
+        {
+            _itemsView.Clear();
+
+            foreach (object item in AssetDatabase.LoadAllAssetRepresentationsAtPath(_databasePath))
+            {
+                DatabaseItem databaseItem = item as DatabaseItem;
+                if (databaseItem != null) CreateItemOption(databaseItem);
+            }
+        }
+
+        private void CreateItemOption(DatabaseItem databaseItem)
+        {
+            Button option = new Button
+            {
+                text = databaseItem.name
+            };
+
+            option.AddToClassList("item-entry");
+
+            option.clicked += () =>
+            {
+                _currentItem = databaseItem;
+
+                foreach (Button button in _itemsView.Children().Cast<Button>()) button.RemoveFromClassList("selected");
+
+                option.AddToClassList("selected");
+            };
+
+            _itemsView.Add(option);
+        }
 
         private void ConfigureWindow(DatabaseObject databaseObject)
         {

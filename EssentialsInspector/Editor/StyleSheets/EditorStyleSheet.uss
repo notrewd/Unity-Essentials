@@ -21,7 +21,7 @@
 }
 
 .tab-button.selected {
-    background-color: rgb(56, 56, 56);
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .bar {
@@ -31,11 +31,7 @@
     padding-bottom: 3px;
     flex-shrink: 0;
     flex-direction: row;
-    background-color: rgb(47, 47, 47);
     height: auto;
-}
-
-.property-field {
 }
 
 .secondary {
@@ -60,4 +56,13 @@
     -unity-text-align: upper-center;
     -unity-font-style: bold;
     margin-bottom: 10px;
+}
+
+.item-entry {
+    height: 25px;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.item-entry .selected {
+    background-color: rgba(0, 174, 255, 0.49);
 }
