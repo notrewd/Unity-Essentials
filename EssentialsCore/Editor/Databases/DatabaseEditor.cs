@@ -22,11 +22,17 @@ namespace Essentials.Internal.Databases
 
         private DatabaseItem _currentItem;
 
+        private ToolbarPopupSearchField _searchField;
+
         private ToolbarButton _newItemButton;
         private ToolbarButton _deleteItemButton;
 
         private ScrollView _itemsView;
         private IMGUIContainer _itemContent;
+
+        private SearchType _searchType = SearchType.Name;
+
+        private enum SearchType { Name, ID }
 
         public static void CreateWindow(DatabaseObject databaseObject)
         {
@@ -70,6 +76,26 @@ namespace Essentials.Internal.Databases
 
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/Databases/DatabaseEditorDocument.uxml");
             visualTree.CloneTree(rootVisualElement);
+
+            _searchField = rootVisualElement.Q<ToolbarPopupSearchField>("SearchField");
+
+            _searchField.menu.AppendAction("Name",
+                action =>
+                {
+                    _searchType = SearchType.Name;
+                    RefreshItemList();
+                },
+                actionStatus => _searchType == SearchType.Name ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+
+            _searchField.menu.AppendAction("ID",
+                action =>
+                {
+                    _searchType = SearchType.ID;
+                    RefreshItemList();
+                },
+                actionStatus => _searchType == SearchType.ID ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+
+            _searchField.RegisterValueChangedCallback(evt => RefreshItemList());
 
             _newItemButton = rootVisualElement.Q<ToolbarButton>("NewItemButton");
             _deleteItemButton = rootVisualElement.Q<ToolbarButton>("DeleteItemButton");
@@ -123,7 +149,10 @@ namespace Essentials.Internal.Databases
         {
             _itemsView.Clear();
 
-            foreach (object item in AssetDatabase.LoadAllAssetRepresentationsAtPath(_databasePath))
+            object[] items = AssetDatabase.LoadAllAssetRepresentationsAtPath(_databasePath);
+            object[] filteredItems = _searchType == SearchType.Name ? items.Cast<DatabaseItem>().Where(item => item.name.ToLower().Contains(_searchField.value.ToLower())).ToArray() : items.Cast<DatabaseItem>().Where(item => item.id.ToString().Contains(_searchField.value)).ToArray();
+
+            foreach (object item in filteredItems)
             {
                 DatabaseItem databaseItem = item as DatabaseItem;
                 if (databaseItem != null) CreateItemOption(databaseItem, databaseItem == _currentItem);
