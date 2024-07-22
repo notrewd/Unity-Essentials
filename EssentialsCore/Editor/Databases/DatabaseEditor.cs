@@ -106,6 +106,7 @@ namespace Essentials.Internal.Databases
             AssetDatabase.SaveAssets();
 
             RefreshItemList();
+            RefreshDatabaseItems();
         }
 
         private void RenameItem(DatabaseItem databaseItem, string newName)
@@ -163,6 +164,19 @@ namespace Essentials.Internal.Databases
             AssetDatabase.SaveAssets();
 
             RefreshItemList();
+            RefreshDatabaseItems();
+        }
+
+        private void RefreshDatabaseItems()
+        {
+            _databaseObject.items.Clear();
+
+            foreach (DatabaseItem databaseItem in AssetDatabase.LoadAllAssetRepresentationsAtPath(_databasePath).Cast<DatabaseItem>())
+            {
+                _databaseObject.items.Add(databaseItem);
+            }
+
+            EditorUtility.SetDirty(_databaseObject);
         }
 
         private void ShowItemContextMenu(DatabaseItem databaseItem)
@@ -232,6 +246,7 @@ namespace Essentials.Internal.Databases
 
         private void OnDestroy()
         {
+            if (_databaseObject == null) return;
             if (_openDatabases.ContainsKey(_databaseObject)) _openDatabases.Remove(_databaseObject);
         }
     }
