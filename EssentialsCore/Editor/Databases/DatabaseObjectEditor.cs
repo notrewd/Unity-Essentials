@@ -1,3 +1,4 @@
+using System.Linq;
 using Essentials.Core.Databases;
 using UnityEditor;
 using UnityEngine;
@@ -9,8 +10,11 @@ namespace Essentials.Internal.Databases
     {
         public override void OnInspectorGUI()
         {
-            int itemCount = ((DatabaseObject)target).items.Count;
-            int itemsWithNoId = ((DatabaseObject)target).items.FindAll(x => string.IsNullOrEmpty(x.id)).Count;
+            DatabaseObject databaseObject = target as DatabaseObject;
+
+            int itemCount = databaseObject.items.Count;
+            int itemsWithNoId = databaseObject.items.FindAll(x => string.IsNullOrEmpty(x.id)).Count;
+            int itemsWithDuplicateId = databaseObject.items.GroupBy(x => x.id).Count(x => x.Count() > 1);
 
             GUILayout.Label($"{target.name} Details", EditorStyles.boldLabel);
             GUILayout.Space(5f);
@@ -18,9 +22,46 @@ namespace Essentials.Internal.Databases
 
             if (itemsWithNoId > 0)
             {
+                GUILayout.BeginHorizontal();
+
                 GUI.color = Color.red;
                 GUILayout.Label($"Items With No ID: {itemsWithNoId}");
                 GUI.color = Color.white;
+
+                if (GUILayout.Button("Fix", GUILayout.Width(50f)))
+                {
+                    for (int i = 0; i < databaseObject.items.Count; i++)
+                    {
+                        if (string.IsNullOrEmpty(databaseObject.items[i].id))
+                        {
+                            DatabaseEditor.GenerateIdForItem(databaseObject.items[i], databaseObject);
+                        }
+                    }
+                }
+
+                GUILayout.EndHorizontal();
+            }
+
+            if (itemsWithDuplicateId > 0)
+            {
+                GUILayout.BeginHorizontal();
+
+                GUI.color = Color.red;
+                GUILayout.Label($"Items With Duplicate ID: {itemsWithDuplicateId}");
+                GUI.color = Color.white;
+
+                if (GUILayout.Button("Fix", GUILayout.Width(50f)))
+                {
+                    for (int i = 0; i < databaseObject.items.Count; i++)
+                    {
+                        if (databaseObject.items.GroupBy(x => x.id).Count(x => x.Count() > 1) > 0)
+                        {
+                            DatabaseEditor.GenerateIdForItem(databaseObject.items[i], databaseObject);
+                        }
+                    }
+                }
+
+                GUILayout.EndHorizontal();
             }
 
             GUILayout.Space(5f);

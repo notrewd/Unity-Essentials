@@ -102,6 +102,8 @@ namespace Essentials.Internal.Databases
             ScriptableObject scriptableObject = CreateInstance(_databaseType);
             scriptableObject.name = itemName;
 
+            GenerateIdForItem(scriptableObject as DatabaseItem, _databaseObject);
+
             AssetDatabase.AddObjectToAsset(scriptableObject, _databasePath);
             AssetDatabase.SaveAssets();
 
@@ -243,6 +245,42 @@ namespace Essentials.Internal.Databases
                 }
             }
         }
+
+        private static string GenerateIdFromName(string name)
+        {
+            string[] words = name.Split(' ');
+            string id = "";
+
+            for (int i = 0; i < words.Length; i++)
+            {
+                string word = words[i];
+                id += char.ToUpper(word[0]) + word.Substring(1);
+            }
+
+            id = char.ToLower(id[0]) + id[1..];
+            return id;
+        }
+
+        public static void GenerateIdForItem(DatabaseItem databaseItem, DatabaseObject databaseObject)
+        {
+            SerializedObject serializedObject = new SerializedObject(databaseItem);
+            SerializedProperty idProperty = serializedObject.FindProperty("id");
+
+            string id;
+            int interations = 0;
+
+            do
+            {
+                id = GenerateIdFromName(databaseItem.name) + (interations > 0 ? interations.ToString() : "");
+                idProperty.stringValue = id;
+                interations++;
+            }
+            while (IdExists(id, databaseObject));
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private static bool IdExists(string id, DatabaseObject databaseObject) => databaseObject.items.Exists(item => item.id == id);
 
         private void OnDestroy()
         {
