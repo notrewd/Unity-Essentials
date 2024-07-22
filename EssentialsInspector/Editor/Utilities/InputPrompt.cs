@@ -1,4 +1,5 @@
 using System;
+using Essentials.Internal.Databases;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -7,6 +8,9 @@ namespace Essentials.Inspector.Utilities
 {
     public class InputPrompt : EditorWindow
     {
+        private static EditorWindow _parentWindow;
+        private static InputPrompt _currentInstance;
+
         private string _message;
         private string _defaultValue;
         private string _buttonLabel;
@@ -16,9 +20,12 @@ namespace Essentials.Inspector.Utilities
         private TextField _inputField;
         private Button _submitButton;
 
-        public static void ShowWindow(string title, string message, string defaultValue, string buttonLabel, Action<string> onSubmit)
+        public static void ShowWindow(EditorWindow parentWindow, string title, string message, string defaultValue, string buttonLabel, Action<string> onSubmit)
         {
             InputPrompt window = GetWindow<InputPrompt>(true);
+
+            _parentWindow = parentWindow;
+            _currentInstance = window;
 
             window.titleContent = new GUIContent(title);
             window.minSize = new Vector2(300, 100);
@@ -32,6 +39,11 @@ namespace Essentials.Inspector.Utilities
             window.ConfigureValues();
 
             window.Show();
+        }
+
+        public static void CleanUp(EditorWindow parentWindow)
+        {
+            if (_currentInstance != null && _parentWindow == parentWindow) _currentInstance.Close();
         }
 
         private void CreateGUI()
@@ -69,6 +81,11 @@ namespace Essentials.Inspector.Utilities
 
             _onSubmit?.Invoke(_inputField.text);
             Close();
+        }
+
+        private void OnDestroy()
+        {
+            if (_currentInstance == this) _currentInstance = null;
         }
     }
 }

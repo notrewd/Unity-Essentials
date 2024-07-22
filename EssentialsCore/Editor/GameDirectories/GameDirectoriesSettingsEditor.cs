@@ -1,5 +1,4 @@
 using System.Linq;
-using Essentials.Core.GameDirectories;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -68,7 +67,7 @@ namespace Essentials.Internal.GameDirectories
 
             rootVisualElement.RegisterCallback<FocusInEvent>(_ =>
             {
-                if (!GameDirectoriesEditor.appliedChanges) unappliedChanges.style.display = DisplayStyle.Flex;
+                if (!GameDirectoriesEditor.Instance.appliedChanges) unappliedChanges.style.display = DisplayStyle.Flex;
                 else unappliedChanges.style.display = DisplayStyle.None;
             });
 
@@ -139,7 +138,7 @@ namespace Essentials.Internal.GameDirectories
                 }
             }
 
-            if (!GameDirectoriesEditor.appliedChanges) unappliedChanges.style.display = DisplayStyle.Flex;
+            if (!GameDirectoriesEditor.Instance.appliedChanges) unappliedChanges.style.display = DisplayStyle.Flex;
             else unappliedChanges.style.display = DisplayStyle.None;
         }
 
@@ -156,10 +155,10 @@ namespace Essentials.Internal.GameDirectories
 
                 TextField referenceField = directoryReference.Q<TextField>();
 
-                Core.GameDirectories.GameDirectories.FindGameDirectory(referenceField.label).reference = referenceField.value;
+                GameDirectoriesEditor.Instance.FindGameDirectory(referenceField.label).reference = referenceField.value;
             }
 
-            GameDirectory[] gameDirectories = Core.GameDirectories.GameDirectories.GetAllGameDirectories();
+            GameDirectory[] gameDirectories = GameDirectoriesEditor.Instance.GetAllGameDirectories();
             GameDirectoryData[] gameDirectoriesData = new GameDirectoryData[gameDirectories.Length];
 
             for (int i = 0; i < gameDirectories.Length; i++)

@@ -115,12 +115,12 @@ namespace Essentials.Internal.Databases
 
         private void ShowNewItemPrompt()
         {
-            InputPrompt.ShowWindow($"New {_itemLabel}", $"Enter the Name of the New {_itemLabel}", $"New {_itemLabel}", "Create", name => CreateNewItem(name));
+            InputPrompt.ShowWindow(this, $"New {_itemLabel}", $"Enter Name of the New {_itemLabel}", $"New {_itemLabel}", "Create", name => CreateNewItem(name));
         }
 
         private void ShowRenameItemPrompt(DatabaseItem databaseItem)
         {
-            InputPrompt.ShowWindow($"Rename {_itemLabel}", $"Enter the New Name for '{databaseItem.name}'", databaseItem.name, "Rename", name => RenameItem(databaseItem, name));
+            InputPrompt.ShowWindow(this, $"Rename {_itemLabel}", $"Enter New Name for '{databaseItem.name}'", databaseItem.name, "Rename", name => RenameItem(databaseItem, name));
         }
 
         private void CreateNewItem(string itemName)
@@ -313,8 +313,8 @@ namespace Essentials.Internal.Databases
 
         private void OnDestroy()
         {
-            if (_databaseObject == null) return;
-            if (_openDatabases.ContainsKey(_databaseObject)) _openDatabases.Remove(_databaseObject);
+            InputPrompt.CleanUp(this);
+            if (_databaseObject != null && _openDatabases.ContainsKey(_databaseObject)) _openDatabases.Remove(_databaseObject);
         }
     }
 }

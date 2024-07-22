@@ -1,7 +1,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using Essentials.Core.GameDirectories;
 using Essentials.Core.Utility;
 using UnityEditor;
 using UnityEngine;
