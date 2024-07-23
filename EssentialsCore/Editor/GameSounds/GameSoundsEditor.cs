@@ -1,3 +1,4 @@
+using Essentials.Inspector.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -7,8 +8,6 @@ namespace Essentials.Internal.GameSounds
 {
     public class GameSoundsEditor : EditorWindow
     {
-        private static Texture _soundTexture;
-
         private VisualTreeAsset _gameSoundGroupTemplate;
 
         private GameSoundsData _gameSoundsData;
@@ -26,18 +25,11 @@ namespace Essentials.Internal.GameSounds
 
         private Button _resetButton;
 
-        private static void SetTextures()
-        {
-            _soundTexture = EditorGUIUtility.isProSkin ? EditorGUIUtility.IconContent("d_Profiler.Audio").image : EditorGUIUtility.IconContent("Profiler.Audio").image;
-        }
-
         [MenuItem("Essentials/Game Sounds")]
         private static void ShowWindow()
         {
-            SetTextures();
-
             EditorWindow window = GetWindow<GameSoundsEditor>();
-            window.titleContent = new GUIContent("Game Sounds", _soundTexture);
+            window.titleContent = new GUIContent("Game Sounds", IconDatabase.GetIcon("Sound"));
             window.minSize = new Vector2(300, 300);
         }
 

@@ -12,8 +12,6 @@ namespace Essentials.Internal.GameDirectories
     {
         public static GameDirectoriesEditor Instance { get; private set; }
 
-        private static Texture _folderTexture;
-
         private List<GameDirectory> _gameDirectories = new List<GameDirectory>();
 
         public bool appliedChanges = true;
@@ -30,19 +28,12 @@ namespace Essentials.Internal.GameDirectories
 
         private GameDirectoriesSettingsEditor _settingsEditor;
 
-        private static void SetTextures()
-        {
-            _folderTexture = EditorGUIUtility.isProSkin ? EditorGUIUtility.IconContent("d_Project").image : EditorGUIUtility.IconContent("Project").image;
-        }
-
         [MenuItem("Essentials/Game Directories")]
         private static void ShowWindow()
         {
-            SetTextures();
-
             EditorWindow window = GetWindow<GameDirectoriesEditor>();
 
-            window.titleContent = new GUIContent("Game Directories", _folderTexture);
+            window.titleContent = new GUIContent("Game Directories", IconDatabase.GetIcon("Folder"));
             window.minSize = new Vector2(300, 300);
 
             Instance = window as GameDirectoriesEditor;
@@ -385,7 +376,7 @@ namespace Essentials.Internal.GameDirectories
                         subDirectoryElement.style.alignItems = Align.FlexStart;
 
                         Image subDirectoryIcon = new Image();
-                        subDirectoryIcon.image = _folderTexture;
+                        subDirectoryIcon.image = IconDatabase.GetIcon("Folder");
                         subDirectoryElement.Add(subDirectoryIcon);
 
                         if (subDirectory.subDirectories.Count == 0)
@@ -436,7 +427,7 @@ namespace Essentials.Internal.GameDirectories
                 gameDirectoryElement.style.alignItems = Align.FlexStart;
 
                 Image gameDirectoryIcon = new Image();
-                gameDirectoryIcon.image = _folderTexture;
+                gameDirectoryIcon.image = IconDatabase.GetIcon("Folder");
                 gameDirectoryElement.Add(gameDirectoryIcon);
 
                 if (gameDirectory.subDirectories.Count >= 1)
