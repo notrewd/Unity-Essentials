@@ -6,21 +6,7 @@ namespace Essentials.Inspector.Utilities
 {
     public static class IconDatabase
     {
-        public static Texture GetFolderIcon()
-        {
-            return EditorGUIUtility.isProSkin
-                ? EditorGUIUtility.IconContent("d_Project").image
-                : EditorGUIUtility.IconContent("Project").image;
-        }
-
-        public static Texture GetSettingsIcon()
-        {
-            return EditorGUIUtility.isProSkin
-                ? EditorGUIUtility.IconContent("d_Settings").image
-                : EditorGUIUtility.IconContent("Settings").image;
-        }
-
-        public static Texture GetIcon(string name)
+        public static Texture2D GetIcon(string name)
         {
             string iconPath = "Packages/com.notrewd.essentials/EssentialsCore/Icons";
             string iconName = EditorGUIUtility.isProSkin ? "d_" + name + ".png" : name + ".png";

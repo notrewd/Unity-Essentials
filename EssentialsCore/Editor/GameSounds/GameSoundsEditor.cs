@@ -29,7 +29,7 @@ namespace Essentials.Internal.GameSounds
         private static void ShowWindow()
         {
             EditorWindow window = GetWindow<GameSoundsEditor>();
-            window.titleContent = new GUIContent("Game Sounds", IconDatabase.GetIcon("Sound@2x"));
+            window.titleContent = new GUIContent("Game Sounds", IconDatabase.GetIcon("Sound@32"));
             window.minSize = new Vector2(300, 300);
         }
 

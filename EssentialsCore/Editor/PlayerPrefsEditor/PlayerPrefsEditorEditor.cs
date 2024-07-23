@@ -10,6 +10,7 @@ using System.Linq;
 using Microsoft.Win32;
 using System.IO;
 using System.ComponentModel;
+using Essentials.Inspector.Utilities;
 
 namespace Essentials.Internal.PlayerPrefsEditor
 {
@@ -51,12 +52,19 @@ namespace Essentials.Internal.PlayerPrefsEditor
         private static void ShowWindow()
         {
             PlayerPrefsEditorEditor window = GetWindow<PlayerPrefsEditorEditor>();
-            Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/playerprefs_icon.png");
-
-            window.titleContent = new GUIContent("PlayerPrefs Editor", icon);
+            window.titleContent = new GUIContent("PlayerPrefs Editor", IconDatabase.GetIcon("PlayerPrefs@32"));
             window.minSize = new Vector2(350, 300);
         }
 #endif
+
+        private void SetupButtonIcons()
+        {
+#if UNITY_EDITOR_WIN
+            _watchButton.style.backgroundImage = IconDatabase.GetIcon("Watch@32");
+#endif
+            _orderButton.style.backgroundImage = IconDatabase.GetIcon("Ascending@32");
+            _refreshButton.style.backgroundImage = IconDatabase.GetIcon("Refresh@32");
+        }
 
         public void CreateGUI()
         {
@@ -80,6 +88,8 @@ namespace Essentials.Internal.PlayerPrefsEditor
             _internalPlayerPrefsToggle = _bottomBar.Q<Toggle>("InternalPlayerPrefsToggle");
             _newPlayerPrefButton = _bottomBar.Q<Button>("NewPlayerPrefButton");
             _applyButton = _bottomBar.Q<Button>("ApplyButton");
+
+            SetupButtonIcons();
 
             _playerPrefsButton.clicked += () =>
             {
@@ -158,7 +168,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
             if (!_watchingChanges)
             {
-                Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/unwatch_icon.png");
+                Texture2D icon = IconDatabase.GetIcon("Unwatch@32");
                 _watchButton.style.backgroundImage = new StyleBackground(icon);
 
                 _watchButton.tooltip = "Watch Changes";
@@ -168,7 +178,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
             {
                 _watchingChanges = !_watchingChanges;
 
-                Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/" + (_watchingChanges ? "watch_icon" : "unwatch_icon") + ".png");
+                Texture2D icon = _watchingChanges ? IconDatabase.GetIcon("Watch@32") : IconDatabase.GetIcon("Unwatch@32");
                 _watchButton.style.backgroundImage = new StyleBackground(icon);
 
                 if (_watchingChanges)
@@ -192,7 +202,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
             {
                 _orderAscending = !_orderAscending;
 
-                Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/" + (_orderAscending ? "ascending_icon" : "descending_icon") + ".png");
+                Texture2D icon = _orderAscending ? IconDatabase.GetIcon("Ascending@32") : IconDatabase.GetIcon("Descending@32");
                 _orderButton.style.backgroundImage = new StyleBackground(icon);
 
                 RefreshList();

@@ -43,7 +43,7 @@ namespace Essentials.Internal.GameSounds
         public static GameSoundsGroupEditor CreateWindow(GameSoundGroup gameSoundGroup)
         {
             GameSoundsGroupEditor window = CreateInstance<GameSoundsGroupEditor>();
-            window.titleContent = new GUIContent("Game Sounds Group Settings", IconDatabase.GetSettingsIcon());
+            window.titleContent = new GUIContent("Game Sounds Group Settings", IconDatabase.GetIcon("Settings@32"));
             window.minSize = new Vector2(300, 300);
 
             window.SetGameSoundGroup(gameSoundGroup);

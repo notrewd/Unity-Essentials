@@ -33,7 +33,7 @@ namespace Essentials.Internal.GameDirectories
         {
             EditorWindow window = GetWindow<GameDirectoriesEditor>();
 
-            window.titleContent = new GUIContent("Game Directories", IconDatabase.GetIcon("Folder"));
+            window.titleContent = new GUIContent("Game Directories", IconDatabase.GetIcon("Folder@16"));
             window.minSize = new Vector2(300, 300);
 
             Instance = window as GameDirectoriesEditor;
@@ -376,7 +376,7 @@ namespace Essentials.Internal.GameDirectories
                         subDirectoryElement.style.alignItems = Align.FlexStart;
 
                         Image subDirectoryIcon = new Image();
-                        subDirectoryIcon.image = IconDatabase.GetIcon("Folder");
+                        subDirectoryIcon.image = IconDatabase.GetIcon("Folder@16");
                         subDirectoryElement.Add(subDirectoryIcon);
 
                         if (subDirectory.subDirectories.Count == 0)
@@ -427,7 +427,7 @@ namespace Essentials.Internal.GameDirectories
                 gameDirectoryElement.style.alignItems = Align.FlexStart;
 
                 Image gameDirectoryIcon = new Image();
-                gameDirectoryIcon.image = IconDatabase.GetIcon("Folder");
+                gameDirectoryIcon.image = IconDatabase.GetIcon("Folder@16");
                 gameDirectoryElement.Add(gameDirectoryIcon);
 
                 if (gameDirectory.subDirectories.Count >= 1)

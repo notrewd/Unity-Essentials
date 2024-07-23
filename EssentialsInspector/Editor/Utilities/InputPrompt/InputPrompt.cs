@@ -47,7 +47,7 @@ namespace Essentials.Inspector.Utilities
 
         private void CreateGUI()
         {
-            VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsInspector/Editor/Utilities/InputPromptDocument.uxml");
+            VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsInspector/Editor/Utilities/InputPrompt/InputPromptDocument.uxml");
             visualTree.CloneTree(rootVisualElement);
 
             _messageLabel = rootVisualElement.Q<Label>("MessageLabel");

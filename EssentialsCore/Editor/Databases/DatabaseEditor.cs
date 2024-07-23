@@ -43,7 +43,7 @@ namespace Essentials.Internal.Databases
             }
 
             DatabaseEditor window = CreateInstance<DatabaseEditor>();
-            window.titleContent = new GUIContent(databaseObject.name);
+            window.titleContent = new GUIContent(databaseObject.name, IconDatabase.GetIcon("Database@32"));
             window.minSize = new Vector2(300, 300);
 
             window.ConfigureWindow(databaseObject);
