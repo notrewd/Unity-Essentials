@@ -33,7 +33,31 @@ namespace Essentials.Inspector.Utilities
                 return null;
             }
 
-            return AssetDatabase.LoadAssetAtPath<Texture2D>(fullPath);
+            Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>(fullPath);
+
+            return icon;
+        }
+
+        public static Texture2D ResizeIcon(Texture2D icon, int width, int height)
+        {
+            Texture2D resizedIcon = new Texture2D(width, height);
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    int originalX = Mathf.RoundToInt(x * (float)icon.width / width);
+                    int originalY = Mathf.RoundToInt(y * (float)icon.height / height);
+
+                    Color pixelColor = icon.GetPixel(originalX, originalY);
+
+                    resizedIcon.SetPixel(x, y, pixelColor);
+                }
+            }
+
+            resizedIcon.Apply();
+
+            return resizedIcon;
         }
     }
 }
