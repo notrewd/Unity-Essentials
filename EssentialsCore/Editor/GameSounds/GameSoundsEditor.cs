@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -8,6 +7,8 @@ namespace Essentials.Internal.GameSounds
 {
     public class GameSoundsEditor : EditorWindow
     {
+        private static Texture _soundTexture;
+
         private VisualTreeAsset _gameSoundGroupTemplate;
 
         private GameSoundsData _gameSoundsData;
@@ -25,11 +26,18 @@ namespace Essentials.Internal.GameSounds
 
         private Button _resetButton;
 
+        private static void SetTextures()
+        {
+            _soundTexture = EditorGUIUtility.isProSkin ? EditorGUIUtility.IconContent("d_Profiler.Audio").image : EditorGUIUtility.IconContent("Profiler.Audio").image;
+        }
+
         [MenuItem("Essentials/Game Sounds")]
         private static void ShowWindow()
         {
+            SetTextures();
+
             EditorWindow window = GetWindow<GameSoundsEditor>();
-            window.titleContent = new GUIContent("Game Sounds", EditorGUIUtility.IconContent("d_SceneViewAudio On").image);
+            window.titleContent = new GUIContent("Game Sounds", _soundTexture);
             window.minSize = new Vector2(300, 300);
         }
 
@@ -134,7 +142,7 @@ namespace Essentials.Internal.GameSounds
 
         private void OnResetButtonClicked()
         {
-            if (!EditorUtility.DisplayDialog("Reset", "Are you sure you want to reset the sound settings? All the current settings and groups will be lost.", "Yes", "No")) return;
+            if (!EditorUtility.DisplayDialog("Reset", "Are you sure you want to reset the sound settings? All of the current settings and groups will be lost.", "Yes", "No")) return;
 
             rootVisualElement.Unbind();
 

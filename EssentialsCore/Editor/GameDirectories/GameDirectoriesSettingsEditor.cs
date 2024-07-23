@@ -7,6 +7,8 @@ namespace Essentials.Internal.GameDirectories
 {
     public class GameDirectoriesSettingsEditor : EditorWindow
     {
+        private static Texture _settingsTexture;
+
         private VisualElement bottomBar;
         private VisualElement content;
         private Button applyButton;
@@ -16,10 +18,17 @@ namespace Essentials.Internal.GameDirectories
         private VisualElement directoryReferences;
         private VisualElement unappliedChanges;
 
+        private static void SetTextures()
+        {
+            _settingsTexture = EditorGUIUtility.isProSkin ? EditorGUIUtility.IconContent("d_Settings").image : EditorGUIUtility.IconContent("Settings").image;
+        }
+
         public static GameDirectoriesSettingsEditor Open()
         {
+            SetTextures();
+
             GameDirectoriesSettingsEditor window = GetWindow<GameDirectoriesSettingsEditor>();
-            window.titleContent = new GUIContent("Game Directories Settings", EditorGUIUtility.IconContent("d_SettingsIcon").image);
+            window.titleContent = new GUIContent("Game Directories Settings", _settingsTexture);
             window.minSize = new Vector2(300, 300);
 
             return window;

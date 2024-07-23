@@ -11,6 +11,7 @@ namespace Essentials.Internal.GameSounds
     public class GameSoundsGroupEditor : EditorWindow
     {
         private static List<GameSoundsGroupEditor> _windows = new List<GameSoundsGroupEditor>();
+        private static Texture _settingsTexture;
 
         public Action onGroupNameChanged;
 
@@ -39,10 +40,17 @@ namespace Essentials.Internal.GameSounds
         private PropertyField _panStereoField;
         private PropertyField _reverbZoneMixField;
 
+        private static void SetTextures()
+        {
+            _settingsTexture = EditorGUIUtility.isProSkin ? EditorGUIUtility.IconContent("d_Settings").image : EditorGUIUtility.IconContent("Settings").image;
+        }
+
         public static GameSoundsGroupEditor CreateWindow(GameSoundGroup gameSoundGroup)
         {
+            SetTextures();
+
             GameSoundsGroupEditor window = CreateInstance<GameSoundsGroupEditor>();
-            window.titleContent = new GUIContent("Game Sounds Group Settings", EditorGUIUtility.IconContent("d_SettingsIcon").image);
+            window.titleContent = new GUIContent("Game Sounds Group Settings", _settingsTexture);
             window.minSize = new Vector2(300, 300);
 
             window.SetGameSoundGroup(gameSoundGroup);

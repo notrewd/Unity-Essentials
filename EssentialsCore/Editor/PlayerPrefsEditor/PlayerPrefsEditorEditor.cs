@@ -16,33 +16,33 @@ namespace Essentials.Internal.PlayerPrefsEditor
     public class PlayerPrefsEditorEditor : EditorWindow
     {
         public static bool isEditorPrefs { get; private set; } = false;
-        private static bool shownEditorPrefsWarning = false;
+        private static bool _shownEditorPrefsWarning = false;
 #if UNITY_EDITOR_WIN
-        private static bool watchingChanges = true;
+        private static bool _watchingChanges = true;
 #endif
-        private VisualElement topBar;
-        private Button playerPrefsButton;
-        private Button editorPrefsButton;
-        private ToolbarPopupSearchField searchField;
-        private Button watchButton;
-        private Button orderButton;
-        private Button refreshButton;
-        private ScrollView playerPrefsList;
-        private VisualElement noPlayerPrefsInfo;
-        private Button infoRefreshButton;
-        private VisualElement bottomBar;
-        private Label internalPlayerPrefsLabel;
-        private Toggle internalPlayerPrefsToggle;
-        private Button newPlayerPrefButton;
-        private Button applyButton;
+        private VisualElement _topBar;
+        private Button _playerPrefsButton;
+        private Button _editorPrefsButton;
+        private ToolbarPopupSearchField _searchField;
+        private Button _watchButton;
+        private Button _orderButton;
+        private Button _refreshButton;
+        private ScrollView _playerPrefsList;
+        private VisualElement _noPlayerPrefsInfo;
+        private Button _infoRefreshButton;
+        private VisualElement _bottomBar;
+        private Label _internalPlayerPrefsLabel;
+        private Toggle _internalPlayerPrefsToggle;
+        private Button _newPlayerPrefButton;
+        private Button _applyButton;
 
-        private RegistryMonitor playerPrefsRegistryMonitor;
-        private RegistryMonitor editorPrefsRegistryMonitor;
-        private Dictionary<string, object> playerPrefs = new Dictionary<string, object>();
-        private SearchType searchType = SearchType.KeyName;
-        private bool orderAscending = true;
-        private bool playerPrefsEntryUpdated = false;
-        private bool editorPrefsEntryUpdated = false;
+        private RegistryMonitor _playerPrefsRegistryMonitor;
+        private RegistryMonitor _editorPrefsRegistryMonitor;
+        private Dictionary<string, object> _playerPrefs = new Dictionary<string, object>();
+        private SearchType _searchType = SearchType.KeyName;
+        private bool _orderAscending = true;
+        private bool _playerPrefsEntryUpdated = false;
+        private bool _editorPrefsEntryUpdated = false;
 
         private enum SearchType { KeyName, Value, ValueType }
 
@@ -65,148 +65,148 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
             isEditorPrefs = false;
 
-            topBar = rootVisualElement.Q<VisualElement>("TopBar");
-            playerPrefsButton = topBar.Q<Button>("PlayerPrefsButton");
-            editorPrefsButton = topBar.Q<Button>("EditorPrefsButton");
-            searchField = topBar.Q<ToolbarPopupSearchField>("SearchField");
-            watchButton = topBar.Q<Button>("WatchButton");
-            orderButton = topBar.Q<Button>("OrderButton");
-            refreshButton = topBar.Q<Button>("RefreshButton");
-            playerPrefsList = rootVisualElement.Q<ScrollView>("PlayerPrefsList");
-            noPlayerPrefsInfo = rootVisualElement.Q<VisualElement>("NoPlayerPrefsInfo");
-            infoRefreshButton = noPlayerPrefsInfo.Q<Button>("RefreshButton");
-            bottomBar = rootVisualElement.Q<VisualElement>("BottomBar");
-            internalPlayerPrefsLabel = bottomBar.Q<Label>("InternalPlayerPrefsLabel");
-            internalPlayerPrefsToggle = bottomBar.Q<Toggle>("InternalPlayerPrefsToggle");
-            newPlayerPrefButton = bottomBar.Q<Button>("NewPlayerPrefButton");
-            applyButton = bottomBar.Q<Button>("ApplyButton");
+            _topBar = rootVisualElement.Q<VisualElement>("TopBar");
+            _playerPrefsButton = _topBar.Q<Button>("PlayerPrefsButton");
+            _editorPrefsButton = _topBar.Q<Button>("EditorPrefsButton");
+            _searchField = _topBar.Q<ToolbarPopupSearchField>("SearchField");
+            _watchButton = _topBar.Q<Button>("WatchButton");
+            _orderButton = _topBar.Q<Button>("OrderButton");
+            _refreshButton = _topBar.Q<Button>("RefreshButton");
+            _playerPrefsList = rootVisualElement.Q<ScrollView>("PlayerPrefsList");
+            _noPlayerPrefsInfo = rootVisualElement.Q<VisualElement>("NoPlayerPrefsInfo");
+            _infoRefreshButton = _noPlayerPrefsInfo.Q<Button>("RefreshButton");
+            _bottomBar = rootVisualElement.Q<VisualElement>("BottomBar");
+            _internalPlayerPrefsLabel = _bottomBar.Q<Label>("InternalPlayerPrefsLabel");
+            _internalPlayerPrefsToggle = _bottomBar.Q<Toggle>("InternalPlayerPrefsToggle");
+            _newPlayerPrefButton = _bottomBar.Q<Button>("NewPlayerPrefButton");
+            _applyButton = _bottomBar.Q<Button>("ApplyButton");
 
-            playerPrefsButton.clicked += () =>
+            _playerPrefsButton.clicked += () =>
             {
                 if (!isEditorPrefs) return;
-                if (applyButton.enabledSelf) if (!EditorUtility.DisplayDialog("Warning", "You have unsaved changes. Are you sure you want to continue?", "Yes", "No")) return;
+                if (_applyButton.enabledSelf) if (!EditorUtility.DisplayDialog("Warning", "You have unsaved changes. Are you sure you want to continue?", "Yes", "No")) return;
 
                 isEditorPrefs = false;
 
-                playerPrefsButton.AddToClassList("selected");
-                editorPrefsButton.RemoveFromClassList("selected");
+                _playerPrefsButton.AddToClassList("selected");
+                _editorPrefsButton.RemoveFromClassList("selected");
 
-                internalPlayerPrefsLabel.style.display = DisplayStyle.Flex;
-                internalPlayerPrefsToggle.style.display = DisplayStyle.Flex;
+                _internalPlayerPrefsLabel.style.display = DisplayStyle.Flex;
+                _internalPlayerPrefsToggle.style.display = DisplayStyle.Flex;
 
-                newPlayerPrefButton.text = "New PlayerPref";
+                _newPlayerPrefButton.text = "New PlayerPref";
 
-                applyButton.SetEnabled(false);
+                _applyButton.SetEnabled(false);
 
                 RefreshAll();
             };
 
-            editorPrefsButton.clicked += () =>
+            _editorPrefsButton.clicked += () =>
             {
                 if (isEditorPrefs) return;
 
-                if (!shownEditorPrefsWarning && !EditorUtility.DisplayDialog("Warning", "You are about to edit the EditorPrefs. This may cause the editor to crash or behave unexpectedly. Are you sure you want to continue?", "Yes", "No")) return;
-                shownEditorPrefsWarning = true;
+                if (!_shownEditorPrefsWarning && !EditorUtility.DisplayDialog("Warning", "You are about to edit the EditorPrefs. This may cause the editor to crash or behave unexpectedly. Are you sure you want to continue?", "Yes", "No")) return;
+                _shownEditorPrefsWarning = true;
 
-                if (applyButton.enabledSelf) if (!EditorUtility.DisplayDialog("Warning", "You have unsaved changes. Are you sure you want to continue?", "Yes", "No")) return;
+                if (_applyButton.enabledSelf) if (!EditorUtility.DisplayDialog("Warning", "You have unsaved changes. Are you sure you want to continue?", "Yes", "No")) return;
 
                 isEditorPrefs = true;
 
-                playerPrefsButton.RemoveFromClassList("selected");
-                editorPrefsButton.AddToClassList("selected");
+                _playerPrefsButton.RemoveFromClassList("selected");
+                _editorPrefsButton.AddToClassList("selected");
 
-                internalPlayerPrefsLabel.style.display = DisplayStyle.None;
-                internalPlayerPrefsToggle.style.display = DisplayStyle.None;
+                _internalPlayerPrefsLabel.style.display = DisplayStyle.None;
+                _internalPlayerPrefsToggle.style.display = DisplayStyle.None;
 
-                newPlayerPrefButton.text = "New EditorPref";
+                _newPlayerPrefButton.text = "New EditorPref";
 
-                applyButton.SetEnabled(false);
+                _applyButton.SetEnabled(false);
 
                 RefreshAll();
             };
 
-            searchField.menu.AppendAction("Key Name", (_) =>
+            _searchField.menu.AppendAction("Key Name", (_) =>
             {
-                searchType = SearchType.KeyName;
+                _searchType = SearchType.KeyName;
                 RefreshList();
-            }, (_) => searchType == SearchType.KeyName ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+            }, (_) => _searchType == SearchType.KeyName ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
 
-            searchField.menu.AppendAction("Value", (_) =>
+            _searchField.menu.AppendAction("Value", (_) =>
             {
-                searchType = SearchType.Value;
+                _searchType = SearchType.Value;
                 RefreshList();
-            }, (_) => searchType == SearchType.Value ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+            }, (_) => _searchType == SearchType.Value ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
 
-            searchField.menu.AppendAction("Value Type", (_) =>
+            _searchField.menu.AppendAction("Value Type", (_) =>
             {
-                searchType = SearchType.ValueType;
+                _searchType = SearchType.ValueType;
                 RefreshList();
-            }, (_) => searchType == SearchType.ValueType ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+            }, (_) => _searchType == SearchType.ValueType ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
 
-            searchField.RegisterValueChangedCallback((_) => RefreshList());
+            _searchField.RegisterValueChangedCallback((_) => RefreshList());
 
 #if UNITY_EDITOR_WIN
-            playerPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity\\UnityEditor\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
-            playerPrefsRegistryMonitor.RegChanged += (_, __) => playerPrefsEntryUpdated = true;
-            if (watchingChanges) playerPrefsRegistryMonitor.Start();
+            _playerPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity\\UnityEditor\\" + PlayerSettings.companyName + "\\" + PlayerSettings.productName);
+            _playerPrefsRegistryMonitor.RegChanged += (_, __) => _playerPrefsEntryUpdated = true;
+            if (_watchingChanges) _playerPrefsRegistryMonitor.Start();
 
-            editorPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity Technologies\\Unity Editor 5.x");
-            editorPrefsRegistryMonitor.RegChanged += (_, __) => editorPrefsEntryUpdated = true;
-            if (watchingChanges) editorPrefsRegistryMonitor.Start();
+            _editorPrefsRegistryMonitor = new RegistryMonitor(RegistryHive.CurrentUser, "Software\\Unity Technologies\\Unity Editor 5.x");
+            _editorPrefsRegistryMonitor.RegChanged += (_, __) => _editorPrefsEntryUpdated = true;
+            if (_watchingChanges) _editorPrefsRegistryMonitor.Start();
 
-            watchButton.style.display = DisplayStyle.Flex;
+            _watchButton.style.display = DisplayStyle.Flex;
 
-            if (!watchingChanges)
+            if (!_watchingChanges)
             {
                 Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/unwatch_icon.png");
-                watchButton.style.backgroundImage = new StyleBackground(icon);
+                _watchButton.style.backgroundImage = new StyleBackground(icon);
 
-                watchButton.tooltip = "Watch Changes";
+                _watchButton.tooltip = "Watch Changes";
             }
 
-            watchButton.clicked += () =>
+            _watchButton.clicked += () =>
             {
-                watchingChanges = !watchingChanges;
+                _watchingChanges = !_watchingChanges;
 
-                Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/" + (watchingChanges ? "watch_icon" : "unwatch_icon") + ".png");
-                watchButton.style.backgroundImage = new StyleBackground(icon);
+                Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/" + (_watchingChanges ? "watch_icon" : "unwatch_icon") + ".png");
+                _watchButton.style.backgroundImage = new StyleBackground(icon);
 
-                if (watchingChanges)
+                if (_watchingChanges)
                 {
-                    playerPrefsRegistryMonitor.Start();
-                    editorPrefsRegistryMonitor.Start();
+                    _playerPrefsRegistryMonitor.Start();
+                    _editorPrefsRegistryMonitor.Start();
 
-                    watchButton.tooltip = "Unwatch Changes";
+                    _watchButton.tooltip = "Unwatch Changes";
                 }
                 else
                 {
-                    playerPrefsRegistryMonitor.Stop();
-                    editorPrefsRegistryMonitor.Stop();
+                    _playerPrefsRegistryMonitor.Stop();
+                    _editorPrefsRegistryMonitor.Stop();
 
-                    watchButton.tooltip = "Watch Changes";
+                    _watchButton.tooltip = "Watch Changes";
                 }
             };
 #endif
 
-            orderButton.clicked += () =>
+            _orderButton.clicked += () =>
             {
-                orderAscending = !orderAscending;
+                _orderAscending = !_orderAscending;
 
-                Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/" + (orderAscending ? "ascending_icon" : "descending_icon") + ".png");
-                orderButton.style.backgroundImage = new StyleBackground(icon);
+                Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Packages/com.notrewd.essentials/EssentialsCore/Icons/" + (_orderAscending ? "ascending_icon" : "descending_icon") + ".png");
+                _orderButton.style.backgroundImage = new StyleBackground(icon);
 
                 RefreshList();
             };
 
-            refreshButton.clicked += RefreshAll;
+            _refreshButton.clicked += RefreshAll;
 
-            infoRefreshButton.clicked += RefreshAll;
+            _infoRefreshButton.clicked += RefreshAll;
 
-            internalPlayerPrefsToggle.RegisterValueChangedCallback((_) => RefreshList());
+            _internalPlayerPrefsToggle.RegisterValueChangedCallback((_) => RefreshList());
 
-            newPlayerPrefButton.clicked += () => PlayerPrefsAddEditor.ShowWindow(this);
+            _newPlayerPrefButton.clicked += () => PlayerPrefsAddEditor.ShowWindow(this);
 
-            applyButton.clicked += Apply;
+            _applyButton.clicked += Apply;
 
             RefreshAll();
         }
@@ -217,17 +217,17 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
         private void Update()
         {
-            if (playerPrefsEntryUpdated)
+            if (_playerPrefsEntryUpdated)
             {
-                playerPrefsEntryUpdated = false;
+                _playerPrefsEntryUpdated = false;
                 if (isEditorPrefs) return;
                 LoadPlayerPrefs();
                 RefreshList();
             }
 
-            if (editorPrefsEntryUpdated)
+            if (_editorPrefsEntryUpdated)
             {
-                editorPrefsEntryUpdated = false;
+                _editorPrefsEntryUpdated = false;
                 if (!isEditorPrefs) return;
                 LoadPlayerPrefs();
                 RefreshList();
@@ -236,16 +236,16 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
         public void AddPlayerPref(string key, object value)
         {
-            if (playerPrefs.ContainsKey(key))
+            if (_playerPrefs.ContainsKey(key))
             {
                 EditorUtility.DisplayDialog("Error", "Key already exists", "OK");
                 return;
             }
 
-            playerPrefs.Add(key, value);
+            _playerPrefs.Add(key, value);
 
             RefreshList();
-            applyButton.SetEnabled(true);
+            _applyButton.SetEnabled(true);
         }
 
         private void RefreshAll()
@@ -253,7 +253,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
             LoadPlayerPrefs();
             RefreshList();
 
-            applyButton.SetEnabled(false);
+            _applyButton.SetEnabled(false);
         }
 
         private void LoadPlayerPrefs()
@@ -267,15 +267,15 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
                 if (values != null)
                 {
-                    playerPrefs.Clear();
+                    _playerPrefs.Clear();
 
                     foreach (string key in values.Keys)
                     {
                         if (!PlayerPrefs.HasKey(key)) continue;
 
-                        if (PlayerPrefs.GetString(key, "Essentials.PlayerPrefsEditor.NoKey") != "Essentials.PlayerPrefsEditor.NoKey") playerPrefs.Add(key, PlayerPrefs.GetString(key));
-                        else if (PlayerPrefs.GetInt(key, int.MinValue) != int.MinValue) playerPrefs.Add(key, PlayerPrefs.GetInt(key));
-                        else if (PlayerPrefs.GetFloat(key, float.NaN) != float.NaN) playerPrefs.Add(key, PlayerPrefs.GetFloat(key));
+                        if (PlayerPrefs.GetString(key, "Essentials.PlayerPrefsEditor.NoKey") != "Essentials.PlayerPrefsEditor.NoKey") _playerPrefs.Add(key, PlayerPrefs.GetString(key));
+                        else if (PlayerPrefs.GetInt(key, int.MinValue) != int.MinValue) _playerPrefs.Add(key, PlayerPrefs.GetInt(key));
+                        else if (PlayerPrefs.GetFloat(key, float.NaN) != float.NaN) _playerPrefs.Add(key, PlayerPrefs.GetFloat(key));
                     }
                 }
             }
@@ -285,15 +285,15 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
                 if (values != null)
                 {
-                    playerPrefs.Clear();
+                    _playerPrefs.Clear();
 
                     foreach (string key in values.Keys)
                     {
                         if (!EditorPrefs.HasKey(key)) continue;
 
-                        if (EditorPrefs.GetString(key, "Essentials.PlayerPrefsEditor.NoKey") != "Essentials.PlayerPrefsEditor.NoKey") playerPrefs.Add(key, EditorPrefs.GetString(key));
-                        else if (EditorPrefs.GetInt(key, int.MinValue) != int.MinValue) playerPrefs.Add(key, EditorPrefs.GetInt(key));
-                        else if (EditorPrefs.GetFloat(key, float.NaN) != float.NaN) playerPrefs.Add(key, EditorPrefs.GetFloat(key));
+                        if (EditorPrefs.GetString(key, "Essentials.PlayerPrefsEditor.NoKey") != "Essentials.PlayerPrefsEditor.NoKey") _playerPrefs.Add(key, EditorPrefs.GetString(key));
+                        else if (EditorPrefs.GetInt(key, int.MinValue) != int.MinValue) _playerPrefs.Add(key, EditorPrefs.GetInt(key));
+                        else if (EditorPrefs.GetFloat(key, float.NaN) != float.NaN) _playerPrefs.Add(key, EditorPrefs.GetFloat(key));
                     }
                 }
             }
@@ -345,31 +345,31 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
         private void RefreshList()
         {
-            playerPrefsList.Clear();
+            _playerPrefsList.Clear();
 
-            if (orderAscending) playerPrefs = playerPrefs.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
-            else playerPrefs = playerPrefs.OrderByDescending(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+            if (_orderAscending) _playerPrefs = _playerPrefs.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+            else _playerPrefs = _playerPrefs.OrderByDescending(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
 
             int index = 0;
 
-            foreach (KeyValuePair<string, object> pair in playerPrefs)
+            foreach (KeyValuePair<string, object> pair in _playerPrefs)
             {
-                if (!internalPlayerPrefsToggle.value && (pair.Key.ToString().StartsWith("unity.") || pair.Key.ToString() == "UnityGraphicsQuality")) continue;
+                if (!_internalPlayerPrefsToggle.value && (pair.Key.ToString().StartsWith("unity.") || pair.Key.ToString() == "UnityGraphicsQuality")) continue;
 
-                if (searchType == SearchType.KeyName && !pair.Key.ToString().ToLower().Contains(searchField.value.ToLower())) continue;
-                else if (searchType == SearchType.Value && pair.Value.ToString().ToLower() != searchField.value.ToLower()) continue;
-                else if (searchType == SearchType.ValueType)
+                if (_searchType == SearchType.KeyName && !pair.Key.ToString().ToLower().Contains(_searchField.value.ToLower())) continue;
+                else if (_searchType == SearchType.Value && pair.Value.ToString().ToLower() != _searchField.value.ToLower()) continue;
+                else if (_searchType == SearchType.ValueType)
                 {
                     switch (pair.Value)
                     {
                         case string _:
-                            if (searchField.value.ToLower() != "string") continue;
+                            if (_searchField.value.ToLower() != "string") continue;
                             break;
                         case int _:
-                            if (searchField.value.ToLower() != "int") continue;
+                            if (_searchField.value.ToLower() != "int") continue;
                             break;
                         case float _:
-                            if (searchField.value.ToLower() != "float") continue;
+                            if (_searchField.value.ToLower() != "float") continue;
                             break;
                         default:
                             continue;
@@ -399,15 +399,15 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
                 valueField.RegisterValueChangedCallback((evt) =>
                 {
-                    applyButton.SetEnabled(true);
+                    _applyButton.SetEnabled(true);
 
                     if (typeField.value == "Int")
                     {
-                        if (!int.TryParse(evt.newValue, out int value)) applyButton.SetEnabled(false);
+                        if (!int.TryParse(evt.newValue, out int value)) _applyButton.SetEnabled(false);
                     }
                     else if (typeField.value == "Float")
                     {
-                        if (!float.TryParse(evt.newValue, out float value)) applyButton.SetEnabled(false);
+                        if (!float.TryParse(evt.newValue, out float value)) _applyButton.SetEnabled(false);
                     }
                 });
 
@@ -416,40 +416,40 @@ namespace Essentials.Internal.PlayerPrefsEditor
                     if (typeField.value == "Int")
                     {
                         if (!int.TryParse(valueField.value, out int value)) return;
-                        playerPrefs[pair.Key] = int.Parse(valueField.value);
+                        _playerPrefs[pair.Key] = int.Parse(valueField.value);
                     }
                     else if (typeField.value == "Float")
                     {
                         if (!float.TryParse(valueField.value, out float value)) return;
-                        playerPrefs[pair.Key] = float.Parse(valueField.value);
+                        _playerPrefs[pair.Key] = float.Parse(valueField.value);
                     }
-                    else playerPrefs[pair.Key] = valueField.value;
+                    else _playerPrefs[pair.Key] = valueField.value;
                 });
 
                 typeField.RegisterValueChangedCallback((evt) =>
                 {
-                    if (evt.newValue == "String") playerPrefs[pair.Key] = valueField.value;
+                    if (evt.newValue == "String") _playerPrefs[pair.Key] = valueField.value;
                     else if (evt.newValue == "Int")
                     {
                         if (!int.TryParse(valueField.value, out int value)) valueField.value = "0";
-                        playerPrefs[pair.Key] = int.Parse(valueField.value);
+                        _playerPrefs[pair.Key] = int.Parse(valueField.value);
                     }
                     else if (evt.newValue == "Float")
                     {
                         if (!float.TryParse(valueField.value, out float value)) valueField.value = "0";
-                        playerPrefs[pair.Key] = float.Parse(valueField.value);
+                        _playerPrefs[pair.Key] = float.Parse(valueField.value);
                     }
 
-                    applyButton.SetEnabled(true);
+                    _applyButton.SetEnabled(true);
                 });
 
                 ContextualMenuManipulator menuManipulator = new ContextualMenuManipulator((evt) =>
                 {
                     evt.menu.AppendAction(isEditorPrefs ? "Delete EditorPref" : "Delete PlayerPref", (_) =>
                     {
-                        playerPrefs.Remove(pair.Key);
+                        _playerPrefs.Remove(pair.Key);
                         RefreshList();
-                        applyButton.SetEnabled(true);
+                        _applyButton.SetEnabled(true);
                     });
                 });
 
@@ -457,30 +457,30 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
                 element.Add(valueField);
                 element.Add(typeField);
-                playerPrefsList.Add(element);
+                _playerPrefsList.Add(element);
 
                 index++;
             }
 
-            if (playerPrefsList.childCount > 0)
+            if (_playerPrefsList.childCount > 0)
             {
-                noPlayerPrefsInfo.style.display = DisplayStyle.None;
-                playerPrefsList.style.display = DisplayStyle.Flex;
+                _noPlayerPrefsInfo.style.display = DisplayStyle.None;
+                _playerPrefsList.style.display = DisplayStyle.Flex;
             }
             else
             {
-                noPlayerPrefsInfo.style.display = DisplayStyle.Flex;
-                playerPrefsList.style.display = DisplayStyle.None;
+                _noPlayerPrefsInfo.style.display = DisplayStyle.Flex;
+                _playerPrefsList.style.display = DisplayStyle.None;
             }
         }
 
         private void Apply()
         {
 #if UNITY_EDITOR_WIN
-            if (watchingChanges)
+            if (_watchingChanges)
             {
-                playerPrefsRegistryMonitor.Stop();
-                editorPrefsRegistryMonitor.Stop();
+                _playerPrefsRegistryMonitor.Stop();
+                _editorPrefsRegistryMonitor.Stop();
             }
 #endif
 
@@ -488,7 +488,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
             {
                 PlayerPrefs.DeleteAll();
 
-                foreach (KeyValuePair<string, object> pair in playerPrefs)
+                foreach (KeyValuePair<string, object> pair in _playerPrefs)
                 {
                     if (pair.Value is string) PlayerPrefs.SetString(pair.Key.ToString(), pair.Value.ToString());
                     else if (pair.Value is int) PlayerPrefs.SetInt(pair.Key.ToString(), int.Parse(pair.Value.ToString()));
@@ -497,13 +497,13 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
                 PlayerPrefs.Save();
 
-                applyButton.SetEnabled(false);
+                _applyButton.SetEnabled(false);
             }
             else
             {
                 EditorPrefs.DeleteAll();
 
-                foreach (KeyValuePair<string, object> pair in playerPrefs)
+                foreach (KeyValuePair<string, object> pair in _playerPrefs)
                 {
                     if (pair.Value is string) EditorPrefs.SetString(pair.Key.ToString(), pair.Value.ToString());
                     else if (pair.Value is int) EditorPrefs.SetInt(pair.Key.ToString(), int.Parse(pair.Value.ToString()));
@@ -511,14 +511,14 @@ namespace Essentials.Internal.PlayerPrefsEditor
                     else if (pair.Value is bool) EditorPrefs.SetBool(pair.Key.ToString(), bool.Parse(pair.Value.ToString()));
                 }
 
-                applyButton.SetEnabled(false);
+                _applyButton.SetEnabled(false);
             }
 
 #if UNITY_EDITOR_WIN
-            if (watchingChanges)
+            if (_watchingChanges)
             {
-                playerPrefsRegistryMonitor.Start();
-                editorPrefsRegistryMonitor.Start();
+                _playerPrefsRegistryMonitor.Start();
+                _editorPrefsRegistryMonitor.Start();
             }
 #endif
         }
