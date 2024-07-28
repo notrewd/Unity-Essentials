@@ -3,6 +3,7 @@
     <ui:VisualElement style="flex-grow: 1;">
         <uie:Toolbar style="flex-direction: row;">
             <uie:ToolbarPopupSearchField name="SearchField" style="width: 200px;" />
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="OrderButton" class="icon-button" style="background-image: url(&quot;project://database/Packages/com.notrewd.essentials/EssentialsCore/Icons/d_Ascending@32.png?fileID=2800000&amp;guid=cb748bdd458024cbbb4253b9250c7736&amp;type=3#d_Ascending@32&quot;);" />
             <ui:VisualElement style="flex-grow: 1; flex-direction: row-reverse;">
                 <uie:ToolbarButton text="New Item" parse-escape-sequences="true" display-tooltip-when-elided="true" name="NewItemButton" class="toolbar-button" />
                 <uie:ToolbarButton text="Delete Item" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeleteItemButton" class="toolbar-button" />

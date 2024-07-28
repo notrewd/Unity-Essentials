@@ -23,6 +23,7 @@ namespace Essentials.Internal.Databases
         private DatabaseItem _currentItem;
 
         private ToolbarPopupSearchField _searchField;
+        private Button _orderButton;
 
         private ToolbarButton _newItemButton;
         private ToolbarButton _deleteItemButton;
@@ -31,6 +32,8 @@ namespace Essentials.Internal.Databases
         private IMGUIContainer _itemContent;
 
         private SearchType _searchType = SearchType.Name;
+
+        private bool _orderAscending = true;
 
         private enum SearchType { Name, ID }
 
@@ -78,6 +81,10 @@ namespace Essentials.Internal.Databases
             visualTree.CloneTree(rootVisualElement);
 
             _searchField = rootVisualElement.Q<ToolbarPopupSearchField>("SearchField");
+            _orderButton = rootVisualElement.Q<Button>("OrderButton");
+
+            _orderButton.style.backgroundImage = _orderAscending ? IconDatabase.GetIcon("Ascending@32") : IconDatabase.GetIcon("Descending@32");
+            _orderButton.clicked += SwitchOrder;
 
             _searchField.menu.AppendAction("Name",
                 action =>
@@ -152,11 +159,23 @@ namespace Essentials.Internal.Databases
             object[] items = AssetDatabase.LoadAllAssetRepresentationsAtPath(_databasePath);
             object[] filteredItems = _searchType == SearchType.Name ? items.Cast<DatabaseItem>().Where(item => item.name.ToLower().Contains(_searchField.value.ToLower())).ToArray() : items.Cast<DatabaseItem>().Where(item => item.id.ToString().Contains(_searchField.value)).ToArray();
 
+            if (!_orderAscending) Array.Reverse(filteredItems);
+
             foreach (object item in filteredItems)
             {
                 DatabaseItem databaseItem = item as DatabaseItem;
                 if (databaseItem != null) CreateItemOption(databaseItem, databaseItem == _currentItem);
             }
+        }
+
+        private void SwitchOrder()
+        {
+            _orderAscending = !_orderAscending;
+
+            Texture2D icon = _orderAscending ? IconDatabase.GetIcon("Ascending@32") : IconDatabase.GetIcon("Descending@32");
+            _orderButton.style.backgroundImage = icon;
+
+            RefreshItemList();
         }
 
         private void CreateItemOption(DatabaseItem databaseItem, bool selected)
