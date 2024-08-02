@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Essentials.Inspector.Utilities;
 using Essentials.Serialization;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -42,7 +43,7 @@ namespace Essentials.Internal.GameSounds
         public static GameSoundsGroupEditor CreateWindow(GameSoundGroup gameSoundGroup)
         {
             GameSoundsGroupEditor window = CreateInstance<GameSoundsGroupEditor>();
-            window.titleContent = new GUIContent("Game Sounds Group Settings", EditorGUIUtility.IconContent("d_SettingsIcon").image);
+            window.titleContent = new GUIContent("Game Sounds Group Settings", IconDatabase.GetIcon("Settings@32"));
             window.minSize = new Vector2(300, 300);
 
             window.SetGameSoundGroup(gameSoundGroup);

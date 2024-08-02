@@ -1,4 +1,4 @@
-using System;
+using Essentials.Inspector.Utilities;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -29,7 +29,7 @@ namespace Essentials.Internal.GameSounds
         private static void ShowWindow()
         {
             EditorWindow window = GetWindow<GameSoundsEditor>();
-            window.titleContent = new GUIContent("Game Sounds", EditorGUIUtility.IconContent("d_SceneViewAudio On").image);
+            window.titleContent = new GUIContent("Game Sounds", IconDatabase.GetIcon("Sound@32"));
             window.minSize = new Vector2(300, 300);
         }
 
@@ -94,7 +94,7 @@ namespace Essentials.Internal.GameSounds
                 Button editButton = buttons.Q<Button>("EditButton");
                 Button deleteButton = buttons.Q<Button>("DeleteButton");
 
-                if (i % 2 == 1) gameSoundGroupElement.style.backgroundColor = (Color)new Color32(47, 47, 47, 255);
+                if (i % 2 == 1) gameSoundGroupElement.AddToClassList("secondary");
 
                 editButton.clicked += () => OpenGroup(gameSoundGroup);
                 deleteButton.clicked += () => RemoveGroup(gameSoundGroup);
@@ -134,7 +134,7 @@ namespace Essentials.Internal.GameSounds
 
         private void OnResetButtonClicked()
         {
-            if (!EditorUtility.DisplayDialog("Reset", "Are you sure you want to reset the sound settings? All the current settings and groups will be lost.", "Yes", "No")) return;
+            if (!EditorUtility.DisplayDialog("Reset", "Are you sure you want to reset the sound settings? All of the current settings and groups will be lost.", "Yes", "No")) return;
 
             rootVisualElement.Unbind();
 

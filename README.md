@@ -27,6 +27,10 @@ public class PlayASound : MonoBehaviour
 }
 ```
 
+### Databases
+Essentials Databases allows you to have all of your scriptable objects at one place. No more searching for scriptable objects and making various workarounds for fetching them during runtime.
+<img width="843" alt="Screenshot 2024-08-02 at 13 26 04" src="https://github.com/user-attachments/assets/160d2e96-8f60-4cc5-9a5f-cbd66a01f051">
+
 ### PlayerPrefs Editor
 Ever wanted to see your PlayerPrefs or change them through an editor? Well now you can.
 <img width="608" alt="image" src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/e24d1de9-c434-42aa-a511-414eebc8ace6">

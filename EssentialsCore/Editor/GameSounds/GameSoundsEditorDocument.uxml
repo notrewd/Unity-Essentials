@@ -27,7 +27,7 @@
                 </ui:Foldout>
             </ui:VisualElement>
         </ui:ScrollView>
-        <ui:VisualElement name="BottomBar" class="bar" style="justify-content: flex-end;">
+        <ui:VisualElement name="BottomBar" class="bar secondary" style="justify-content: flex-end;">
             <ui:Button text="Reset" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ResetButton" />
         </ui:VisualElement>
     </ui:VisualElement>

@@ -1,5 +1,5 @@
 using System.Linq;
-using Essentials.Core.GameDirectories;
+using Essentials.Inspector.Utilities;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,19 +8,19 @@ namespace Essentials.Internal.GameDirectories
 {
     public class GameDirectoriesSettingsEditor : EditorWindow
     {
-        private VisualElement bottomBar;
-        private VisualElement content;
-        private Button applyButton;
-        private TextField classNameField;
-        private Label classLocationLabel;
-        private Button classLocationButton;
-        private VisualElement directoryReferences;
-        private VisualElement unappliedChanges;
+        private VisualElement _bottomBar;
+        private VisualElement _content;
+        private Button _applyButton;
+        private TextField _classNameField;
+        private Label _classLocationLabel;
+        private Button _classLocationButton;
+        private VisualElement _directoryReferences;
+        private VisualElement _unappliedChanges;
 
         public static GameDirectoriesSettingsEditor Open()
         {
             GameDirectoriesSettingsEditor window = GetWindow<GameDirectoriesSettingsEditor>();
-            window.titleContent = new GUIContent("Game Directories Settings", EditorGUIUtility.IconContent("d_SettingsIcon").image);
+            window.titleContent = new GUIContent("Game Directories Settings", IconDatabase.GetIcon("Settings@32"));
             window.minSize = new Vector2(300, 300);
 
             return window;
@@ -33,25 +33,25 @@ namespace Essentials.Internal.GameDirectories
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/GameDirectories/GameDirectoriesSettingsEditorDocument.uxml");
             visualTree.CloneTree(rootVisualElement);
 
-            content = rootVisualElement.Q<VisualElement>("Content");
-            bottomBar = rootVisualElement.Q<VisualElement>("BottomBar");
-            applyButton = bottomBar.Q<Button>("ApplyButton");
-            classNameField = content.Q("ClassName").Q<TextField>("ClassNameField");
-            classLocationLabel = content.Q("ClassLocation").Q<Label>("ClassLocationLabel");
-            classLocationButton = content.Q("ClassLocation").Q<Button>("ClassLocationButton");
-            directoryReferences = content.Q<VisualElement>("DirectoryReferences");
-            unappliedChanges = rootVisualElement.Q<VisualElement>("UnappliedChanges");
+            _content = rootVisualElement.Q<VisualElement>("Content");
+            _bottomBar = rootVisualElement.Q<VisualElement>("BottomBar");
+            _applyButton = _bottomBar.Q<Button>("ApplyButton");
+            _classNameField = _content.Q("ClassName").Q<TextField>("ClassNameField");
+            _classLocationLabel = _content.Q("ClassLocation").Q<Label>("ClassLocationLabel");
+            _classLocationButton = _content.Q("ClassLocation").Q<Button>("ClassLocationButton");
+            _directoryReferences = _content.Q<VisualElement>("DirectoryReferences");
+            _unappliedChanges = rootVisualElement.Q<VisualElement>("UnappliedChanges");
 
-            applyButton.SetEnabled(false);
+            _applyButton.SetEnabled(false);
 
-            applyButton.clickable.clicked += Apply;
+            _applyButton.clickable.clicked += Apply;
 
-            classNameField.RegisterValueChangedCallback(_ =>
+            _classNameField.RegisterValueChangedCallback(_ =>
             {
-                applyButton.SetEnabled(Validate());
+                _applyButton.SetEnabled(Validate());
             });
 
-            classLocationButton.clickable.clicked += () =>
+            _classLocationButton.clickable.clicked += () =>
             {
                 string path = EditorUtility.OpenFolderPanel("Select Class Location", "Assets", "");
                 if (string.IsNullOrWhiteSpace(path)) return;
@@ -62,14 +62,14 @@ namespace Essentials.Internal.GameDirectories
                     return;
                 }
 
-                classLocationLabel.text = "Assets" + path[Application.dataPath.Length..];
-                applyButton.SetEnabled(Validate());
+                _classLocationLabel.text = "Assets" + path[Application.dataPath.Length..];
+                _applyButton.SetEnabled(Validate());
             };
 
             rootVisualElement.RegisterCallback<FocusInEvent>(_ =>
             {
-                if (!GameDirectoriesEditor.appliedChanges) unappliedChanges.style.display = DisplayStyle.Flex;
-                else unappliedChanges.style.display = DisplayStyle.None;
+                if (!GameDirectoriesEditor.Instance.appliedChanges) _unappliedChanges.style.display = DisplayStyle.Flex;
+                else _unappliedChanges.style.display = DisplayStyle.None;
             });
 
             Refresh();
@@ -82,12 +82,12 @@ namespace Essentials.Internal.GameDirectories
                 "GameDirectory", "GameDirectories", "GameDirectoriesSettings", "GameDirectoriesSettingsEditor", "GameDirectoriesEditor", "GameDirectoriesPopup"
             };
 
-            if (string.IsNullOrWhiteSpace(classNameField.value)) return false;
-            if (reservedNames.Contains(classNameField.value)) return false;
-            if (!char.IsLetter(classNameField.value[0])) return false;
-            foreach (char character in classNameField.value) if (!char.IsLetterOrDigit(character) && character != '_') return false;
+            if (string.IsNullOrWhiteSpace(_classNameField.value)) return false;
+            if (reservedNames.Contains(_classNameField.value)) return false;
+            if (!char.IsLetter(_classNameField.value[0])) return false;
+            foreach (char character in _classNameField.value) if (!char.IsLetterOrDigit(character) && character != '_') return false;
 
-            foreach (VisualElement directoryReference in directoryReferences.Children())
+            foreach (VisualElement directoryReference in _directoryReferences.Children())
             {
                 if (directoryReference is Label) continue;
 
@@ -96,7 +96,7 @@ namespace Essentials.Internal.GameDirectories
                 if (!char.IsLetter(referenceField.value[0])) return false;
                 foreach (char character in referenceField.value) if (!char.IsLetterOrDigit(character) && character != '_') return false;
 
-                if (directoryReferences.Children().Count(x => x != directoryReference && x is TextField && ((TextField)x).value == referenceField.value) > 0) return false;
+                if (_directoryReferences.Children().Count(x => x != directoryReference && x is TextField && ((TextField)x).value == referenceField.value) > 0) return false;
             }
 
             return true;
@@ -104,12 +104,12 @@ namespace Essentials.Internal.GameDirectories
 
         public void Refresh()
         {
-            applyButton.SetEnabled(false);
+            _applyButton.SetEnabled(false);
 
-            classNameField.value = GameDirectoriesSettings.GetClassName();
-            classLocationLabel.text = GameDirectoriesSettings.GetClassLocation();
+            _classNameField.value = GameDirectoriesSettings.GetClassName();
+            _classLocationLabel.text = GameDirectoriesSettings.GetClassLocation();
 
-            directoryReferences.Clear();
+            _directoryReferences.Clear();
 
             GameDirectoryData[] gameDirectoriesData = GameDirectoriesSettings.GetGameDirectoriesData();
 
@@ -118,7 +118,7 @@ namespace Essentials.Internal.GameDirectories
                 Label label = new Label("No directories have been added yet.");
                 label.style.color = Color.grey;
 
-                directoryReferences.Add(label);
+                _directoryReferences.Add(label);
             }
             else
             {
@@ -132,34 +132,34 @@ namespace Essentials.Internal.GameDirectories
 
                     referenceField.RegisterValueChangedCallback(_ =>
                     {
-                        applyButton.SetEnabled(Validate());
+                        _applyButton.SetEnabled(Validate());
                     });
 
-                    directoryReferences.Add(referenceField);
+                    _directoryReferences.Add(referenceField);
                 }
             }
 
-            if (!GameDirectoriesEditor.appliedChanges) unappliedChanges.style.display = DisplayStyle.Flex;
-            else unappliedChanges.style.display = DisplayStyle.None;
+            if (!GameDirectoriesEditor.Instance.appliedChanges) _unappliedChanges.style.display = DisplayStyle.Flex;
+            else _unappliedChanges.style.display = DisplayStyle.None;
         }
 
         public void Apply()
         {
-            applyButton.SetEnabled(false);
+            _applyButton.SetEnabled(false);
 
-            GameDirectoriesSettings.SetClassName(classNameField.value);
-            GameDirectoriesSettings.SetClassLocation(classLocationLabel.text);
+            GameDirectoriesSettings.SetClassName(_classNameField.value);
+            GameDirectoriesSettings.SetClassLocation(_classLocationLabel.text);
 
-            foreach (VisualElement directoryReference in directoryReferences.Children())
+            foreach (VisualElement directoryReference in _directoryReferences.Children())
             {
                 if (directoryReference is Label) continue;
 
                 TextField referenceField = directoryReference.Q<TextField>();
 
-                Core.GameDirectories.GameDirectories.FindGameDirectory(referenceField.label).reference = referenceField.value;
+                GameDirectoriesEditor.Instance.FindGameDirectory(referenceField.label).reference = referenceField.value;
             }
 
-            GameDirectory[] gameDirectories = Core.GameDirectories.GameDirectories.GetAllGameDirectories();
+            GameDirectory[] gameDirectories = GameDirectoriesEditor.Instance.GetAllGameDirectories();
             GameDirectoryData[] gameDirectoriesData = new GameDirectoryData[gameDirectories.Length];
 
             for (int i = 0; i < gameDirectories.Length; i++)

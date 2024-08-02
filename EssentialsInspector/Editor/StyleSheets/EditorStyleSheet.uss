@@ -21,7 +21,7 @@
 }
 
 .tab-button.selected {
-    background-color: rgb(56, 56, 56);
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .bar {
@@ -31,9 +31,88 @@
     padding-bottom: 3px;
     flex-shrink: 0;
     flex-direction: row;
-    background-color: rgb(47, 47, 47);
     height: auto;
 }
 
-.property-field {
+.secondary {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.prompt {
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.prompt > Button {
+    align-self: center;
+    margin-top: 10px;
+}
+
+.prompt > Label {
+    -unity-text-align: upper-center;
+    -unity-font-style: bold;
+    margin-bottom: 10px;
+}
+
+.item-entry {
+    height: 25px;
+    background-color: rgba(0, 0, 0, 0.2);
+    -unity-text-align: middle-center;
+}
+
+.item-entry:hover {
+    background-color: rgba(0, 35, 53, 0.1);
+}
+
+.item-entry:focus {
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.item-entry.selected {
+    background-color: rgba(0, 171, 255, 0.49);
+}
+
+.toolbar-button {
+    -unity-text-align: middle-center;
+    border-left-color: rgb(35, 35, 35);
+    border-right-color: rgb(35, 35, 35);
+    border-top-color: rgb(35, 35, 35);
+    border-bottom-color: rgb(35, 35, 35);
+    border-right-width: 1px;
+    border-left-width: 1px;
+}
+
+.toolbar-button:focus {
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-left-color: rgb(35, 35, 35);
+    border-right-color: rgb(35, 35, 35);
+    border-top-color: rgb(35, 35, 35);
+    border-bottom-color: rgb(35, 35, 35);
+}
+
+.icon-button {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    width: 20px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 1px;
+    margin-right: 1px;
 }
