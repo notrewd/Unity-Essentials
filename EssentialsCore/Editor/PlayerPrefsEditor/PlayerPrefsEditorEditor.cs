@@ -310,7 +310,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
 #endif
 
 #if UNITY_EDITOR_WIN
-            playerPrefs.Clear();
+            _playerPrefs.Clear();
 
             if (!isEditorPrefs)
             {
@@ -325,9 +325,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
                         if (!PlayerPrefs.HasKey(key)) continue;
 
-                        if (PlayerPrefs.GetString(key, "Essentials.PlayerPrefsEditor.NoKey") != "Essentials.PlayerPrefsEditor.NoKey") playerPrefs.Add(key, PlayerPrefs.GetString(key));
-                        else if (PlayerPrefs.GetInt(key, int.MinValue) != int.MinValue) playerPrefs.Add(key, PlayerPrefs.GetInt(key));
-                        else if (PlayerPrefs.GetFloat(key, float.NaN) != float.NaN) playerPrefs.Add(key, PlayerPrefs.GetFloat(key));
+                        if (PlayerPrefs.GetString(key, "Essentials.PlayerPrefsEditor.NoKey") != "Essentials.PlayerPrefsEditor.NoKey") _playerPrefs.Add(key, PlayerPrefs.GetString(key));
+                        else if (PlayerPrefs.GetInt(key, int.MinValue) != int.MinValue) _playerPrefs.Add(key, PlayerPrefs.GetInt(key));
+                        else if (PlayerPrefs.GetFloat(key, float.NaN) != float.NaN) _playerPrefs.Add(key, PlayerPrefs.GetFloat(key));
                     }
                 }
             }
@@ -344,9 +344,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
                         if (!EditorPrefs.HasKey(key)) continue;
 
-                        if (EditorPrefs.GetString(key, "Essentials.PlayerPrefsEditor.NoKey") != "Essentials.PlayerPrefsEditor.NoKey") playerPrefs.Add(key, EditorPrefs.GetString(key));
-                        else if (EditorPrefs.GetInt(key, int.MinValue) != int.MinValue) playerPrefs.Add(key, EditorPrefs.GetInt(key));
-                        else if (EditorPrefs.GetFloat(key, float.NaN) != float.NaN) playerPrefs.Add(key, EditorPrefs.GetFloat(key));
+                        if (EditorPrefs.GetString(key, "Essentials.PlayerPrefsEditor.NoKey") != "Essentials.PlayerPrefsEditor.NoKey") _playerPrefs.Add(key, EditorPrefs.GetString(key));
+                        else if (EditorPrefs.GetInt(key, int.MinValue) != int.MinValue) _playerPrefs.Add(key, EditorPrefs.GetInt(key));
+                        else if (EditorPrefs.GetFloat(key, float.NaN) != float.NaN) _playerPrefs.Add(key, EditorPrefs.GetFloat(key));
                     }
                 }
             }
