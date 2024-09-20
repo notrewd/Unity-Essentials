@@ -2,7 +2,7 @@
 
 {% hint style="info" %}
 **Essentials.Core.Transformation** namespace is needed for this.
-{& endhint %}
+{% endhint %}
 
 Transformation is a feature focused on transforming objects. It has currently only one use case and that is snapping objects to other nearby objects. You can access the Transformation in the **Essentials >> Transformation** menu.
 

@@ -2,7 +2,7 @@
 
 {% hint style="info" %}
 **Essentials.Inspector** namespace is needed for this.
-{& endhint %}
+{% endhint %}
 
 The Essentials Inspector has a few attributes that can help you customize your inspector properties a little bit better.
 

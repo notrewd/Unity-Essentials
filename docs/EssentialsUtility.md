@@ -2,7 +2,7 @@
 
 {% hint style="info" %}
 **Essentials.Core.Utility** namespace is needed for this.
-{& endhint %}
+{% endhint %}
 
 `EssentialsUtility` is a small class meant to give a little helping hand. Currently has only one method.
 
