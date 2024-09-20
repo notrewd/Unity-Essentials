@@ -1,4 +1,4 @@
-# Game Directories
+# Components > Game Directories
 
 {% hint style="info" %}
 **Essentials.Core.GameDirectories** namespace is needed for this.
@@ -23,13 +23,17 @@ To understand how to use Game Directories in code, you need to know about **dire
 
 <img width="547" alt="image" src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/ed9b39f5-dea1-4281-98ae-97a8f695c8e5">
 
-_References can't have whitespaces or start with a number._
+{% hint style="warning" %}
+References can't have whitespaces or start with a number.
+{% endhint %}
 
 ## Using Directories In Code
 
 Game Directories automatically, upon applying changes, generates all the needed code for the directories to be created and to function. To use them in code all you need to do is include `Essentials.Core.GameDirectories` namespace and reference the target directory using `DirectoriesList.<DIRECTORY_REFERENCE>` by default, which will return the path to the target directory.
 
 ## Example Of Referencing MyFolder Directory
+
+{% code title="MyGameDataSaver.cs" lineNumbers="true" %}
 
 ```cs
 using Essentials.Core.GameDirectories;
@@ -46,7 +50,11 @@ public class MyGameDataSaver : MonoBehaviour
 }
 ```
 
+{% endcode %}
+
 It is a good practice to cache the reference when you are sure of that the directory will not get deleted during runtime, since each call to DirectoriesList actually checks whether that directory exists.
+
+{% code title="MyGameDataSaver.cs" lineNumbers="true" %}
 
 ```cs
 using System.IO;
@@ -75,6 +83,8 @@ public class MyGameDataSaver : MonoBehaviour
     }
 }
 ```
+
+{% endcode %}
 
 ## Modifying DirectoriesList Class
 

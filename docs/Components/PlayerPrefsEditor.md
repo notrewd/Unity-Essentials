@@ -1,4 +1,4 @@
-# PlayerPrefs Editor
+# Components > PlayerPrefs Editor
 
 The PlayerPrefs Editor allows you to create, see and delete PlayerPrefs in realtime inside Unity Editor without any code. It can be found in the **Essentials >> PlayerPrefs Editor** menu button.
 
@@ -44,4 +44,4 @@ PlayerPrefs Editor has also the capability to show you EditorPrefs. These are in
 
 ## Show Internal PlayerPrefs
 
-When editing PlayerPrefs, there is a checkbox below that says "Show Internal PlayerPrefs". This shows the PlayerPrefs that the Unity Editor uses internally, and should never be changed manually.
+When editing PlayerPrefs, there is a checkbox below that says **Show Internal PlayerPrefs**. This shows the PlayerPrefs that the Unity Editor uses internally, and should never be changed manually.

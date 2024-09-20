@@ -1,4 +1,4 @@
-# Transformation
+# Components > Transformation
 
 {% hint style="info" %}
 **Essentials.Core.Transformation** namespace is needed for this.
@@ -8,7 +8,9 @@ Transformation is a feature focused on transforming objects. It has currently on
 
 <img width="835" alt="image" src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/82708be1-04fe-4121-8533-ae03aaa1d43a">
 
-_If the options are greyed out, check if the selected object has a collider attached to it. The same goes for the surface you want to snap it onto._
+{% hint style="warning" %}
+If the options are greyed out, check if the selected object has a collider attached to it. The same goes for the surface you want to snap it onto.
+{% endhint %}
 
 ## Using It In Code
 

@@ -1,4 +1,4 @@
-# Databases
+# Components > Databases
 
 {% hint style="info" %}
 **Essentials.Core.Databases** namespace is needed for this.
@@ -11,6 +11,8 @@ Databases allows you to organize and manage all of your scriptable objects in on
 
 Before creating a database, we first need to create a database item that will be used to populate the database itself. Creating a database item is like creating a scriptable object, but it derives from the `DatabaseItem` class instead of the `ScriptableObject` one. In this example, we are creating a database item with two properties: name and description.
 
+{% code title="MyItem.cs" lineNumbers="true" %}
+
 ```cs
 using Essentials.Core.Databases;
 
@@ -21,11 +23,17 @@ public class MyItem : DatabaseItem
 }
 ```
 
-_Every database item has an ID property created by default. This ID property is to help you uniquely identify a database item._
+{% endcode %}
+
+{% hint style="info" %}
+Every database item has an ID property created by default. This ID property is to help you uniquely identify a database item.
+{% endhint %}
 
 ## Creating a Database
 
 Now that we have a database item created and ready to go, we can move on to creating the database itself. To create a database, we need to create an empty class that derives from `DatabaseObject` along with the `Database` attribute that accepts the type of the database item that we want to have in our database. We also need to be able to create it from the asset menu and that's where the [`CreateAssetMenu`](https://docs.unity3d.com/ScriptReference/CreateAssetMenuAttribute.html) attribute comes in.
+
+{% code title="MyDatabase.cs" lineNumbers="true" %}
 
 ```cs
 using UnityEngine;
@@ -35,6 +43,8 @@ using Essentials.Core.Databases;
 [CreateAssetMenu(fileName = "My Database", menuName = "Databases/My Database", order = 1)]
 public class MyDatabase : DatabaseObject { }
 ```
+
+{% endcode %}
 
 Now we should be able to see and create a database in our Project window.
 
@@ -79,6 +89,8 @@ If there is a discrepancy found when it comes to IDs, warnings will appear in th
 
 We can fetch all of the items by having a reference to a database and calling the `GetAllItems` method. Since `GetAllItems` method returns an array of DatabaseItems, there is a friendlier, generic version of the method that casts all of the items to a specified type. Here in this example, we are using a generic method to fetch all of the items from a database and print them out.
 
+{% code title="GetDatabaseItems.cs" lineNumbers="true" %}
+
 ```cs
 using UnityEngine;
 
@@ -101,9 +113,13 @@ public class GetDatabaseItems : MonoBehaviour
 }
 ```
 
+{% endcode %}
+
 ### Fetching Items by an ID
 
 If we want to get a specific item, we can call the `GetItem` method and pass its ID as an argument. Again, there is a generic version of this method available that is used in this example.
+
+{% code title="GetDatabaseItems.cs" lineNumbers="true" %}
 
 ```cs
 using UnityEngine;
@@ -124,7 +140,11 @@ public class GetDatabaseItems : MonoBehaviour
 }
 ```
 
-_Remember that IDs are **case-sensitive**. If there is more than one item with the same ID (which shouldn't happen), the first one found will be returned._
+{% endcode %}
+
+{% hint style="warning" %}
+Remember that IDs are **case-sensitive**. If there is more than one item with the same ID (which shouldn't happen), the first one found will be returned.
+{% endhint %}
 
 ## Methods
 

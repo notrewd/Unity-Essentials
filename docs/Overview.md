@@ -1,10 +1,6 @@
-# About
+# Overview
 
 A package for the Unity game engine that brings a few features I found handy during game development.
-
-## Installation
-
-Simply open the package manager and add a package from git URL: `https://github.com/NotRewd/Unity-Essentials.git`
 
 ## Key Features
 
