@@ -1,8 +1,9 @@
 # Essentials Utility
 
-_`Essentials.Core.Utility` is needed for this._
-<br />
-<br />
+{% hint style="info" %}
+**Essentials.Core.Utility** namespace is needed for this.
+{& endhint %}
+
 `EssentialsUtility` is a small class meant to give a little helping hand. Currently has only one method.
 
 ## Methods

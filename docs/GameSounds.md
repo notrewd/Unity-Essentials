@@ -1,8 +1,9 @@
 # Game Sounds
 
-_`Essentials.Core.GameSounds` namespace is needed for this._
-<br />
-<br />
+{% hint style="info" %}
+**Essentials.Core.GameSounds** namespace is needed for this.
+{& endhint %}
+
 Game Sounds allows you to create in-game audio with just only a few lines of code.
 
 ## Playing a GameSound

@@ -1,6 +1,8 @@
 # Databases
 
-_`Essentials.Core.Databases` namespace is needed for this._
+{% hint style="info" %}
+**Essentials.Core.Databases** namespace is needed for this.
+{& endhint %}
 
 Databases allows you to organize and manage all of your scriptable objects in one place.
 <img width="843" alt="Screenshot 2024-08-02 at 13 36 08" src="https://github.com/user-attachments/assets/3971a5e9-f140-4231-bc53-88dd1b15ff56">

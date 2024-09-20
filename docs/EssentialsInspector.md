@@ -1,8 +1,9 @@
 # Essentials Inspector
 
-_`Essentials.Inspector` namespace is needed for this._
-<br />
-<br />
+{% hint style="info" %}
+**Essentials.Inspector** namespace is needed for this.
+{& endhint %}
+
 The Essentials Inspector has a few attributes that can help you customize your inspector properties a little bit better.
 
 ## FieldColor

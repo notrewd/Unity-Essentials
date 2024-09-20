@@ -1,8 +1,9 @@
 # Transformation
 
-_`Essentials.Core.Transformation` is needed for this._
-<br />
-<br />
+{% hint style="info" %}
+**Essentials.Core.Transformation** namespace is needed for this.
+{& endhint %}
+
 Transformation is a feature focused on transforming objects. It has currently only one use case and that is snapping objects to other nearby objects. You can access the Transformation in the **Essentials >> Transformation** menu.
 
 <img width="835" alt="image" src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/82708be1-04fe-4121-8533-ae03aaa1d43a">

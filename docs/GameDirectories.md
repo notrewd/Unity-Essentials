@@ -1,8 +1,9 @@
 # Game Directories
 
-_`Essentials.Core.GameDirectories` namespace is needed for this._
-<br />
-<br />
+{% hint style="info" %}
+**Essentials.Core.GameDirectories** namespace is needed for this.
+{& endhint %}
+
 Game Directories allows you to create and visualize game folders without the need to write any code.
 It can be found in the **Essentials >> Game Directories** menu button.
 
