@@ -2,7 +2,7 @@
 
 * [Overview](README.md)
   * [Installation](overview/installation.md)
-* [Components](components/README.md)
+* [Features](components/README.md)
   * [Databases](components/databases.md)
   * [Game Directories](components/gamedirectories.md)
   * [Game Sounds](components/gamesounds.md)
