@@ -10,7 +10,7 @@ Game Sounds allows you to create in-game audio with just only a few lines of cod
 
 Playing a GameSound is really easy and a simple process using the `GameSounds.PlaySound()` method. That's all! Nothing less, nothing more.
 
-{% code title="MySoundCreator.js" lineNumbers="true" %}
+{% code title="MySoundCreator.cs" lineNumbers="true" %}
 ```cs
 using Essentials.Core.GameSounds;
 using UnityEngine;
@@ -35,7 +35,7 @@ Upon the creation of a GameSound, a new GameObject will be created with an audio
 
 Now, you probably want a little bit more flexibility when it comes to playing sounds. What about volume? Or spatial blending? For those cases, you can **create** a GameSound, configure it, and then play it. You can create a sound by calling the `GameSounds.CreateSound()` method and then you can chain methods on to it to configure it. Remember to always call `Play()` at the end if you want to play your sound afterwards.
 
-{% code title="MySoundCreator.js" lineNumbers="true" %}
+{% code title="MySoundCreator.cs" lineNumbers="true" %}
 ```cs
 using Essentials.Core.GameSounds;
 using UnityEngine;
@@ -60,7 +60,7 @@ public class MySoundCreator : MonoBehaviour
 
 Each GameSounds has its own unique ID. If not specified, the ID will be generated at random. You can specify the ID using the `SetId()` method. You can use the GameSound's ID to see if it is playing by using the `GameSounds.IsPlaying` method, or to simply stop it using the `GameSounds.StopSound()` method.
 
-{% code title="MySoundCreator.js" lineNumbers="true" %}
+{% code title="MySoundCreator.cs" lineNumbers="true" %}
 ```cs
 using System.Collections;
 using Essentials.Core.GameSounds;
@@ -114,7 +114,7 @@ Each group can be configured by clicking on the _**Edit**_ button. Upon doing so
 
 To use a group, you need to assign it to a GameSound. You can do so by using the `SetGroup()` method. Notice that the `SetGroup()` method accepts the **group name** as its parameter. This name is case sensitive.
 
-{% code title="MySoundCreator.js" lineNumbers="true" %}
+{% code title="MySoundCreator.cs" lineNumbers="true" %}
 ```cs
 using Essentials.Core.GameSounds;
 using UnityEngine;
@@ -137,7 +137,7 @@ public class MySoundCreator : MonoBehaviour
 
 Perhaps you want to apply a group to a GameSound, but then change one of the settings to something else. You can do this by setting the group and then changing the target setting.
 
-{% code title="MySoundCreator.js" lineNumbers="true" %}
+{% code title="MySoundCreator.cs" lineNumbers="true" %}
 ```cs
 using Essentials.Core.GameSounds;
 using UnityEngine;
@@ -166,7 +166,7 @@ Notice that we are setting the group **BEFORE** setting any of the other setting
 
 For more extreme use cases, you can control a GameSound directly by getting its audio source. **The GameSound needs to be already playing to get the audio source since the audio source is created only when the GameSound starts playing.**
 
-{% code title="MySoundCreator.js" lineNumbers="true" %}
+{% code title="MySoundCreator.cs" lineNumbers="true" %}
 ```cs
 using Essentials.Core.GameSounds;
 using UnityEngine;
