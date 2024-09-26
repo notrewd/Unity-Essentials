@@ -4,7 +4,9 @@
 **Essentials.Core.Databases** namespace is needed for this.
 {% endhint %}
 
-Databases allows you to organize and manage all of your scriptable objects in one place. ![Screenshot 2024-08-02 at 13 36 08](https://github.com/user-attachments/assets/3971a5e9-f140-4231-bc53-88dd1b15ff56)
+Databases allows you to organize and manage all of your scriptable objects in one place.
+
+<figure><img src="https://github.com/user-attachments/assets/3971a5e9-f140-4231-bc53-88dd1b15ff56" alt=""><figcaption><p>A fully functional database window</p></figcaption></figure>
 
 ## Creating a Database Item
 
@@ -43,31 +45,47 @@ public class MyDatabase : DatabaseObject { }
 
 Now we should be able to see and create a database in our Project window.
 
-![image](https://github.com/user-attachments/assets/367d2f8f-a6df-45a1-9e26-6af39a8b9257)
+<figure><img src="https://github.com/user-attachments/assets/367d2f8f-a6df-45a1-9e26-6af39a8b9257" alt=""><figcaption><p>Right-click menu in the Project window</p></figcaption></figure>
 
 ## Working with a Database
 
 Now that we have a database created, it's time to go and open it. We can do so by double clicking on the database or by clicking on the **Open Database** button in the inspector when the database is selected. Upon opening the database for the first time, it will look something like this. A blank database that has got nothing in it. And that's because we need to create an item.\
-![image](https://github.com/user-attachments/assets/be701fe0-e183-4a37-ba01-24c19123074d)
+
+
+<figure><img src="https://github.com/user-attachments/assets/be701fe0-e183-4a37-ba01-24c19123074d" alt=""><figcaption><p>An empty database</p></figcaption></figure>
 
 ## Creating an Item in a Database
 
 To create an item, click on the **New Item** button _(by default)_ in the upper right corner of the database.\
-![Untitled](https://github.com/user-attachments/assets/1a2b6a4c-96e5-476e-ab57-dcc94d079ada)\
+
+
+<figure><img src="https://github.com/user-attachments/assets/1a2b6a4c-96e5-476e-ab57-dcc94d079ada" alt=""><figcaption><p>New Item button in the database window</p></figcaption></figure>
+
+\
 Upon doing so, a new window will appear, asking for the item's name. Choose whatever name suits your newly created item best and hit **Create**.\
-![Screenshot 2024-08-02 at 14 03 37](https://github.com/user-attachments/assets/326e1073-8e12-486e-a884-b98760367788)\
+
+
+<figure><img src="https://github.com/user-attachments/assets/326e1073-8e12-486e-a884-b98760367788" alt="" width="375"><figcaption><p>New Item creation pop-up window</p></figcaption></figure>
+
+\
 The item now appears in the database and when clicking on it, it will display all of its properties that we have defined earlier. Notice that we have not defined an **ID** property and that's because the ID property is added by default to every database item. It's also automatically generated and filled out from the item's name.\
-![image](https://github.com/user-attachments/assets/7b148749-0573-4e69-bccc-c31eee4a95f6)
+
+
+<figure><img src="https://github.com/user-attachments/assets/7b148749-0573-4e69-bccc-c31eee4a95f6" alt=""><figcaption><p>First database item</p></figcaption></figure>
 
 ## Renaming an Item in a Database
 
 Renaming an item can be done by right clicking on an item and choosing **Rename \<Item Name>**. Upon doing so, a new window will appear asking for a new name.\
-![image](https://github.com/user-attachments/assets/e422dbda-e745-4e8e-9411-6a1c23e812cb)
+
+
+<figure><img src="https://github.com/user-attachments/assets/e422dbda-e745-4e8e-9411-6a1c23e812cb" alt=""><figcaption><p>Database item context menu</p></figcaption></figure>
 
 ## Deleting an Item in a Database
 
 Deleting an item can be done by selecting an item and clicking on the **Delete Item** button in the upper right corner of the database. It can also be done by right clicking an item and choosing **Delete \<Item Name>**.\
-![Untitled](https://github.com/user-attachments/assets/00a54e10-23f4-4f08-a1df-48d75935e36d)
+
+
+<figure><img src="https://github.com/user-attachments/assets/00a54e10-23f4-4f08-a1df-48d75935e36d" alt=""><figcaption><p>Delete Item button in the database window</p></figcaption></figure>
 
 ## Item IDs
 
@@ -76,7 +94,9 @@ Each created item has a unique ID that can be used when fetching an item. Apart 
 ### Database Warnings
 
 If there is a discrepancy found when it comes to IDs, warnings will appear in the inspector when a database is selected. The warnings also include an option to automatically fix the issue, which will change the affected IDs in a way that there will be no discrepancies.\
-![image](https://github.com/user-attachments/assets/4d6b9e0f-b13c-44b3-b831-5a468cbbdf03)
+
+
+<figure><img src="https://github.com/user-attachments/assets/4d6b9e0f-b13c-44b3-b831-5a468cbbdf03" alt="" width="375"><figcaption><p>Database warnings for MyDatabase</p></figcaption></figure>
 
 ## Fetching Items from a Database
 

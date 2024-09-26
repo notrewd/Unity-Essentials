@@ -6,7 +6,7 @@
 
 Game Directories allows you to create and visualize game folders without the need to write any code. It can be found in the **Essentials >> Game Directories** menu button.
 
-![Game Directories window](https://github.com/NotRewd/Unity-Essentials/assets/48103943/72d8dea7-9e50-46bd-a7c7-a4d184196093)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/72d8dea7-9e50-46bd-a7c7-a4d184196093" alt="" width="563"><figcaption><p>Game Directories window</p></figcaption></figure>
 
 ## Creating Directories
 
@@ -20,10 +20,10 @@ You can nest a directory inside another by specifying the path to that directory
 
 To understand how to use Game Directories in code, you need to know about **directory references**. Each directory has its own directory reference which is used in code to reference the actual directory. You need to set these references in the **Settings** menu in the bottom left corner in the Game Directories window.
 
-![image](https://github.com/NotRewd/Unity-Essentials/assets/48103943/ed9b39f5-dea1-4281-98ae-97a8f695c8e5)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/ed9b39f5-dea1-4281-98ae-97a8f695c8e5" alt="" width="563"><figcaption><p>Game Directories Settings window</p></figcaption></figure>
 
 {% hint style="warning" %}
-References can't have whitespaces or start with a number.
+References can't contain whitespaces or start with a number.
 {% endhint %}
 
 ## Using Directories In Code

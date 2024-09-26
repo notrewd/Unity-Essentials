@@ -24,7 +24,7 @@ public class MyCustomClass : MonoBehaviour
 ```
 {% endcode %}
 
-![image](https://github.com/NotRewd/Unity-Essentials/assets/48103943/f9f2c140-b8e6-4928-af9a-7a7856287183)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/f9f2c140-b8e6-4928-af9a-7a7856287183" alt="" width="375"><figcaption><p>FieldColor attribute example</p></figcaption></figure>
 
 ## LabelColor
 
@@ -44,7 +44,7 @@ public class MyCustomClass : MonoBehaviour
 ```
 {% endcode %}
 
-![image](https://github.com/NotRewd/Unity-Essentials/assets/48103943/e5a0a5de-fc5f-41a1-ba4b-9518497a5a5d)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/e5a0a5de-fc5f-41a1-ba4b-9518497a5a5d" alt="" width="375"><figcaption><p>LabelColor attribute example</p></figcaption></figure>
 
 ## ReadOnly
 
@@ -63,7 +63,7 @@ public class MyCustomClass : MonoBehaviour
 ```
 {% endcode %}
 
-![Screenshot 2024-07-04 at 11 18 35](https://github.com/NotRewd/Unity-Essentials/assets/48103943/2f8e238e-0d60-4a3f-a2f6-a6bbd579f3dd)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/2f8e238e-0d60-4a3f-a2f6-a6bbd579f3dd" alt="" width="375"><figcaption><p>ReadOnly attribute example</p></figcaption></figure>
 
 ## SetIndentLevel
 
@@ -82,7 +82,7 @@ public class MyCustomClass : MonoBehaviour
 ```
 {% endcode %}
 
-![Screenshot 2024-07-04 at 11 21 12](https://github.com/NotRewd/Unity-Essentials/assets/48103943/703af060-61c6-403f-a02a-fdb987045da5)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/703af060-61c6-403f-a02a-fdb987045da5" alt="" width="375"><figcaption><p>SetIndentLevel attribute example</p></figcaption></figure>
 
 ## ShowIf
 
@@ -101,7 +101,13 @@ public class MyCustomClass : MonoBehaviour
 ```
 {% endcode %}
 
-![Screenshot 2024-07-04 at 11 23 41](https://github.com/NotRewd/Unity-Essentials/assets/48103943/096d8b5b-ebbe-46bc-a888-b21a6bb18338) ![Screenshot 2024-07-04 at 11 23 52](https://github.com/NotRewd/Unity-Essentials/assets/48103943/aaf0881e-b9fb-4bee-9ddb-9839bf7c0ea2)
+<div align="center" data-full-width="false">
+
+<figure><img src=".gitbook/assets/345774025-096d8b5b-ebbe-46bc-a888-b21a6bb18338.png" alt="" width="375"><figcaption><p>ShowIf attribute example (false)</p></figcaption></figure>
+
+</div>
+
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/aaf0881e-b9fb-4bee-9ddb-9839bf7c0ea2" alt="" width="375"><figcaption><p>ShowIf attribute example (true)</p></figcaption></figure>
 
 ## HideIf
 
@@ -120,7 +126,9 @@ public class MyCustomClass : MonoBehaviour
 ```
 {% endcode %}
 
-![image](https://github.com/NotRewd/Unity-Essentials/assets/48103943/2508e28a-0424-4283-95c0-9e4efb3b86f2) ![image](https://github.com/NotRewd/Unity-Essentials/assets/48103943/aa422841-c654-4ff7-8180-8d6a280a215d)
+<figure><img src=".gitbook/assets/346274022-2508e28a-0424-4283-95c0-9e4efb3b86f2.png" alt="" width="375"><figcaption><p>HideIf attribute example (false)</p></figcaption></figure>
+
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/aa422841-c654-4ff7-8180-8d6a280a215d" alt="" width="375"><figcaption><p>HideIf attribute example (true)</p></figcaption></figure>
 
 ## DisableIf
 
@@ -135,11 +143,13 @@ public class MyCustomClass : MonoBehaviour
 {
     public bool propertyDisabled;
     [DisableIf("propertyDisabled", true)] public int disableIfProperty;
-}
+} 
 ```
 {% endcode %}
 
-![image](https://github.com/NotRewd/Unity-Essentials/assets/48103943/a5aa7cb4-9a53-4068-b5a9-a2c39f3e5877) ![image](https://github.com/NotRewd/Unity-Essentials/assets/48103943/fab7735f-87a0-4f3e-8866-e0e987aa7177)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/a5aa7cb4-9a53-4068-b5a9-a2c39f3e5877" alt="" width="375"><figcaption><p>DisableIf attribute example (false)</p></figcaption></figure>
+
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/fab7735f-87a0-4f3e-8866-e0e987aa7177" alt="" width="375"><figcaption><p>DisableIf attribute example (true)</p></figcaption></figure>
 
 ## EnableIf
 
@@ -154,11 +164,13 @@ public class MyCustomClass : MonoBehaviour
 {
     public bool propertyEnabled;
     [EnableIf("propertyEnabled", true)] public int enableIfProperty;
-}
+} 
 ```
 {% endcode %}
 
-![Screenshot 2024-07-06 at 14 43 45](https://github.com/NotRewd/Unity-Essentials/assets/48103943/443c1dd9-95e8-4339-af95-ed5fbd936fb5) ![Screenshot 2024-07-06 at 14 43 53](https://github.com/NotRewd/Unity-Essentials/assets/48103943/a16fcd3a-418d-4ccc-adcb-03a33709dae0)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/443c1dd9-95e8-4339-af95-ed5fbd936fb5" alt="" width="375"><figcaption><p>EnableIf attribute example (false)</p></figcaption></figure>
+
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/a16fcd3a-418d-4ccc-adcb-03a33709dae0" alt="" width="375"><figcaption><p>EnableIf attribute example (true)</p></figcaption></figure>
 
 ## Comparing Values
 

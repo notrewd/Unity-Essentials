@@ -6,7 +6,7 @@
 
 Transformation is a feature focused on transforming objects. It has currently only one use case and that is snapping objects to other nearby objects. You can access the Transformation in the **Essentials >> Transformation** menu.
 
-![image](https://github.com/NotRewd/Unity-Essentials/assets/48103943/82708be1-04fe-4121-8533-ae03aaa1d43a)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/82708be1-04fe-4121-8533-ae03aaa1d43a" alt=""><figcaption><p>Transformation menu</p></figcaption></figure>
 
 {% hint style="warning" %}
 If the options are greyed out, check if the selected object has a collider attached to it. The same goes for the surface you want to snap it onto.

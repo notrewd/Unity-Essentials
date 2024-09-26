@@ -96,19 +96,19 @@ public class MySoundCreator : MonoBehaviour
 
 If you don't like the defaults that a GameSound comes with when it is created, perhaps you want every single GameSound that is created to be in a different audio mixer group, or perhaps they all should have lower volumes, then you can use the **GameSounds Editor** to edit those defaults. It is located in the **Essentials >> Game Sounds** menu. Each GameSound that is created will inherit properties from those defaults unless they are overridden by their own configuration.
 
-![GameSounds window](https://github.com/NotRewd/Unity-Essentials/assets/48103943/67e1d26d-b420-4dbd-ae61-990f8e90c96f)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/67e1d26d-b420-4dbd-ae61-990f8e90c96f" alt="" width="563"><figcaption><p>Game Sounds window</p></figcaption></figure>
 
 ## Creating Groups
 
 Apart from the default settings which are applied to every single GameSound that is created, you can create your own presets called groups and then assign them to a GameSound. A new group can be created by clicking on the _**New Group**_ button in the **Groups** section.
 
-![GameSounds window](https://github.com/NotRewd/Unity-Essentials/assets/48103943/d846b988-b53d-4236-8493-f305c9f787a1)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/d846b988-b53d-4236-8493-f305c9f787a1" alt="" width="563"><figcaption><p>Groups in the Game Sounds window</p></figcaption></figure>
 
 ## Configuring Groups
 
 Each group can be configured by clicking on the _**Edit**_ button. Upon doing so, a new window appears with the group properties that is very similar to the default properties in the GameSounds window. From there you can configure your newly created group.
 
-![GameSound group window](https://github.com/NotRewd/Unity-Essentials/assets/48103943/b1fa6fc5-940d-492e-81b5-5c5f9f05f9b4)
+<figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/b1fa6fc5-940d-492e-81b5-5c5f9f05f9b4" alt="" width="563"><figcaption><p>Game Sounds Group Settings window</p></figcaption></figure>
 
 ## Assigning a Group
 
