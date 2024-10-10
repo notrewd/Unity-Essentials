@@ -30,26 +30,52 @@ public class EssentialsSensors : MonoBehaviour
         Both
     }
 
+    [Tooltip("How the scanning should performed. Either static scanning where the sensors don't move or other scanning methods where the sensors move dynamically.")]
     public ScanMethod scanMethod = ScanMethod.Static;
+
+    [Tooltip("The orientation of the sensors. Either horizontal, vertical or both.")]
     public SensorsOrientation sensorsOrientation = SensorsOrientation.Horizontal;
 
+    [Tooltip("The amount of sensors that should be created.")]
     [SerializeField] private int _sensorsCount = 10;
+
+    [Tooltip("The amount of rows of sensors that should be created. Available only if sensors orientation is set to both.")]
     [SerializeField] private int _sensorsRows = 3;
+
+    [Tooltip("The angle in degrees of the spread of the sensors.")]
     public float sensorsAngle = 90;
+
+    [Tooltip("The angle in degrees of the horizontal spread of the sensors. Available only if sensors orientation is set to both.")]
     public float sensorsHorizontalAngle = 90;
+
+    [Tooltip("The angle in degrees of the vertical spread of the sensors. Available only if sensors orientation is set to both.")]
     public float sensorsVerticalAngle = 90;
+
+    [Tooltip("How far should the sensors reach in meters.")]
     public float sensorsRange = 10;
 
+    [Tooltip("The amplitude of the scan angle. Available only if sensors orientation is set to horizontal or vertical.")]
     public float scanAngleAmplitude = 90;
+
+    [Tooltip("The frequency of the scan angle. Available only if sensors orientation is set to horizontal or vertical.")]
     public float scanAngleFrequency = 10;
 
+    [Tooltip("The type of randomization to apply to the sensors. Available only if scan method is set to random.")]
     public RandomScanType randomScanType = RandomScanType.Horizontal;
+
+    [Tooltip("The vertical randomization to apply to the sensors. Available only if random scan type is set to vertical.")]
     public float verticalRandomization = 0.1f;
+
+    [Tooltip("The horizontal randomization to apply to the sensors. Available only if random scan type is set to horizontal.")]
+    public float horizontalRandomization = 0.1f;
 
     [Tooltip("An ID that is used to identify which objects are detected by this sensor. Use this if you want to have multiple sensors that detect different objects. If you want to have multiple sensors that detect the same object, leave this at 0.")]
     public int sensorsId;
 
+    [Tooltip("Shows the sensors in the scene view.")]
     public bool showSensors;
+
+    [Tooltip("Colors the sensors to red if they hit something or green if they didn't hit anything.")]
     public bool showSensorHits;
 
     private float _scanAngle;
@@ -93,6 +119,7 @@ public class EssentialsSensors : MonoBehaviour
         private RandomScanType _randomScanType;
 
         private float _verticalRandomization;
+        private float _horizontalRandomization;
 
         private NativeArray<JobSensorData> _sensorDatas;
         private NativeArray<RaycastCommand> _raycastCommands;
@@ -150,8 +177,8 @@ public class EssentialsSensors : MonoBehaviour
                     {
                         if (_randomScanType is RandomScanType.Horizontal or RandomScanType.Both)
                         {
-                            float angle = random.NextFloat() * _sensorsAngle - _sensorsAngle * 0.5f;
-                            direction = Quaternion.AngleAxis(angle, _upDirection) * _forwardDirection;
+                            float horizontalAngle = random.NextFloat() * _horizontalRandomization - _horizontalRandomization * 0.5f;
+                            direction = Quaternion.AngleAxis(horizontalAngle, _upDirection) * direction;
                         }
 
                         if (_randomScanType is RandomScanType.Vertical or RandomScanType.Both)
@@ -174,7 +201,7 @@ public class EssentialsSensors : MonoBehaviour
             _raycastCommands[index] = new RaycastCommand(_startPosition, direction, QueryParameters.Default, _sensorsRange);
         }
 
-        public CalculateDirectionsJob(ScanMethod scanMethod, SensorsOrientation sensorsOrientation, Vector3 startPosition, Vector3 forwardDirection, Vector3 upDirection, Vector3 rightDirection, int sensorsRows, float sensorsAngle, float sensorsHorizontalAngle, float sensorsVerticalAngle, float sensorsRange, float scanAngle, RandomScanType randomScanType, float verticalRandomization, NativeArray<JobSensorData> sensorDatas, NativeArray<RaycastCommand> raycastCommands, uint seed)
+        public CalculateDirectionsJob(ScanMethod scanMethod, SensorsOrientation sensorsOrientation, Vector3 startPosition, Vector3 forwardDirection, Vector3 upDirection, Vector3 rightDirection, int sensorsRows, float sensorsAngle, float sensorsHorizontalAngle, float sensorsVerticalAngle, float sensorsRange, float scanAngle, RandomScanType randomScanType, float verticalRandomization, float horizontalRandomization, NativeArray<JobSensorData> sensorDatas, NativeArray<RaycastCommand> raycastCommands, uint seed)
         {
             _scanMethod = scanMethod;
             _sensorsOrientation = sensorsOrientation;
@@ -193,6 +220,7 @@ public class EssentialsSensors : MonoBehaviour
             _scanAngle = scanAngle;
             _randomScanType = randomScanType;
             _verticalRandomization = verticalRandomization;
+            _horizontalRandomization = horizontalRandomization;
             _sensorDatas = sensorDatas;
             _raycastCommands = raycastCommands;
             _seed = seed;
@@ -232,7 +260,7 @@ public class EssentialsSensors : MonoBehaviour
 
     private void UpdateSensors()
     {
-        CalculateDirectionsJob calculateDirectionsJob = new CalculateDirectionsJob(scanMethod, sensorsOrientation, transform.position, transform.forward, transform.up, transform.right, _sensorsRows, sensorsAngle, sensorsHorizontalAngle, sensorsVerticalAngle, sensorsRange, _scanAngle, randomScanType, verticalRandomization, jobSensorDatas, raycastCommands, (uint)random.Next(0, int.MaxValue));
+        CalculateDirectionsJob calculateDirectionsJob = new CalculateDirectionsJob(scanMethod, sensorsOrientation, transform.position, transform.forward, transform.up, transform.right, _sensorsRows, sensorsAngle, sensorsHorizontalAngle, sensorsVerticalAngle, sensorsRange, _scanAngle, randomScanType, verticalRandomization, horizontalRandomization, jobSensorDatas, raycastCommands, (uint)random.Next(0, int.MaxValue));
         calculateDirectionsJobHandle = calculateDirectionsJob.Schedule(_sensorsCount, 5);
 
         calculateRaycastsJobHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastHits, 5, calculateDirectionsJobHandle);
