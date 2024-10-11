@@ -92,7 +92,7 @@ public class EssentialsSensors : MonoBehaviour
         public Vector3 direction;
         public bool hit;
         public Vector3 hitPosition;
-        public EssentialsSensorsReciever reciever;
+        public EssentialsSensorsReceiver reciever;
     }
 
     [BurstCompile]
@@ -294,7 +294,7 @@ public class EssentialsSensors : MonoBehaviour
         {
             if (hit.collider == null) continue;
 
-            EssentialsSensorsReciever reciever = hit.collider.GetComponent<EssentialsSensorsReciever>();
+            EssentialsSensorsReceiver reciever = hit.collider.GetComponent<EssentialsSensorsReceiver>();
 
             if (reciever == null) continue;
             if (reciever.sensorsId != sensorsId) continue;
