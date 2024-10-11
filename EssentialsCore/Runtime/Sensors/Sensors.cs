@@ -74,7 +74,7 @@ namespace Essentials.Core.Sensors
         [Tooltip("An ID that is used to identify which objects are detected by this sensor. Use this if you want to have multiple sensors that detect different objects. If you want to have multiple sensors that detect the same object, leave this at 0.")]
         public int sensorsId;
 
-        [Tooltip("Shows the sensors in the scene view.")]
+        [Tooltip("Shows the sensors in the scene view during runtime.")]
         public bool showSensors;
 
         [Tooltip("Colors the sensors to red if they hit something or green if they didn't hit anything.")]
