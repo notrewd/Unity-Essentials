@@ -27,7 +27,7 @@ namespace Essentials.Core.Sensors
         [Tooltip("An ID that is used to identify which sensors are detecting this object. Use this if you want to have multiple sensors that detect different objects. If you want to have multiple sensors that detect the same object, leave this at 0.")]
         public int sensorsId;
 
-        [Tooltip("Is the object currently detected by any sensors?")]
+        [Tooltip("Is the object currently being detected?")]
         [SerializeField] private bool _isDetected;
 
         public bool isDetected { get => _isDetected; private set => _isDetected = value; }
