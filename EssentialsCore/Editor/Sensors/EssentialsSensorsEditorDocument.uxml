@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Packages/com.notrewd.essentials/EssentialsInspector/Editor/StyleSheets/EditorStyleSheet.uss?fileID=7433441132597879392&amp;guid=456df42b6676c4189b86d4cc87698692&amp;type=3#EditorStyleSheet" />
-    <ui:VisualElement style="flex-grow: 1; padding-top: 10px; padding-bottom: 10px;">
+    <ui:VisualElement style="flex-grow: 1; padding-bottom: 10px;">
         <ui:VisualElement class="category secondary category-first">
             <ui:Label tabindex="-1" text="Scanning" parse-escape-sequences="true" display-tooltip-when-elided="true" class="category-label" />
             <uie:PropertyField name="ScanMethodField" binding-path="scanMethod" class="property" />
@@ -11,7 +11,7 @@
             <uie:PropertyField name="VerticalRandomizationField" binding-path="verticalRandomization" class="property" />
             <uie:PropertyField name="HorizontalRandomizationField" binding-path="horizontalRandomization" class="property" />
         </ui:VisualElement>
-        <ui:VisualElement class="category secondary category-second" style="margin-top: 10px;">
+        <ui:VisualElement class="category secondary category-second">
             <ui:Label tabindex="-1" text="Sensors" parse-escape-sequences="true" display-tooltip-when-elided="true" class="category-label" />
             <uie:PropertyField name="SensorsCountField" binding-path="_sensorsCount" class="property" />
             <uie:PropertyField name="SensorsRowsField" binding-path="_sensorsRows" class="property" />
@@ -20,11 +20,11 @@
             <uie:PropertyField name="SensorsVerticalAngleField" binding-path="sensorsVerticalAngle" class="property" />
             <uie:PropertyField name="SensorsRangeField" binding-path="sensorsRange" class="property" />
         </ui:VisualElement>
-        <ui:VisualElement class="category secondary category-third" style="margin-top: 10px;">
+        <ui:VisualElement class="category secondary category-third">
             <ui:Label tabindex="-1" text="Advanced" parse-escape-sequences="true" display-tooltip-when-elided="true" class="category-label" />
             <uie:PropertyField name="SensorsIdField" binding-path="sensorsId" label="Sensors ID" class="property" />
         </ui:VisualElement>
-        <ui:VisualElement class="category secondary category-debug" style="margin-top: 10px;">
+        <ui:VisualElement class="category secondary category-debug">
             <ui:Label tabindex="-1" text="Debug" parse-escape-sequences="true" display-tooltip-when-elided="true" class="category-label" />
             <uie:PropertyField name="ShowSensorsField" binding-path="showSensors" class="property" />
             <uie:PropertyField name="ShowSensorHitsField" binding-path="showSensorHits" class="property" />

@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Packages/com.notrewd.essentials/EssentialsInspector/Editor/StyleSheets/EditorStyleSheet.uss?fileID=7433441132597879392&amp;guid=456df42b6676c4189b86d4cc87698692&amp;type=3#EditorStyleSheet" />
+    <ui:VisualElement style="flex-grow: 1; padding-bottom: 10px;">
+        <ui:VisualElement class="category-first category secondary">
+            <ui:Label tabindex="-1" text="Callback" parse-escape-sequences="true" display-tooltip-when-elided="true" class="category-label" />
+            <uie:PropertyField name="CallbackTypeField" binding-path="callbackType" />
+        </ui:VisualElement>
+        <ui:VisualElement name="EventsCategory" class="category secondary category-second">
+            <ui:Label tabindex="-1" text="Events" parse-escape-sequences="true" display-tooltip-when-elided="true" class="category-label" />
+            <uie:PropertyField name="OnSensorsReceivedField" binding-path="onSensorsReceived" />
+            <uie:PropertyField name="OnSensorsLostField" binding-path="onSensorsLost" style="margin-top: 10px;" />
+        </ui:VisualElement>
+        <ui:VisualElement class="category secondary category-third">
+            <ui:Label tabindex="-1" text="Advanced" parse-escape-sequences="true" display-tooltip-when-elided="true" class="category-label" />
+            <uie:PropertyField name="SensorsIdField" binding-path="sensorsId" />
+        </ui:VisualElement>
+        <ui:VisualElement class="category secondary category-debug">
+            <ui:Label tabindex="-1" text="Debug" parse-escape-sequences="true" display-tooltip-when-elided="true" class="category-label" />
+            <uie:PropertyField name="IsDetectedField" binding-path="isDetected" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
