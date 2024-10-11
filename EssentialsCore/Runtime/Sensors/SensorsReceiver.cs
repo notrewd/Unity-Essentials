@@ -21,7 +21,7 @@ namespace Essentials.Core.Sensors
         [Tooltip("Callback that will be called when sensors stop detecting this object.")]
         public UnityEvent onSensorsLost;
 
-        [Tooltip("How often should the receiver check if the object is still detected?")]
+        [Tooltip("How often (in seconds) should the receiver check if the object is still detected?")]
         public float checkInterval = 1f;
 
         [Tooltip("An ID that is used to identify which sensors are detecting this object. Use this if you want to have multiple sensors that detect different objects. If you want to have multiple sensors that detect the same object, leave this at 0.")]
