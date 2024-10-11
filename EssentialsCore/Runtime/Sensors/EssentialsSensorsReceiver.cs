@@ -2,75 +2,78 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EssentialsSensorsReceiver : MonoBehaviour
+namespace Essentials.Core.Sensors
 {
-    public enum CallbackType
+    public class EssentialsSensorsReceiver : MonoBehaviour
     {
-        DisableRenderer,
-        Custom
-    }
-
-    [Tooltip("Callback type that will be used when sensors detect this object. 'Disable Renderer' will disable the renderer, and 'Custom' will call the custom callback.")]
-    public CallbackType callbackType;
-
-    public UnityEvent onSensorsReceived;
-    public UnityEvent onSensorsLost;
-
-    public float checkInterval = 1f;
-
-    [Tooltip("An ID that is used to identify which sensors are detecting this object. Use this if you want to have multiple sensors that detect different objects. If you want to have multiple sensors that detect the same object, leave this at 0.")]
-    public int sensorsId;
-    [Tooltip("Is the object currently detected by sensors?")]
-    public bool isDetected;
-
-    private float timer;
-
-    private void Update()
-    {
-        if (isDetected) UpdateInterval();
-    }
-
-    public void SendCallback()
-    {
-        isDetected = true;
-        timer = 0;
-
-        switch (callbackType)
+        public enum CallbackType
         {
-            case CallbackType.DisableRenderer:
-                GetComponent<Renderer>().enabled = true;
-                break;
-            case CallbackType.Custom:
-                onSensorsReceived.Invoke();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            DisableRenderer,
+            Custom
         }
-    }
 
-    private void UpdateInterval()
-    {
-        timer += Time.deltaTime;
-        if (timer < checkInterval) return;
+        [Tooltip("Callback type that will be used when sensors detect this object. 'Disable Renderer' will disable the renderer, and 'Custom' will call the custom callback.")]
+        public CallbackType callbackType;
 
-        timer = 0;
-        OnSensorsLost();
-    }
+        public UnityEvent onSensorsReceived;
+        public UnityEvent onSensorsLost;
 
-    private void OnSensorsLost()
-    {
-        isDetected = false;
+        public float checkInterval = 1f;
 
-        switch (callbackType)
+        [Tooltip("An ID that is used to identify which sensors are detecting this object. Use this if you want to have multiple sensors that detect different objects. If you want to have multiple sensors that detect the same object, leave this at 0.")]
+        public int sensorsId;
+        [Tooltip("Is the object currently detected by sensors?")]
+        public bool isDetected;
+
+        private float timer;
+
+        private void Update()
         {
-            case CallbackType.DisableRenderer:
-                GetComponent<Renderer>().enabled = false;
-                break;
-            case CallbackType.Custom:
-                onSensorsLost.Invoke();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            if (isDetected) UpdateInterval();
+        }
+
+        public void SendCallback()
+        {
+            isDetected = true;
+            timer = 0;
+
+            switch (callbackType)
+            {
+                case CallbackType.DisableRenderer:
+                    GetComponent<Renderer>().enabled = true;
+                    break;
+                case CallbackType.Custom:
+                    onSensorsReceived.Invoke();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void UpdateInterval()
+        {
+            timer += Time.deltaTime;
+            if (timer < checkInterval) return;
+
+            timer = 0;
+            OnSensorsLost();
+        }
+
+        private void OnSensorsLost()
+        {
+            isDetected = false;
+
+            switch (callbackType)
+            {
+                case CallbackType.DisableRenderer:
+                    GetComponent<Renderer>().enabled = false;
+                    break;
+                case CallbackType.Custom:
+                    onSensorsLost.Invoke();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

@@ -1,48 +1,52 @@
+using Essentials.Core.Sensors;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-[CustomEditor(typeof(EssentialsSensorsReceiver))]
-[CanEditMultipleObjects]
-public class EssentialsSensorsReceiverEditor : Editor
+namespace Essentials.Internal.Sensors
 {
-    private EssentialsSensorsReceiver _target;
-
-    private PropertyField _callbackTypeField;
-    private VisualElement _eventsCategory;
-    private PropertyField _isDetectedField;
-
-    public override VisualElement CreateInspectorGUI()
+    [CustomEditor(typeof(EssentialsSensorsReceiver))]
+    [CanEditMultipleObjects]
+    public class EssentialsSensorsReceiverEditor : Editor
     {
-        _target = (EssentialsSensorsReceiver)target;
+        private EssentialsSensorsReceiver _target;
 
-        VisualElement root = new VisualElement();
+        private PropertyField _callbackTypeField;
+        private VisualElement _eventsCategory;
+        private PropertyField _isDetectedField;
 
-        VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/Sensors/EssentialsSensorsReceiverEditorDocument.uxml");
-        visualTree.CloneTree(root);
+        public override VisualElement CreateInspectorGUI()
+        {
+            _target = (EssentialsSensorsReceiver)target;
 
-        GetProperties(root);
-        BindPropertyEvents();
+            VisualElement root = new VisualElement();
 
-        _isDetectedField.SetEnabled(false);
+            VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/Sensors/EssentialsSensorsReceiverEditorDocument.uxml");
+            visualTree.CloneTree(root);
 
-        return root;
-    }
+            GetProperties(root);
+            BindPropertyEvents();
 
-    private void GetProperties(VisualElement root)
-    {
-        _callbackTypeField = root.Q<PropertyField>("CallbackTypeField");
-        _eventsCategory = root.Q<VisualElement>("EventsCategory");
-        _isDetectedField = root.Q<PropertyField>("IsDetectedField");
-    }
+            _isDetectedField.SetEnabled(false);
 
-    private void BindPropertyEvents()
-    {
-        _callbackTypeField.RegisterValueChangeCallback(OnPropertyChanged);
-    }
+            return root;
+        }
 
-    private void OnPropertyChanged(SerializedPropertyChangeEvent evt)
-    {
-        _eventsCategory.style.display = _target.callbackType == EssentialsSensorsReceiver.CallbackType.DisableRenderer ? DisplayStyle.None : DisplayStyle.Flex;
+        private void GetProperties(VisualElement root)
+        {
+            _callbackTypeField = root.Q<PropertyField>("CallbackTypeField");
+            _eventsCategory = root.Q<VisualElement>("EventsCategory");
+            _isDetectedField = root.Q<PropertyField>("IsDetectedField");
+        }
+
+        private void BindPropertyEvents()
+        {
+            _callbackTypeField.RegisterValueChangeCallback(OnPropertyChanged);
+        }
+
+        private void OnPropertyChanged(SerializedPropertyChangeEvent evt)
+        {
+            _eventsCategory.style.display = _target.callbackType == EssentialsSensorsReceiver.CallbackType.DisableRenderer ? DisplayStyle.None : DisplayStyle.Flex;
+        }
     }
 }
