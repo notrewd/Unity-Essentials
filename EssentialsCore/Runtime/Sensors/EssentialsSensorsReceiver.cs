@@ -13,7 +13,7 @@ public class EssentialsSensorsReceiver : MonoBehaviour
     [Tooltip("Callback type that will be used when sensors detect this object. 'Disable Renderer' will disable the renderer, and 'Custom' will call the custom callback.")]
     public CallbackType callbackType;
 
-    public UnityEvent onSensorsRecieved;
+    public UnityEvent onSensorsReceived;
     public UnityEvent onSensorsLost;
 
     public float checkInterval = 1f;
@@ -41,7 +41,7 @@ public class EssentialsSensorsReceiver : MonoBehaviour
                 GetComponent<Renderer>().enabled = true;
                 break;
             case CallbackType.Custom:
-                onSensorsRecieved.Invoke();
+                onSensorsReceived.Invoke();
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
