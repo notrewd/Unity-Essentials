@@ -12,17 +12,22 @@ namespace Essentials.Core.Sensors
             Custom
         }
 
-        [Tooltip("Callback type that will be used when sensors detect this object. 'Disable Renderer' will disable the renderer, and 'Custom' will call the custom callback.")]
+        [Tooltip("Callback type that will be used when sensors detect this object. 'Disable Renderer' will disable the renderer when no sensors are detected, and 'Custom' will call a custom callback.")]
         public CallbackType callbackType;
 
+        [Tooltip("Callback that will be called when sensors detect this object.")]
         public UnityEvent onSensorsReceived;
+
+        [Tooltip("Callback that will be called when sensors stop detecting this object.")]
         public UnityEvent onSensorsLost;
 
+        [Tooltip("How often should the receiver check if the object is still detected?")]
         public float checkInterval = 1f;
 
         [Tooltip("An ID that is used to identify which sensors are detecting this object. Use this if you want to have multiple sensors that detect different objects. If you want to have multiple sensors that detect the same object, leave this at 0.")]
         public int sensorsId;
-        [Tooltip("Is the object currently detected by sensors?")]
+
+        [Tooltip("Is the object currently detected by any sensors?")]
         public bool isDetected;
 
         private float timer;
