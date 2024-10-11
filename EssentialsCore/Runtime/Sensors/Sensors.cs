@@ -8,7 +8,7 @@ using Random = Unity.Mathematics.Random;
 
 namespace Essentials.Core.Sensors
 {
-    public class EssentialsSensors : MonoBehaviour
+    public class Sensors : MonoBehaviour
     {
         public enum ScanMethod
         {
@@ -94,7 +94,7 @@ namespace Essentials.Core.Sensors
             public Vector3 direction;
             public bool hit;
             public Vector3 hitPosition;
-            public EssentialsSensorsReceiver reciever;
+            public SensorsReceiver reciever;
         }
 
         [BurstCompile]
@@ -296,7 +296,7 @@ namespace Essentials.Core.Sensors
             {
                 if (hit.collider == null) continue;
 
-                EssentialsSensorsReceiver reciever = hit.collider.GetComponent<EssentialsSensorsReceiver>();
+                SensorsReceiver reciever = hit.collider.GetComponent<SensorsReceiver>();
 
                 if (reciever == null) continue;
                 if (reciever.sensorsId != sensorsId) continue;

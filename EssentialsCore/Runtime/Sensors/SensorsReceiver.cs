@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace Essentials.Core.Sensors
 {
-    public class EssentialsSensorsReceiver : MonoBehaviour
+    public class SensorsReceiver : MonoBehaviour
     {
         public enum CallbackType
         {

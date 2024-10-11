@@ -5,11 +5,11 @@ using UnityEngine.UIElements;
 
 namespace Essentials.Internal.Sensors
 {
-    [CustomEditor(typeof(EssentialsSensors))]
+    [CustomEditor(typeof(Core.Sensors.Sensors))]
     [CanEditMultipleObjects]
-    public class EssentialsSensorsEditor : Editor
+    public class SensorsEditor : Editor
     {
-        private EssentialsSensors _target;
+        private Core.Sensors.Sensors _target;
 
         private PropertyField _scanMethodField;
         private PropertyField _sensorsOrientationField;
@@ -33,11 +33,11 @@ namespace Essentials.Internal.Sensors
 
         public override VisualElement CreateInspectorGUI()
         {
-            _target = (EssentialsSensors)target;
+            _target = (Core.Sensors.Sensors)target;
 
             VisualElement root = new VisualElement();
 
-            VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/Sensors/EssentialsSensorsEditorDocument.uxml");
+            VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/Sensors/SensorsEditorDocument.uxml");
             visualTree.CloneTree(root);
 
             GetProperties(root);
@@ -79,15 +79,15 @@ namespace Essentials.Internal.Sensors
 
         private void OnPropertyChanged(SerializedPropertyChangeEvent evt)
         {
-            ShowField(_scanAngleAmplitudeField, _target.scanMethod is EssentialsSensors.ScanMethod.Vertical or EssentialsSensors.ScanMethod.Horizontal);
-            ShowField(_scanAngleFrequencyField, _target.scanMethod is EssentialsSensors.ScanMethod.Vertical or EssentialsSensors.ScanMethod.Horizontal);
-            ShowField(_randomScanTypeField, _target.scanMethod is EssentialsSensors.ScanMethod.Random);
-            ShowField(_verticalRandomizationField, _target.scanMethod is EssentialsSensors.ScanMethod.Random && _target.randomScanType is EssentialsSensors.RandomScanType.Vertical or EssentialsSensors.RandomScanType.Both);
-            ShowField(_horizontalRandomizationField, _target.scanMethod is EssentialsSensors.ScanMethod.Random && _target.randomScanType is EssentialsSensors.RandomScanType.Horizontal or EssentialsSensors.RandomScanType.Both);
-            ShowField(_sensorsRowsField, _target.sensorsOrientation is EssentialsSensors.SensorsOrientation.Both);
-            ShowField(_sensorsAngleField, _target.sensorsOrientation is not EssentialsSensors.SensorsOrientation.Both);
-            ShowField(_sensorsHorizontalAngleField, _target.sensorsOrientation is EssentialsSensors.SensorsOrientation.Both);
-            ShowField(_sensorsVerticalAngleField, _target.sensorsOrientation is EssentialsSensors.SensorsOrientation.Both);
+            ShowField(_scanAngleAmplitudeField, _target.scanMethod is Core.Sensors.Sensors.ScanMethod.Vertical or Core.Sensors.Sensors.ScanMethod.Horizontal);
+            ShowField(_scanAngleFrequencyField, _target.scanMethod is Core.Sensors.Sensors.ScanMethod.Vertical or Core.Sensors.Sensors.ScanMethod.Horizontal);
+            ShowField(_randomScanTypeField, _target.scanMethod is Core.Sensors.Sensors.ScanMethod.Random);
+            ShowField(_verticalRandomizationField, _target.scanMethod is Core.Sensors.Sensors.ScanMethod.Random && _target.randomScanType is Core.Sensors.Sensors.RandomScanType.Vertical or Core.Sensors.Sensors.RandomScanType.Both);
+            ShowField(_horizontalRandomizationField, _target.scanMethod is Core.Sensors.Sensors.ScanMethod.Random && _target.randomScanType is Core.Sensors.Sensors.RandomScanType.Horizontal or Core.Sensors.Sensors.RandomScanType.Both);
+            ShowField(_sensorsRowsField, _target.sensorsOrientation is Core.Sensors.Sensors.SensorsOrientation.Both);
+            ShowField(_sensorsAngleField, _target.sensorsOrientation is not Core.Sensors.Sensors.SensorsOrientation.Both);
+            ShowField(_sensorsHorizontalAngleField, _target.sensorsOrientation is Core.Sensors.Sensors.SensorsOrientation.Both);
+            ShowField(_sensorsVerticalAngleField, _target.sensorsOrientation is Core.Sensors.Sensors.SensorsOrientation.Both);
             ShowField(_showSensorHitsField, _target.showSensors);
         }
 

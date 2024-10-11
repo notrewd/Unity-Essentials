@@ -5,11 +5,11 @@ using UnityEngine.UIElements;
 
 namespace Essentials.Internal.Sensors
 {
-    [CustomEditor(typeof(EssentialsSensorsReceiver))]
+    [CustomEditor(typeof(SensorsReceiver))]
     [CanEditMultipleObjects]
-    public class EssentialsSensorsReceiverEditor : Editor
+    public class SensorsReceiverEditor : Editor
     {
-        private EssentialsSensorsReceiver _target;
+        private SensorsReceiver _target;
 
         private PropertyField _callbackTypeField;
         private VisualElement _eventsCategory;
@@ -17,11 +17,11 @@ namespace Essentials.Internal.Sensors
 
         public override VisualElement CreateInspectorGUI()
         {
-            _target = (EssentialsSensorsReceiver)target;
+            _target = (SensorsReceiver)target;
 
             VisualElement root = new VisualElement();
 
-            VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/Sensors/EssentialsSensorsReceiverEditorDocument.uxml");
+            VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/Sensors/SensorsReceiverEditorDocument.uxml");
             visualTree.CloneTree(root);
 
             GetProperties(root);
@@ -46,7 +46,7 @@ namespace Essentials.Internal.Sensors
 
         private void OnPropertyChanged(SerializedPropertyChangeEvent evt)
         {
-            _eventsCategory.style.display = _target.callbackType == EssentialsSensorsReceiver.CallbackType.DisableRenderer ? DisplayStyle.None : DisplayStyle.Flex;
+            _eventsCategory.style.display = _target.callbackType == SensorsReceiver.CallbackType.DisableRenderer ? DisplayStyle.None : DisplayStyle.Flex;
         }
     }
 }
