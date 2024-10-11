@@ -1,4 +1,3 @@
-using Essentials.Core.Sensors;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
@@ -24,9 +23,6 @@ namespace Essentials.Internal.Sensors
         private PropertyField _sensorsAngleField;
         private PropertyField _sensorsHorizontalAngleField;
         private PropertyField _sensorsVerticalAngleField;
-        private PropertyField _sensorsRangeField;
-
-        private PropertyField _sensorsIdField;
 
         private PropertyField _showSensorsField;
         private PropertyField _showSensorHitsField;
@@ -61,9 +57,6 @@ namespace Essentials.Internal.Sensors
             _sensorsAngleField = root.Q<PropertyField>("SensorsAngleField");
             _sensorsHorizontalAngleField = root.Q<PropertyField>("SensorsHorizontalAngleField");
             _sensorsVerticalAngleField = root.Q<PropertyField>("SensorsVerticalAngleField");
-            _sensorsRangeField = root.Q<PropertyField>("SensorsRangeField");
-
-            _sensorsIdField = root.Q<PropertyField>("SensorsIdField");
 
             _showSensorsField = root.Q<PropertyField>("ShowSensorsField");
             _showSensorHitsField = root.Q<PropertyField>("ShowSensorHitsField");
