@@ -16,7 +16,7 @@
         </ui:VisualElement>
         <ui:VisualElement class="category secondary category-debug">
             <ui:Label tabindex="-1" text="Debug" parse-escape-sequences="true" display-tooltip-when-elided="true" class="category-label" />
-            <uie:PropertyField name="IsDetectedField" binding-path="isDetected" />
+            <uie:PropertyField name="IsDetectedField" binding-path="_isDetected" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

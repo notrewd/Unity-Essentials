@@ -28,7 +28,9 @@ namespace Essentials.Core.Sensors
         public int sensorsId;
 
         [Tooltip("Is the object currently detected by any sensors?")]
-        public bool isDetected;
+        [SerializeField] private bool _isDetected;
+
+        public bool isDetected { get => _isDetected; private set => _isDetected = value; }
 
         private float timer;
 
