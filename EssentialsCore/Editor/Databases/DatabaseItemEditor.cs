@@ -1,32 +1,27 @@
 using Essentials.Core.Databases;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Essentials.Internal.Databases
 {
     [CustomEditor(typeof(DatabaseItem), true)]
     public class DatabaseItemEditor : Editor
     {
-        public override void OnInspectorGUI()
+        public override VisualElement CreateInspectorGUI()
         {
-            SerializedObject serializedObject = new SerializedObject(target);
-            SerializedProperty property = serializedObject.GetIterator();
+            VisualElement root = new VisualElement();
 
-            while (property.NextVisible(true))
-            {
-                if (property.name == "m_Script") continue;
+            InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
-                if (property.name == "id")
-                {
-                    EditorGUILayout.PropertyField(property, new GUIContent("ID"));
-                    GUILayout.Space(5f);
-                    serializedObject.ApplyModifiedProperties();
-                    continue;
-                }
+            root.Q<VisualElement>("PropertyField:m_Script").style.display = DisplayStyle.None;
 
-                EditorGUILayout.PropertyField(property);
-                serializedObject.ApplyModifiedProperties();
-            }
+            PropertyField idField = root.Q<PropertyField>("PropertyField:id");
+            idField.label = "ID";
+            idField.style.paddingBottom = 10;
+
+            return root;
         }
     }
 }

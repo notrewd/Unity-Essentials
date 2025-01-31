@@ -12,6 +12,8 @@ namespace Essentials.Internal.Databases
         {
             DatabaseObject databaseObject = target as DatabaseObject;
 
+            if (databaseObject == null) return;
+
             int itemCount = databaseObject.items.Count;
             int itemsWithNoId = databaseObject.items.FindAll(x => string.IsNullOrEmpty(x.id)).Count;
             int itemsWithDuplicateId = databaseObject.items.GroupBy(x => x.id).Count(x => x.Count() > 1);

@@ -9,9 +9,8 @@
                 <uie:ToolbarButton text="Delete Item" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DeleteItemButton" class="toolbar-button" />
             </ui:VisualElement>
         </uie:Toolbar>
-        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="Content" style="flex-grow: 1; flex-direction: row;">
             <ui:ScrollView name="ItemsView" class="secondary" style="width: 200px;" />
-            <ui:IMGUIContainer name="ItemContent" style="flex-grow: 1; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
