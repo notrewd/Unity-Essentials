@@ -28,8 +28,10 @@ namespace Essentials.Internal.Databases
         private ToolbarButton _newItemButton;
         private ToolbarButton _deleteItemButton;
 
+        private VisualElement _content;
+
         private ScrollView _itemsView;
-        private IMGUIContainer _itemContent;
+        private InspectorElement _itemInspector;
 
         private SearchType _searchType = SearchType.Name;
 
@@ -113,8 +115,12 @@ namespace Essentials.Internal.Databases
             _deleteItemButton.text = $"Delete {_itemLabel}";
             _deleteItemButton.clicked += DeleteCurrentItem;
 
-            _itemsView = rootVisualElement.Q<ScrollView>("ItemsView");
-            _itemContent = rootVisualElement.Q<IMGUIContainer>("ItemContent");
+            _content = rootVisualElement.Q<VisualElement>("Content");
+
+            _itemsView = _content.Q<ScrollView>("ItemsView");
+
+            _itemInspector = new InspectorElement();
+            _content.Add(_itemInspector);
 
             RefreshDeleteButton();
             RefreshItemList();
@@ -252,11 +258,13 @@ namespace Essentials.Internal.Databases
         {
             if (_currentItem == null)
             {
-                _itemContent.onGUIHandler = null;
+                _itemInspector.Unbind();
+                _itemInspector.Clear();
                 return;
             }
 
-            _itemContent.onGUIHandler = () => Editor.CreateEditor(_currentItem).OnInspectorGUI();
+            SerializedObject serializedObject = new SerializedObject(_currentItem);
+            _itemInspector.Bind(serializedObject);
         }
 
         private void DeselectCurrentItem()
