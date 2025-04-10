@@ -1,3 +1,17 @@
+---
+layout:
+  title:
+    visible: true
+  description:
+    visible: false
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: true
+---
+
 # PlayerPrefs Editor
 
 The PlayerPrefs Editor allows you to create, see and delete PlayerPrefs in realtime inside Unity Editor without any code. It can be found in the **Essentials >> PlayerPrefs Editor** menu button.

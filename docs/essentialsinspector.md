@@ -1,3 +1,17 @@
+---
+layout:
+  title:
+    visible: true
+  description:
+    visible: false
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: true
+---
+
 # Essentials Inspector
 
 {% hint style="info" %}
@@ -101,11 +115,7 @@ public class MyCustomClass : MonoBehaviour
 ```
 {% endcode %}
 
-<div align="center" data-full-width="false">
-
-<figure><img src=".gitbook/assets/345774025-096d8b5b-ebbe-46bc-a888-b21a6bb18338.png" alt="" width="375"><figcaption><p>ShowIf attribute example (false)</p></figcaption></figure>
-
-</div>
+<div align="center" data-full-width="false"><figure><img src=".gitbook/assets/345774025-096d8b5b-ebbe-46bc-a888-b21a6bb18338.png" alt="" width="375"><figcaption><p>ShowIf attribute example (false)</p></figcaption></figure></div>
 
 <figure><img src="https://github.com/NotRewd/Unity-Essentials/assets/48103943/aaf0881e-b9fb-4bee-9ddb-9839bf7c0ea2" alt="" width="375"><figcaption><p>ShowIf attribute example (true)</p></figcaption></figure>
 
