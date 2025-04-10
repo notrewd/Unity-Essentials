@@ -13,7 +13,7 @@ namespace Essentials.Internal.GameSounds
     {
         private static List<GameSoundsGroupEditor> _windows = new List<GameSoundsGroupEditor>();
 
-        public Action onGroupNameChanged;
+        public event Action onGroupNameChanged;
 
         private GameSoundGroup _gameSoundGroup;
 
