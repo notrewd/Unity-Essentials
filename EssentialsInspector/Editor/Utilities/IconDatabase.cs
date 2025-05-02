@@ -4,8 +4,18 @@ using UnityEngine;
 
 namespace Essentials.Inspector.Utilities
 {
+    /// <summary>
+    /// Provides utility methods for retrieving and manipulating editor icons.
+    /// </summary>
     public static class IconDatabase
     {
+        /// <summary>
+        /// Retrieves an editor icon by name, considering the current editor skin (Pro/Personal).
+        /// Icons are expected to be located in "Packages/com.notrewd.essentials/EssentialsCore/Icons".
+        /// Pro skin icons should be prefixed with "d_".
+        /// </summary>
+        /// <param name="name">The base name of the icon (e.g., "Settings@32").</param>
+        /// <returns>The loaded Texture2D icon, or null if not found.</returns>
         public static Texture2D GetIcon(string name)
         {
             string iconPath = "Packages/com.notrewd.essentials/EssentialsCore/Icons";
@@ -24,6 +34,13 @@ namespace Essentials.Inspector.Utilities
             return icon;
         }
 
+        /// <summary>
+        /// Resizes a Texture2D icon to the specified dimensions using nearest-neighbor scaling.
+        /// </summary>
+        /// <param name="icon">The original icon Texture2D.</param>
+        /// <param name="width">The desired width.</param>
+        /// <param name="height">The desired height.</param>
+        /// <returns>A new Texture2D with the resized icon.</returns>
         public static Texture2D ResizeIcon(Texture2D icon, int width, int height)
         {
             Texture2D resizedIcon = new Texture2D(width, height);

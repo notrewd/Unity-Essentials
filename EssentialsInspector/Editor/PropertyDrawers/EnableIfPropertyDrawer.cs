@@ -9,6 +9,12 @@ namespace Essentials.Inspector
     {
         private bool _isEnabled;
 
+        /// <summary>
+        /// Draws the property field, enabling or disabling the GUI based on the condition specified by the EnableIfAttribute.
+        /// </summary>
+        /// <param name="position">Rectangle on the screen to use for the property GUI.</param>
+        /// <param name="property">The SerializedProperty to make the custom GUI for.</param>
+        /// <param name="label">The label of this property.</param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EnableIfAttribute enableIfAttribute = (EnableIfAttribute)attribute;
