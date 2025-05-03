@@ -4,8 +4,15 @@ using UnityEngine;
 
 namespace Essentials.Internal.GameSounds
 {
+    /// <summary>
+    /// Provides static methods for managing GameSoundsData assets.
+    /// </summary>
     public static class GameSoundsSettings
     {
+        /// <summary>
+        /// Gets the GameSoundsData asset, creating it if it doesn't exist.
+        /// </summary>
+        /// <returns>The GameSoundsData asset.</returns>
         public static GameSoundsData GetData()
         {
             if (File.Exists(Path.Combine(Application.dataPath, "EssentialsData", "Resources", "GameSoundsData.asset")))
@@ -25,6 +32,9 @@ namespace Essentials.Internal.GameSounds
             }
         }
 
+        /// <summary>
+        /// Deletes the GameSoundsData asset if it exists.
+        /// </summary>
         public static void ResetData()
         {
             if (!File.Exists(Path.Combine(Application.dataPath, "EssentialsData", "Resources", "GameSoundsData.asset"))) return;

@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Essentials.Internal.GameSounds
 {
+    /// <summary>
+    /// Editor window for managing game sound settings and groups.
+    /// </summary>
     public class GameSoundsEditor : EditorWindow
     {
         private VisualTreeAsset _gameSoundGroupTemplate;
@@ -25,6 +28,9 @@ namespace Essentials.Internal.GameSounds
 
         private Button _resetButton;
 
+        /// <summary>
+        /// Shows the Game Sounds editor window.
+        /// </summary>
         [MenuItem("Essentials/Game Sounds")]
         private static void ShowWindow()
         {
@@ -33,6 +39,9 @@ namespace Essentials.Internal.GameSounds
             window.minSize = new Vector2(300, 300);
         }
 
+        /// <summary>
+        /// Creates the GUI for the editor window.
+        /// </summary>
         private void CreateGUI()
         {
             _gameSoundsData = GameSoundsSettings.GetData();
@@ -72,12 +81,18 @@ namespace Essentials.Internal.GameSounds
             RebindWindowEvents();
         }
 
+        /// <summary>
+        /// Rebinds events for any active GameSoundsGroupEditor windows.
+        /// </summary>
         private void RebindWindowEvents()
         {
             GameSoundsGroupEditor[] windows = GameSoundsGroupEditor.GetActiveWindows();
             foreach (GameSoundsGroupEditor window in windows) window.onGroupNameChanged += RefreshGroups;
         }
 
+        /// <summary>
+        /// Refreshes the list of game sound groups displayed in the editor.
+        /// </summary>
         private void RefreshGroups()
         {
             _groupsList.Clear();
@@ -107,6 +122,9 @@ namespace Essentials.Internal.GameSounds
             _groupsList.Add(_newGroupElement);
         }
 
+        /// <summary>
+        /// Adds a new game sound group to the data and refreshes the list.
+        /// </summary>
         private void AddGroup()
         {
             GameSoundGroup gameSoundGroup = new GameSoundGroup();
@@ -116,12 +134,20 @@ namespace Essentials.Internal.GameSounds
             RefreshGroups();
         }
 
+        /// <summary>
+        /// Opens the editor window for a specific game sound group.
+        /// </summary>
+        /// <param name="gameSoundGroup">The game sound group to edit.</param>
         private void OpenGroup(GameSoundGroup gameSoundGroup)
         {
             GameSoundsGroupEditor window = GameSoundsGroupEditor.CreateWindow(gameSoundGroup);
             window.onGroupNameChanged += RefreshGroups;
         }
 
+        /// <summary>
+        /// Removes a game sound group after confirmation.
+        /// </summary>
+        /// <param name="gameSoundGroup">The game sound group to remove.</param>
         private void RemoveGroup(GameSoundGroup gameSoundGroup)
         {
             if (!EditorUtility.DisplayDialog("Delete", "Are you sure you want to delete this group?", "Yes", "No")) return;
@@ -132,6 +158,9 @@ namespace Essentials.Internal.GameSounds
             RefreshGroups();
         }
 
+        /// <summary>
+        /// Handles the reset button click event, resetting all game sound settings after confirmation.
+        /// </summary>
         private void OnResetButtonClicked()
         {
             if (!EditorUtility.DisplayDialog("Reset", "Are you sure you want to reset the sound settings? All of the current settings and groups will be lost.", "Yes", "No")) return;

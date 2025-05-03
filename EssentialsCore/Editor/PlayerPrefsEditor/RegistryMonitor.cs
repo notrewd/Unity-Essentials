@@ -7,6 +7,9 @@ using Microsoft.Win32;
 
 namespace Essentials.Internal.PlayerPrefsEditor
 {
+    /// <summary>
+    /// Monitors registry key changes.
+    /// </summary>
     public class RegistryMonitor : IDisposable
     {
         #region P/Invoke
@@ -116,7 +119,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
         /// <summary>
         /// Initializes a new instance of the <see cref="RegistryMonitor"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="name">The name of the registry key to monitor.</param>
         public RegistryMonitor(string name)
         {
             if (name == null || name.Length == 0)
@@ -165,6 +168,11 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
         #region Initialization
 
+        /// <summary>
+        /// Initializes the registry key hive and subname from the specified hive and name.
+        /// </summary>
+        /// <param name="hive">The registry hive.</param>
+        /// <param name="name">The subkey name.</param>
         private void InitRegistryKey(RegistryHive hive, string name)
         {
             switch (hive)
@@ -203,6 +211,10 @@ namespace Essentials.Internal.PlayerPrefsEditor
             _registrySubName = name;
         }
 
+        /// <summary>
+        /// Initializes the registry key hive and subname from the full key name.
+        /// </summary>
+        /// <param name="name">The full registry key name.</param>
         private void InitRegistryKey(string name)
         {
             string[] nameParts = name.Split('\\');
@@ -252,7 +264,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
         }
 
         /// <summary>
-        /// Start monitoring.
+        /// Starts monitoring registry changes.
         /// </summary>
         public void Start()
         {
@@ -272,7 +284,7 @@ namespace Essentials.Internal.PlayerPrefsEditor
         }
 
         /// <summary>
-        /// Stops the monitoring thread.
+        /// Stops monitoring registry changes.
         /// </summary>
         public void Stop()
         {
@@ -290,6 +302,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
             }
         }
 
+        /// <summary>
+        /// The worker thread method that monitors registry changes.
+        /// </summary>
         private void MonitorThread()
         {
             try
@@ -303,6 +318,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
             _thread = null;
         }
 
+        /// <summary>
+        /// The main loop of the monitoring thread.
+        /// </summary>
         private void ThreadLoop()
         {
             IntPtr registryKey;

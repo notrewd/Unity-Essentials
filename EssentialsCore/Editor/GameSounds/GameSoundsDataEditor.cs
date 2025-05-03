@@ -3,9 +3,16 @@ using UnityEngine;
 
 namespace Essentials.Internal.GameSounds
 {
+    /// <summary>
+    /// Custom editor for the GameSoundsData asset.
+    /// Displays a message indicating that the asset should not be edited directly.
+    /// </summary>
     [CustomEditor(typeof(GameSoundsData))]
     public class GameSoundsDataEditor : Editor
     {
+        /// <summary>
+        /// Overrides the default inspector GUI to display a warning message.
+        /// </summary>
         public override void OnInspectorGUI()
         {
             GUIStyle titleStyle = new GUIStyle()

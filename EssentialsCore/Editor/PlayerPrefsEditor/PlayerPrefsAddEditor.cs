@@ -6,6 +6,9 @@ using UnityEngine.UIElements;
 
 namespace Essentials.Internal.PlayerPrefsEditor
 {
+    /// <summary>
+    /// Editor window for adding new PlayerPrefs or EditorPrefs entries.
+    /// </summary>
     public class PlayerPrefsAddEditor : EditorWindow
     {
         private Label titleLabel;
@@ -16,6 +19,10 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
         private PlayerPrefsEditorEditor editor;
 
+        /// <summary>
+        /// Shows the modal window for adding a new PlayerPref/EditorPref.
+        /// </summary>
+        /// <param name="editor">The main PlayerPrefsEditorEditor instance.</param>
         public static void ShowWindow(PlayerPrefsEditorEditor editor)
         {
             // Create a modal window
@@ -26,6 +33,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
             window.editor = editor;
         }
 
+        /// <summary>
+        /// Creates the GUI for the editor window.
+        /// </summary>
         public void CreateGUI()
         {
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/PlayerPrefsEditor/PlayerPrefsAddEditorDocument.uxml");
@@ -51,6 +61,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
             addButton.clicked += Add;
         }
 
+        /// <summary>
+        /// Adds the new PlayerPref/EditorPref entry based on the input fields.
+        /// </summary>
         private void Add()
         {
             if (string.IsNullOrEmpty(keyField.value))
@@ -91,6 +104,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
             Close();
         }
 
+        /// <summary>
+        /// Checks the validity of the input fields and enables/disables the Add button accordingly.
+        /// </summary>
         private void CheckFields()
         {
             addButton.SetEnabled(false);
