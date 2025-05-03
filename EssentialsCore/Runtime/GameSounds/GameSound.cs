@@ -190,7 +190,7 @@ namespace Essentials.Core.GameSounds
         /// <summary>
         /// Sets the priority of the GameSound's AudioSource.
         /// </summary>
-        /// <param name="priority">The priority level (0 = highest, 256 = lowest).</param>
+        /// <param name="priority">The priority level (0 = highest, 255 = lowest).</param>
         /// <returns>The current GameSound instance for chaining.</returns>
         public GameSound SetPriority(int priority)
         {
