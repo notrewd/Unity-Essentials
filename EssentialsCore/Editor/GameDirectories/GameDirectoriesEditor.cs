@@ -29,6 +29,9 @@ namespace Essentials.Internal.GameDirectories
         private GameDirectoriesSettingsEditor _settingsEditor;
 
         [MenuItem("Essentials/Game Directories")]
+        /// <summary>
+        /// Opens the Game Directories editor window.
+        /// </summary>
         private static void ShowWindow()
         {
             EditorWindow window = GetWindow<GameDirectoriesEditor>();
@@ -39,6 +42,9 @@ namespace Essentials.Internal.GameDirectories
             Instance = window as GameDirectoriesEditor;
         }
 
+        /// <summary>
+        /// Creates the GUI for the editor window, setting up UI elements and callbacks.
+        /// </summary>
         public void CreateGUI()
         {
             GameDirectoriesSettings.LoadData();
@@ -98,6 +104,11 @@ namespace Essentials.Internal.GameDirectories
             appliedChanges = true;
         }
 
+        /// <summary>
+        /// Finds a GameDirectory object based on its hierarchical path.
+        /// </summary>
+        /// <param name="path">The path of the directory (e.g., "Folder/SubFolder").</param>
+        /// <returns>The found GameDirectory, or null if not found or the path is invalid.</returns>
         public GameDirectory FindGameDirectory(string path)
         {
             if (string.IsNullOrWhiteSpace(path)) return null;
@@ -138,6 +149,10 @@ namespace Essentials.Internal.GameDirectories
             return foundDirectory;
         }
 
+        /// <summary>
+        /// Retrieves all GameDirectory objects, including subdirectories, in a flat list.
+        /// </summary>
+        /// <returns>An array containing all GameDirectory objects.</returns>
         public GameDirectory[] GetAllGameDirectories()
         {
             List<GameDirectory> directories = new List<GameDirectory>();
@@ -160,6 +175,12 @@ namespace Essentials.Internal.GameDirectories
             return directories.ToArray();
         }
 
+        /// <summary>
+        /// Creates a new GameDirectory based on the provided path, including necessary parent directories.
+        /// If the directory already exists, it ensures the structure is present and optionally sets the reference.
+        /// </summary>
+        /// <param name="path">The hierarchical path for the directory.</param>
+        /// <param name="reference">Optional reference name for the directory.</param>
         private void CreateGameDirectory(string path, string reference = null)
         {
             if (string.IsNullOrWhiteSpace(path)) return;
@@ -214,6 +235,10 @@ namespace Essentials.Internal.GameDirectories
             _applyButton.SetEnabled(true);
         }
 
+        /// <summary>
+        /// Removes the specified GameDirectory from the hierarchy.
+        /// </summary>
+        /// <param name="directory">The GameDirectory to remove.</param>
         private void RemoveGameDirectory(GameDirectory directory)
         {
             GameDirectory parentDirectory = FindGameDirectory(directory.path[..(directory.path.Contains("/") ? directory.path.LastIndexOf("/") : 0)]);
@@ -227,6 +252,11 @@ namespace Essentials.Internal.GameDirectories
             _applyButton.SetEnabled(true);
         }
 
+        /// <summary>
+        /// Moves a GameDirectory to a new parent path within the hierarchy.
+        /// </summary>
+        /// <param name="directory">The GameDirectory to move.</param>
+        /// <param name="newParentPath">The path of the new parent directory. Use "~" for the root.</param>
         private void MoveGameDirectory(GameDirectory directory, string newParentPath)
         {
             if (string.IsNullOrEmpty(newParentPath)) newParentPath = "~";
@@ -275,7 +305,11 @@ namespace Essentials.Internal.GameDirectories
             _applyButton.SetEnabled(true);
         }
 
-        // show context menu when right clicking on a directory
+        /// <summary>
+        /// Displays a context menu for the specified GameDirectory element.
+        /// </summary>
+        /// <param name="directory">The GameDirectory associated with the context menu.</param>
+        /// <param name="element">The VisualElement that was right-clicked.</param>
         private void ShowDirectoryContextMenu(GameDirectory directory, VisualElement element)
         {
             GenericMenu menu = new GenericMenu();
@@ -359,6 +393,9 @@ namespace Essentials.Internal.GameDirectories
             menu.ShowAsContext();
         }
 
+        /// <summary>
+        /// Refreshes the ScrollView to display the current hierarchy of GameDirectories.
+        /// </summary>
         private void RefreshScrollView()
         {
             _scrollView.Clear();
@@ -471,6 +508,11 @@ namespace Essentials.Internal.GameDirectories
             }
         }
 
+        /// <summary>
+        /// Validates if the provided string represents a valid directory path (no invalid characters).
+        /// </summary>
+        /// <param name="path">The path string to validate.</param>
+        /// <returns>True if the path is valid, false otherwise.</returns>
         private bool ValidatePath(string path)
         {
             if (string.IsNullOrWhiteSpace(path)) return false;
@@ -491,6 +533,10 @@ namespace Essentials.Internal.GameDirectories
             return true;
         }
 
+        /// <summary>
+        /// Applies the changes made in the editor: saves the directory structure and references,
+        /// and regenerates the static class if necessary.
+        /// </summary>
         private void Apply()
         {
             appliedChanges = true;
@@ -517,6 +563,9 @@ namespace Essentials.Internal.GameDirectories
             }
         }
 
+        /// <summary>
+        /// Opens the Game Directories Settings editor window.
+        /// </summary>
         private void ShowSettingsWindow()
         {
             if (_settingsEditor != null)
@@ -528,6 +577,9 @@ namespace Essentials.Internal.GameDirectories
             _settingsEditor = GameDirectoriesSettingsEditor.Open();
         }
 
+        /// <summary>
+        /// Called when the editor window is destroyed. Cleans up resources.
+        /// </summary>
         private void OnDestroy()
         {
             InputPrompt.CleanUp(this);
