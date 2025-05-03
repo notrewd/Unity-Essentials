@@ -4,7 +4,7 @@ namespace Essentials.Core.Databases
 {
     /// <summary>
     /// Base class for items stored within a DatabaseObject.
-    /// Each item must have a unique string ID.
+    /// Each item should have a unique string ID.
     /// </summary>
     public class DatabaseItem : ScriptableObject
     {
