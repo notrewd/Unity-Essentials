@@ -4,11 +4,24 @@ using UnityEngine.Events;
 
 namespace Essentials.Core.Sensors
 {
+    /// <summary>
+    /// Component attached to objects that can be detected by Sensors.
+    /// Handles callbacks when detected or when detection is lost.
+    /// </summary>
     public class SensorsReceiver : MonoBehaviour
     {
+        /// <summary>
+        /// Defines the action to take when the sensor state changes.
+        /// </summary>
         public enum CallbackType
         {
+            /// <summary>
+            /// Automatically disable the object's Renderer when not detected.
+            /// </summary>
             DisableRenderer,
+            /// <summary>
+            /// Invoke custom UnityEvents for detection and loss.
+            /// </summary>
             Custom
         }
 
@@ -30,15 +43,25 @@ namespace Essentials.Core.Sensors
         [Tooltip("Is the object currently being detected?")]
         [SerializeField] private bool _isDetected;
 
+        /// <summary>
+        /// Gets whether the object is currently being detected by a sensor with a matching ID.
+        /// </summary>
         public bool isDetected { get => _isDetected; private set => _isDetected = value; }
 
         private float timer;
 
+        /// <summary>
+        /// Called each frame. Updates the detection interval timer if the object is currently detected.
+        /// </summary>
         private void Update()
         {
             if (isDetected) UpdateInterval();
         }
 
+        /// <summary>
+        /// Called by a Sensor when it detects this object.
+        /// Sets the object as detected, resets the timer, and triggers the appropriate callback based on callbackType.
+        /// </summary>
         public void SendCallback()
         {
             isDetected = true;
@@ -57,6 +80,10 @@ namespace Essentials.Core.Sensors
             }
         }
 
+        /// <summary>
+        /// Updates the timer that tracks how long it has been since the last detection signal.
+        /// If the interval exceeds checkInterval, it calls OnSensorsLost.
+        /// </summary>
         private void UpdateInterval()
         {
             timer += Time.deltaTime;
@@ -66,6 +93,10 @@ namespace Essentials.Core.Sensors
             OnSensorsLost();
         }
 
+        /// <summary>
+        /// Called when the checkInterval expires without receiving a new detection signal.
+        /// Sets the object as not detected and triggers the appropriate callback based on callbackType.
+        /// </summary>
         private void OnSensorsLost()
         {
             isDetected = false;

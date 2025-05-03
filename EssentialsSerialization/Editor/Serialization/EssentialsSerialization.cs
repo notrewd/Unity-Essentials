@@ -6,8 +6,17 @@ using UnityEngine;
 
 namespace Essentials.Serialization
 {
+    /// <summary>
+    /// Provides utility methods for working with Unity's SerializedProperty system.
+    /// </summary>
     public static class EssentialsSerialization
     {
+        /// <summary>
+        /// Retrieves a SerializedProperty element from a list (array) property at the specified index.
+        /// </summary>
+        /// <param name="list">The SerializedProperty representing the list or array.</param>
+        /// <param name="index">The index of the element to retrieve.</param>
+        /// <returns>The SerializedProperty for the element at the specified index, or null if the list is invalid or the index is out of bounds.</returns>
         public static SerializedProperty GetSerializedPropertyFromList(SerializedProperty list, int index)
         {
             if (!list.isArray) return null;
@@ -26,6 +35,13 @@ namespace Essentials.Serialization
             return null;
         }
 
+        /// <summary>
+        /// Compares the value of a SerializedProperty with a given value.
+        /// Supports various property types and comparison operations (e.g., >=, <=, >, <, !=, ==) for numeric types when the compare value is a string.
+        /// </summary>
+        /// <param name="property">The SerializedProperty to compare.</param>
+        /// <param name="compareValue">The value to compare against. Can be a direct value or a string representation (e.g., ">=10", "!=null").</param>
+        /// <returns>True if the property value matches the compare value according to the type and operation, false otherwise.</returns>
         public static bool CompareValues(SerializedProperty property, object compareValue)
         {
             switch (property.propertyType)
@@ -180,6 +196,11 @@ namespace Essentials.Serialization
             return false;
         }
 
+        /// <summary>
+        /// Extracts a comparison operator (>=, <=, >, <, !=, ==) from the beginning of a string, if present.
+        /// </summary>
+        /// <param name="s">The input string.</param>
+        /// <returns>The comparison operator string, or null if no valid operator is found at the beginning.</returns>
         public static string GetOperationFromString(string s)
         {
             if (s.Length <= 1) return null;
@@ -195,11 +216,23 @@ namespace Essentials.Serialization
             return null;
         }
 
+        /// <summary>
+        /// Removes the trailing 'f' character from a string if it exists, typically used for float string representations.
+        /// </summary>
+        /// <param name="s">The input string.</param>
+        /// <returns>The string without the trailing 'f'.</returns>
         public static string GetPureStringFloat(string s)
         {
             return s[^1] == 'f' ? s.Remove(s.Length - 1) : s;
         }
 
+        /// <summary>
+        /// Compares the value of a SerializedProperty against multiple values based on a comparison type (All or Any).
+        /// </summary>
+        /// <param name="property">The SerializedProperty to compare.</param>
+        /// <param name="compareValues">An array of values to compare against.</param>
+        /// <param name="compareType">The comparison logic: All (all values must match) or Any (at least one value must match).</param>
+        /// <returns>True if the comparison condition is met, false otherwise.</returns>
         public static bool CompareValues(SerializedProperty property, object[] compareValues, CompareType compareType = CompareType.All)
         {
             if (property == null) return false;
@@ -218,6 +251,11 @@ namespace Essentials.Serialization
             return false;
         }
 
+        /// <summary>
+        /// Converts an Inspector.CompareType enum value to its corresponding Essentials.Serialization.CompareType value.
+        /// </summary>
+        /// <param name="compareType">The Inspector.CompareType value to convert.</param>
+        /// <returns>The equivalent Essentials.Serialization.CompareType value.</returns>
         public static CompareType ConvertInspectorCompareTypeToSerialized(Inspector.CompareType compareType)
         {
             return compareType switch

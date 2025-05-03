@@ -17,6 +17,10 @@ namespace Essentials.Internal.GameDirectories
         private VisualElement _directoryReferences;
         private VisualElement _unappliedChanges;
 
+        /// <summary>
+        /// Opens the Game Directories Settings editor window.
+        /// </summary>
+        /// <returns>The opened GameDirectoriesSettingsEditor instance.</returns>
         public static GameDirectoriesSettingsEditor Open()
         {
             GameDirectoriesSettingsEditor window = GetWindow<GameDirectoriesSettingsEditor>();
@@ -26,6 +30,9 @@ namespace Essentials.Internal.GameDirectories
             return window;
         }
 
+        /// <summary>
+        /// Creates the GUI for the settings editor window, loading the UXML and binding elements and callbacks.
+        /// </summary>
         public void CreateGUI()
         {
             GameDirectoriesSettings.LoadData();
@@ -75,6 +82,10 @@ namespace Essentials.Internal.GameDirectories
             Refresh();
         }
 
+        /// <summary>
+        /// Validates the current values in the settings editor's input fields (class name, references).
+        /// </summary>
+        /// <returns>True if all values are valid, false otherwise.</returns>
         private bool Validate()
         {
             string[] reservedNames = new string[]
@@ -102,6 +113,9 @@ namespace Essentials.Internal.GameDirectories
             return true;
         }
 
+        /// <summary>
+        /// Refreshes the UI elements in the settings editor to reflect the current loaded settings data.
+        /// </summary>
         public void Refresh()
         {
             _applyButton.SetEnabled(false);
@@ -143,6 +157,10 @@ namespace Essentials.Internal.GameDirectories
             else _unappliedChanges.style.display = DisplayStyle.None;
         }
 
+        /// <summary>
+        /// Applies the changes made in the settings editor: saves the settings, updates directory references,
+        /// saves the main editor data, and regenerates the static class.
+        /// </summary>
         public void Apply()
         {
             _applyButton.SetEnabled(false);

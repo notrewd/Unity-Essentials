@@ -8,6 +8,11 @@ using Random = Unity.Mathematics.Random;
 
 namespace Essentials.Core.Sensors
 {
+    /// <summary>
+    /// Provides a configurable sensor system using raycasting to detect objects.
+    /// Supports various scanning patterns (static, vertical, horizontal, random) and orientations.
+    /// Uses Unity's Job System and Burst compiler for performance.
+    /// </summary>
     public class Sensors : MonoBehaviour
     {
         public enum ScanMethod
@@ -128,6 +133,13 @@ namespace Essentials.Core.Sensors
 
             private uint _seed;
 
+            /// <summary>
+            /// Executes the job for a single sensor index.
+            /// Calculates the initial direction based on orientation and angles.
+            /// Applies dynamic scanning modifications (vertical, horizontal, random) if configured.
+            /// Populates the sensor data and raycast command for the current index.
+            /// </summary>
+            /// <param name="index">The index of the sensor being processed.</param>
             public void Execute(int index)
             {
                 Random random = Random.CreateFromIndex(_seed + (uint)index);
@@ -203,6 +215,27 @@ namespace Essentials.Core.Sensors
                 _raycastCommands[index] = new RaycastCommand(_startPosition, direction, QueryParameters.Default, _sensorsRange);
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CalculateDirectionsJob"/> struct.
+            /// </summary>
+            /// <param name="scanMethod">The scanning method to use.</param>
+            /// <param name="sensorsOrientation">The orientation of the sensors.</param>
+            /// <param name="startPosition">The world position where the sensors originate.</param>
+            /// <param name="forwardDirection">The forward direction of the sensor array.</param>
+            /// <param name="upDirection">The up direction of the sensor array.</param>
+            /// <param name="rightDirection">The right direction of the sensor array.</param>
+            /// <param name="sensorsRows">The number of sensor rows (for Both orientation).</param>
+            /// <param name="sensorsAngle">The total angle spread for Horizontal/Vertical orientation.</param>
+            /// <param name="sensorsHorizontalAngle">The horizontal angle spread (for Both orientation).</param>
+            /// <param name="sensorsVerticalAngle">The vertical angle spread (for Both orientation).</param>
+            /// <param name="sensorsRange">The maximum range of the sensors.</param>
+            /// <param name="scanAngle">The current dynamic scan angle (for Vertical/Horizontal scan methods).</param>
+            /// <param name="randomScanType">The type of randomization (for Random scan method).</param>
+            /// <param name="verticalRandomization">The magnitude of vertical randomization.</param>
+            /// <param name="horizontalRandomization">The magnitude of horizontal randomization.</param>
+            /// <param name="sensorDatas">NativeArray to store calculated sensor start positions and directions.</param>
+            /// <param name="raycastCommands">NativeArray to store the RaycastCommands to be scheduled.</param>
+            /// <param name="seed">A seed for the random number generator used in Random scan method.</param>
             public CalculateDirectionsJob(ScanMethod scanMethod, SensorsOrientation sensorsOrientation, Vector3 startPosition, Vector3 forwardDirection, Vector3 upDirection, Vector3 rightDirection, int sensorsRows, float sensorsAngle, float sensorsHorizontalAngle, float sensorsVerticalAngle, float sensorsRange, float scanAngle, RandomScanType randomScanType, float verticalRandomization, float horizontalRandomization, NativeArray<JobSensorData> sensorDatas, NativeArray<RaycastCommand> raycastCommands, uint seed)
             {
                 _scanMethod = scanMethod;
@@ -239,6 +272,10 @@ namespace Essentials.Core.Sensors
         private SensorData[] sensorDatas;
         private System.Random random = new System.Random();
 
+        /// <summary>
+        /// Initializes the NativeArrays used for the Job System and the sensor data array.
+        /// Called when the script instance is being loaded.
+        /// </summary>
         private void Awake()
         {
             jobSensorDatas = new NativeArray<JobSensorData>(_sensorsCount, Allocator.Persistent);
@@ -248,18 +285,29 @@ namespace Essentials.Core.Sensors
             sensorDatas = new SensorData[_sensorsCount];
         }
 
+        /// <summary>
+        /// Called every frame. Updates the dynamic scan angle and schedules the sensor calculation jobs.
+        /// </summary>
         private void Update()
         {
             UpdateAngles();
             UpdateSensors();
         }
 
+        /// <summary>
+        /// Called every frame after Update. Completes the sensor calculation jobs and processes the results.
+        /// Also sends callbacks to detected SensorsReceiver components.
+        /// </summary>
         private void LateUpdate()
         {
             UpdateLateSensors();
             SendCallbackToReciever();
         }
 
+        /// <summary>
+        /// Schedules the jobs to calculate sensor directions and perform raycasts.
+        /// Creates and schedules CalculateDirectionsJob and RaycastCommand.ScheduleBatch.
+        /// </summary>
         private void UpdateSensors()
         {
             CalculateDirectionsJob calculateDirectionsJob = new CalculateDirectionsJob(scanMethod, sensorsOrientation, transform.position, transform.forward, transform.up, transform.right, _sensorsRows, sensorsAngle, sensorsHorizontalAngle, sensorsVerticalAngle, sensorsRange, _scanAngle, randomScanType, verticalRandomization, horizontalRandomization, jobSensorDatas, raycastCommands, (uint)random.Next(0, int.MaxValue));
@@ -268,6 +316,10 @@ namespace Essentials.Core.Sensors
             calculateRaycastsJobHandle = RaycastCommand.ScheduleBatch(raycastCommands, raycastHits, 5, calculateDirectionsJobHandle);
         }
 
+        /// <summary>
+        /// Completes the raycast job and updates the main thread sensor data based on the job results.
+        /// Copies data from NativeArrays (jobSensorDatas, raycastHits) to the managed array (sensorDatas).
+        /// </summary>
         private void UpdateLateSensors()
         {
             calculateRaycastsJobHandle.Complete();
@@ -284,12 +336,18 @@ namespace Essentials.Core.Sensors
             }
         }
 
+        /// <summary>
+        /// Updates the _scanAngle based on time, frequency, and amplitude for dynamic scanning methods (Vertical, Horizontal).
+        /// </summary>
         private void UpdateAngles()
         {
             if (scanMethod != ScanMethod.Vertical && scanMethod != ScanMethod.Horizontal) return;
             _scanAngle = Mathf.Sin(Time.time * scanAngleFrequency) * scanAngleAmplitude;
         }
 
+        /// <summary>
+        /// Iterates through the raycast hits and sends a callback to any detected SensorsReceiver components with a matching sensorsId.
+        /// </summary>
         private void SendCallbackToReciever()
         {
             foreach (RaycastHit hit in raycastHits)
@@ -305,6 +363,10 @@ namespace Essentials.Core.Sensors
             }
         }
 
+        /// <summary>
+        /// Disposes the NativeArrays allocated in Awake to prevent memory leaks.
+        /// Called when the MonoBehaviour will be destroyed.
+        /// </summary>
         private void OnDestroy()
         {
             jobSensorDatas.Dispose();
@@ -312,6 +374,10 @@ namespace Essentials.Core.Sensors
             raycastCommands.Dispose();
         }
 
+        /// <summary>
+        /// Draws gizmos in the Scene view to visualize the sensors and their hits if showSensors is enabled.
+        /// Uses red for hits and green for misses if showSensorHits is also enabled.
+        /// </summary>
         private void OnDrawGizmos()
         {
             if (!showSensors || sensorDatas == null) return;

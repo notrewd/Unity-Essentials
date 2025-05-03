@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 
 namespace Essentials.Internal.Sensors
 {
+    /// <summary>
+    /// Custom editor for the Sensors component.
+    /// </summary>
     [CustomEditor(typeof(Core.Sensors.Sensors))]
     [CanEditMultipleObjects]
     public class SensorsEditor : Editor
@@ -27,6 +30,10 @@ namespace Essentials.Internal.Sensors
         private PropertyField _showSensorsField;
         private PropertyField _showSensorHitsField;
 
+        /// <summary>
+        /// Creates the custom inspector GUI for the Sensors component.
+        /// </summary>
+        /// <returns>The root VisualElement for the inspector.</returns>
         public override VisualElement CreateInspectorGUI()
         {
             _target = (Core.Sensors.Sensors)target;
@@ -42,6 +49,10 @@ namespace Essentials.Internal.Sensors
             return root;
         }
 
+        /// <summary>
+        /// Gets references to the PropertyField elements in the UI.
+        /// </summary>
+        /// <param name="root">The root VisualElement of the inspector.</param>
         private void GetProperties(VisualElement root)
         {
             _scanMethodField = root.Q<PropertyField>("ScanMethodField");
@@ -62,6 +73,9 @@ namespace Essentials.Internal.Sensors
             _showSensorHitsField = root.Q<PropertyField>("ShowSensorHitsField");
         }
 
+        /// <summary>
+        /// Binds callback events to property changes.
+        /// </summary>
         private void BindPropertyEvents()
         {
             _scanMethodField.RegisterValueChangeCallback(OnPropertyChanged);
@@ -70,6 +84,11 @@ namespace Essentials.Internal.Sensors
             _showSensorsField.RegisterValueChangeCallback(OnPropertyChanged);
         }
 
+        /// <summary>
+        /// Callback method invoked when a serialized property changes.
+        /// Updates the visibility of related fields based on the changed property.
+        /// </summary>
+        /// <param name="evt">The property change event.</param>
         private void OnPropertyChanged(SerializedPropertyChangeEvent evt)
         {
             ShowField(_scanAngleAmplitudeField, _target.scanMethod is Core.Sensors.Sensors.ScanMethod.Vertical or Core.Sensors.Sensors.ScanMethod.Horizontal);
@@ -84,6 +103,11 @@ namespace Essentials.Internal.Sensors
             ShowField(_showSensorHitsField, _target.showSensors);
         }
 
+        /// <summary>
+        /// Shows or hides a PropertyField based on a boolean condition.
+        /// </summary>
+        /// <param name="field">The PropertyField to show or hide.</param>
+        /// <param name="show">True to show the field, false to hide it.</param>
         private void ShowField(PropertyField field, bool show) => field.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
     }
 }

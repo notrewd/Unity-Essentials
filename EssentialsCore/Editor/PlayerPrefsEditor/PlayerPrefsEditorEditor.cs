@@ -14,8 +14,14 @@ using Essentials.Inspector.Utilities;
 
 namespace Essentials.Internal.PlayerPrefsEditor
 {
+    /// <summary>
+    /// Editor window for viewing and editing PlayerPrefs and EditorPrefs.
+    /// </summary>
     public class PlayerPrefsEditorEditor : EditorWindow
     {
+        /// <summary>
+        /// Indicates whether the editor is currently showing EditorPrefs (true) or PlayerPrefs (false).
+        /// </summary>
         public static bool isEditorPrefs { get; private set; } = false;
         private static bool _shownEditorPrefsWarning = false;
 #if UNITY_EDITOR_WIN
@@ -47,6 +53,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
 
         private enum SearchType { KeyName, Value, ValueType }
 
+        /// <summary>
+        /// Shows the PlayerPrefs Editor window.
+        /// </summary>
 #if UNITY_EDITOR_OSX || UNITY_EDITOR_WIN
         [MenuItem("Essentials/PlayerPrefs Editor")]
         private static void ShowWindow()
@@ -57,6 +66,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
         }
 #endif
 
+        /// <summary>
+        /// Sets up the icons for the buttons in the editor window.
+        /// </summary>
         private void SetupButtonIcons()
         {
 #if UNITY_EDITOR_WIN
@@ -66,6 +78,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
             _refreshButton.style.backgroundImage = IconDatabase.GetIcon("Refresh@32");
         }
 
+        /// <summary>
+        /// Creates the GUI for the editor window.
+        /// </summary>
         public void CreateGUI()
         {
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/PlayerPrefsEditor/PlayerPrefsEditorEditorDocument.uxml");
@@ -221,10 +236,22 @@ namespace Essentials.Internal.PlayerPrefsEditor
             RefreshAll();
         }
 
+        /// <summary>
+        /// Called when the editor window is enabled.
+        /// Subscribes to the EditorApplication.update event.
+        /// </summary>
         private void OnEnable() => EditorApplication.update += Update;
 
+        /// <summary>
+        /// Called when the editor window is disabled.
+        /// Unsubscribes from the EditorApplication.update event.
+        /// </summary>
         private void OnDisable() => EditorApplication.update -= Update;
 
+        /// <summary>
+        /// Called every frame by the EditorApplication.update event.
+        /// Checks if PlayerPrefs or EditorPrefs have been updated externally and refreshes the list if necessary.
+        /// </summary>
         private void Update()
         {
             if (_playerPrefsEntryUpdated)
@@ -244,6 +271,11 @@ namespace Essentials.Internal.PlayerPrefsEditor
             }
         }
 
+        /// <summary>
+        /// Adds a new PlayerPref/EditorPref entry to the internal dictionary.
+        /// </summary>
+        /// <param name="key">The key of the new entry.</param>
+        /// <param name="value">The value of the new entry.</param>
         public void AddPlayerPref(string key, object value)
         {
             if (_playerPrefs.ContainsKey(key))
@@ -258,6 +290,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
             _applyButton.SetEnabled(true);
         }
 
+        /// <summary>
+        /// Refreshes both the data source (PlayerPrefs/EditorPrefs) and the displayed list.
+        /// </summary>
         private void RefreshAll()
         {
             LoadPlayerPrefs();
@@ -266,6 +301,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
             _applyButton.SetEnabled(false);
         }
 
+        /// <summary>
+        /// Loads the PlayerPrefs or EditorPrefs data based on the current mode (isEditorPrefs).
+        /// </summary>
         private void LoadPlayerPrefs()
         {
 #if UNITY_EDITOR_OSX
@@ -353,6 +391,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
 #endif
         }
 
+        /// <summary>
+        /// Refreshes the list view with the current PlayerPrefs/EditorPrefs data, applying filtering and sorting.
+        /// </summary>
         private void RefreshList()
         {
             _playerPrefsList.Clear();
@@ -484,6 +525,9 @@ namespace Essentials.Internal.PlayerPrefsEditor
             }
         }
 
+        /// <summary>
+        /// Applies the changes made in the editor to the actual PlayerPrefs or EditorPrefs.
+        /// </summary>
         private void Apply()
         {
 #if UNITY_EDITOR_WIN

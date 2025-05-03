@@ -9,10 +9,16 @@ using UnityEngine.UIElements;
 
 namespace Essentials.Internal.GameSounds
 {
+    /// <summary>
+    /// Editor window for editing the settings of a specific GameSoundGroup.
+    /// </summary>
     public class GameSoundsGroupEditor : EditorWindow
     {
         private static List<GameSoundsGroupEditor> _windows = new List<GameSoundsGroupEditor>();
 
+        /// <summary>
+        /// Event triggered when the group name changes.
+        /// </summary>
         public event Action onGroupNameChanged;
 
         private GameSoundGroup _gameSoundGroup;
@@ -40,6 +46,11 @@ namespace Essentials.Internal.GameSounds
         private PropertyField _panStereoField;
         private PropertyField _reverbZoneMixField;
 
+        /// <summary>
+        /// Creates and shows a new GameSoundsGroupEditor window for the specified group.
+        /// </summary>
+        /// <param name="gameSoundGroup">The GameSoundGroup to edit.</param>
+        /// <returns>The created GameSoundsGroupEditor window instance.</returns>
         public static GameSoundsGroupEditor CreateWindow(GameSoundGroup gameSoundGroup)
         {
             GameSoundsGroupEditor window = CreateInstance<GameSoundsGroupEditor>();
@@ -52,6 +63,9 @@ namespace Essentials.Internal.GameSounds
             return window;
         }
 
+        /// <summary>
+        /// Creates the GUI for the editor window.
+        /// </summary>
         private void CreateGUI()
         {
             VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Packages/com.notrewd.essentials/EssentialsCore/Editor/GameSounds/GameSoundsGroupEditorDocument.uxml");
@@ -96,8 +110,15 @@ namespace Essentials.Internal.GameSounds
             _windows.Add(this);
         }
 
+        /// <summary>
+        /// Called when the editor window is destroyed.
+        /// Removes the window from the list of active windows.
+        /// </summary>
         private void OnDestroy() => _windows.Remove(this);
 
+        /// <summary>
+        /// Binds the UI elements to the serialized properties of the GameSoundGroup.
+        /// </summary>
         private void BindProperties()
         {
             SerializedProperty settingsProperty = _gameSoundsGroupProperty.FindPropertyRelative("settings");
@@ -121,8 +142,16 @@ namespace Essentials.Internal.GameSounds
             _reverbZoneMixField.BindProperty(settingsProperty.FindPropertyRelative("reverbZoneMix"));
         }
 
+        /// <summary>
+        /// Sets the GameSoundGroup to be edited by this window.
+        /// </summary>
+        /// <param name="gameSoundGroup">The GameSoundGroup to edit.</param>
         public void SetGameSoundGroup(GameSoundGroup gameSoundGroup) => _gameSoundGroup = gameSoundGroup;
 
+        /// <summary>
+        /// Gets an array of all currently active GameSoundsGroupEditor windows.
+        /// </summary>
+        /// <returns>An array of active GameSoundsGroupEditor windows.</returns>
         public static GameSoundsGroupEditor[] GetActiveWindows() => _windows.ToArray();
     }
 }

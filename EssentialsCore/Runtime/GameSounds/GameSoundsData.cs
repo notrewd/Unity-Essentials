@@ -11,6 +11,11 @@ namespace Essentials.Internal.GameSounds
         public GameSoundSettings defaultSettings;
         public List<GameSoundGroup> gameSoundGroups = new List<GameSoundGroup>();
 
+        /// <summary>
+        /// Retrieves a GameSoundGroup by its name.
+        /// </summary>
+        /// <param name="name">The name of the group to find.</param>
+        /// <returns>The found GameSoundGroup, or null if no group with the specified name exists.</returns>
         public GameSoundGroup GetGroup(string name) => gameSoundGroups.Find(x => x.name == name);
     }
 

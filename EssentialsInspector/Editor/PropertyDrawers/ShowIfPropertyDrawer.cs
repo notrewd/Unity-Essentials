@@ -9,6 +9,12 @@ namespace Essentials.Inspector
     {
         private bool _isShown;
 
+        /// <summary>
+        /// Draws the property field only if the condition specified by the ShowIfAttribute is met.
+        /// </summary>
+        /// <param name="position">Rectangle on the screen to use for the property GUI.</param>
+        /// <param name="property">The SerializedProperty to make the custom GUI for.</param>
+        /// <param name="label">The label of this property.</param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             ShowIfAttribute showIfAttribute = (ShowIfAttribute)attribute;
@@ -36,6 +42,13 @@ namespace Essentials.Inspector
             if (_isShown) EditorGUI.PropertyField(position, property, label, true);
         }
 
+        /// <summary>
+        /// Gets the height required to draw the property.
+        /// Returns the standard property height if shown, otherwise returns a negative spacing to hide it effectively.
+        /// </summary>
+        /// <param name="property">The SerializedProperty to make the custom GUI for.</param>
+        /// <param name="label">The label of this property.</param>
+        /// <returns>The height required for the property GUI.</returns>
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             if (_isShown) return EditorGUI.GetPropertyHeight(property);
